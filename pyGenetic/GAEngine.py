@@ -35,7 +35,12 @@ class GAEngine:
 
 
 if __name__ == '__main__':
-	factory = ChromosomeFactory.ChromosomeFactory(int,noOfGenes=4,pattern='0|1')
+	factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
+	ga = GAEngine(lambda x:sum(x),'MAX',factory,20)
+	print(ga.fitness_func)
+	print(ga.fitness_type)
+	ga.calculateAllFitness()
+	factory = ChromosomeFactory.ChromosomeRangeFactory(int,8,3,11)
 	ga = GAEngine(lambda x:sum(x),'MAX',factory,20)
 	print(ga.fitness_func)
 	print(ga.fitness_type)
