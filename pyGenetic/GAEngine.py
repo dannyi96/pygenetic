@@ -1,5 +1,6 @@
 import Population
 import ChromosomeFactory
+import random
 
 class GAEngine:
 
@@ -20,7 +21,7 @@ class GAEngine:
 		self.crossover_handlers.append(crossover_handler)
 
 	def addMutationHandler(self,mutation_handler):
-		self.mutation_handlers.append(mutation_func)
+		self.mutation_handlers.append(mutation_handler)
 
 	def setCrossoverProbability(self,cross_prob):
 		self.cross_prob = cross_prob
@@ -33,15 +34,35 @@ class GAEngine:
 			print(chromosome)
 			print(self.fitness_func(chromosome))
 
+	def execute_mutation(self):
+		for chromosome in self.population.members:
+			if random.random() <= self.mut_prob:
+				new_chromosome = self.mutation_handlers[0](chromosome)
+				print(chromosome, " - > ", new_chromosome)
+				self.population.new_members.append(new_chromosome)
+		print(self.population.new_members)
+
+
 
 if __name__ == '__main__':
-	factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
+	#factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
+	#ga = GAEngine(lambda x:sum(x),'MAX',factory,20)
+	#print(ga.fitness_func)
+	#print(ga.fitness_type)
+	#ga.calculateAllFitness()
+	import copy
+	factory = ChromosomeFactory.ChromosomeRangeFactory(int,8,1,9)
 	ga = GAEngine(lambda x:sum(x),'MAX',factory,20)
-	print(ga.fitness_func)
-	print(ga.fitness_type)
-	ga.calculateAllFitness()
-	factory = ChromosomeFactory.ChromosomeRangeFactory(int,8,3,11)
-	ga = GAEngine(lambda x:sum(x),'MAX',factory,20)
-	print(ga.fitness_func)
-	print(ga.fitness_type)
-	ga.calculateAllFitness()
+	#print(ga.fitness_func)
+	#print(ga.fitness_type)
+	#ga.calculateAllFitness()
+	def mut(chrom):
+		index = random.randint(0,6)
+		newchrom = copy.copy(chrom)
+		t = newchrom[index]
+		newchrom[index] = newchrom[index+1]
+		newchrom[index+1] = t
+		return newchrom
+
+	ga.addMutationHandler(mut)
+	ga.execute_mutation()

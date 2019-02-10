@@ -4,10 +4,11 @@ class Population:
 
 	def __init__(self,factory,population_size):
 		self.population_size = population_size
+		self.members = []
+		self.new_members = []
 		self.createMembers(factory)
 
 	def createMembers(self,factory):
-		self.members = []
 		for i in range(self.population_size):
 			self.members.append(factory.createChromosome())
 		print(self.members)

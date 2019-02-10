@@ -19,7 +19,7 @@ class ChromosomeRegexFactory(ChromosomeFactory):
 		self.pattern = pattern
 
 	def createChromosome(self):
-		if(self.data_type==int):
+		if self.data_type==int:
 			chromosome = [int(rstr.xeger(self.pattern)) for i in range(self.noOfGenes)]
 		else:
 			chromosome = [rstr.xeger(self.pattern) for i in range(self.noOfGenes)]
