@@ -68,9 +68,26 @@ class GAEngine:
 				self.population.new_members.append(child)
 				print(mother, ' - > ', child)
 		print(self.population.new_members)
+		self.calculateAllFitness()
 
 	def select_next_generation(self):
-		self.population.new_members = self.selection_handler(self.population.members,self.population.new_members)
+		#self.population.members = self.selection_handler(self.population.members,self.population.new_members)
+		self.scores = []
+		self.new_scores = []
+		for chromosome in self.population.members:
+			self.scores.append((self.fitness_func(chromosome),chromosome))
+		for chromosome in self.population.new_members:
+			self.new_scores.append((self.fitness_func(chromosome),chromosome))
+		self.scores.sort(reverse=True)
+		self.new_scores.sort(reverse=True)
+		self.population.members = [x[1] for x in self.scores[:100]] + [x[1] for x in self.new_scores[:100]]
+		self.population.new_members = []
+		#print(self.population.members)
+
+	def evolve(self,iterations=20):
+		for i in range(iterations):
+			self.execute_one_evolution()
+			self.select_next_generation()
 
 if __name__ == '__main__':
 	#factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
@@ -119,5 +136,7 @@ if __name__ == '__main__':
 
 	ga.addCrossoverHandler(cross)
 	ga.addMutationHandler(mut)
-	ga.execute_one_evolution()
-	ga.calculateAllFitness()
+	ga.evolve(20)
+	#ga.execute_one_evolution()
+	#ga.calculateAllFitness()
+	#ga.select_next_generation()
