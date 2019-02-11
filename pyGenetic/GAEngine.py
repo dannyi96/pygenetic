@@ -16,6 +16,7 @@ class GAEngine:
 		self.smart_fitness = smart_fitness
 		self.crossover_handlers = []
 		self.mutation_handlers = []
+		self.selection_handler = None
 
 	def addCrossoverHandler(self,crossover_handler):
 		self.crossover_handlers.append(crossover_handler)
@@ -28,6 +29,9 @@ class GAEngine:
 
 	def setMutationProbability(self,mut_prob):
 		self.mut_prob = mut_prob
+
+	def setSelectionHandler(self,selection_handler):
+		self.selection_handler = selection_handler
 
 	def calculateAllFitness(self):
 		for chromosome in self.population.members:
@@ -65,7 +69,8 @@ class GAEngine:
 				print(mother, ' - > ', child)
 		print(self.population.new_members)
 
-
+	def select_next_generation(self):
+		self.population.new_members = self.selection_handler(self.population.members,self.population.new_members)
 
 if __name__ == '__main__':
 	#factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
@@ -75,7 +80,20 @@ if __name__ == '__main__':
 	#ga.calculateAllFitness()
 	import copy
 	factory = ChromosomeFactory.ChromosomeRangeFactory(int,8,1,9)
-	ga = GAEngine(lambda x:sum(x),'MAX',factory,20)
+	def fitness(board):
+		fitness = 0
+		for i in range(len(board)):
+			isSafe = True
+			for j in range(len(board)):
+				if i!=j:
+					if (board[i] == board[j]) or (abs(board[i] - board[j]) == abs(i-j)):
+						isSafe = False
+						break
+			if(isSafe==True):
+				fitness += 1
+		return fitness
+
+	ga = GAEngine(fitness,'MAX',factory,20)
 	#print(ga.fitness_func)
 	#print(ga.fitness_type)
 	#ga.calculateAllFitness()
@@ -102,3 +120,4 @@ if __name__ == '__main__':
 	ga.addCrossoverHandler(cross)
 	ga.addMutationHandler(mut)
 	ga.execute_one_evolution()
+	ga.calculateAllFitness()
