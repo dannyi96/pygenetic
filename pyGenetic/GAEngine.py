@@ -42,6 +42,29 @@ class GAEngine:
 				self.population.new_members.append(new_chromosome)
 		print(self.population.new_members)
 
+	def execute_one_evolution(self):
+		iteration_size = self.population.population_size
+		if iteration_size%2==1:
+			iteration_size -= 1
+		for i in range(0,iteration_size,2):
+			father, mother = self.population.members[i], self.population.members[i+1]
+			if random.random() <= self.cross_prob:
+				child1, child2 = self.crossover_handlers[0](father,mother)
+				self.population.new_members.append(child1)
+				self.population.new_members.append(child2)
+				print(father, "   ", mother)
+				print('becomes')
+				print(child1, "   ", child2)
+			if random.random() <= self.mut_prob:
+				child = self.mutation_handlers[0](father)
+				self.population.new_members.append(child)
+				print(father , ' - > ', child)
+			if random.random() <= self.mut_prob:
+				child = self.mutation_handlers[0](mother)
+				self.population.new_members.append(child)
+				print(mother, ' - > ', child)
+		print(self.population.new_members)
+
 
 
 if __name__ == '__main__':
@@ -64,5 +87,18 @@ if __name__ == '__main__':
 		newchrom[index+1] = t
 		return newchrom
 
+	def cross(chrom1,chrom2):
+		r = random.randint(1,6)
+		new_chromosome1 = chrom1[:r]
+		for i in chrom2:
+			if i not in new_chromosome1:
+				new_chromosome1.append(i)
+		new_chromosome2 = chrom2[:r]
+		for i in chrom1:
+			if i not in new_chromosome2:
+				new_chromosome2.append(i)
+		return new_chromosome1,new_chromosome2
+
+	ga.addCrossoverHandler(cross)
 	ga.addMutationHandler(mut)
-	ga.execute_mutation()
+	ga.execute_one_evolution()
