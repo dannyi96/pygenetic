@@ -3,6 +3,7 @@ import ChromosomeFactory
 import random
 import numpy as np
 import collections
+import Utils
 
 class GAEngine:
 
@@ -53,7 +54,7 @@ class GAEngine:
 		self.generateFitnessDict()
 		return self.selection_handler(self.population.members,self.fitness_dict)
 
-	def evolve(self,noOfIterations=20):
+	def evolve(self,noOfIterations=200):
 		print(noOfIterations)
 		for i in range(noOfIterations):
 			self.population.new_members = self.handle_selection()
@@ -108,16 +109,6 @@ if __name__ == '__main__':
 		return fitness
 
 	ga = GAEngine(fitness,8,factory,100)
-	#print(ga.fitness_func)
-	#print(ga.fitness_type)
-	#ga.calculateAllFitness()
-	def mut(chrom):
-		index = random.randint(0,6)
-		newchrom = copy.copy(chrom)
-		t = newchrom[index]
-		newchrom[index] = newchrom[index+1]
-		newchrom[index+1] = t
-		return newchrom
 
 	def cross(chrom1,chrom2):
 		r = random.randint(1,6)
@@ -136,6 +127,6 @@ if __name__ == '__main__':
 		return pop[:20]
 
 	ga.addCrossoverHandler(cross)
-	ga.addMutationHandler(mut)
+	ga.addMutationHandler(Utils.MutationHandlers.swap)
 	ga.setSelectionHandler(selection)
 	ga.evolve()
