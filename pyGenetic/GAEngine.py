@@ -1,12 +1,14 @@
 import Population
 import ChromosomeFactory
 import random
+import numpy as np
+import collections
 
 class GAEngine:
 
-	def __init__(self,fitness_func,fitness_type,factory,population_size=100,cross_prob=0.4,mut_prob=0.2,adaptive_mutation=False,smart_fitness=False):
+	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.4,adaptive_mutation=False,smart_fitness=False):
 		self.fitness_func = fitness_func
-		self.fitness_type = fitness_type
+		self.fitness_threshold = fitness_threshold
 		self.factory = factory
 		self.population = Population.Population(factory,population_size)
 		self.population_size = population_size
@@ -17,6 +19,7 @@ class GAEngine:
 		self.crossover_handlers = []
 		self.mutation_handlers = []
 		self.selection_handler = None
+		self.highest_fitness = None, float("-inf")
 
 	def addCrossoverHandler(self,crossover_handler):
 		self.crossover_handlers.append(crossover_handler)
@@ -34,60 +37,54 @@ class GAEngine:
 		self.selection_handler = selection_handler
 
 	def calculateAllFitness(self):
-		for chromosome in self.population.members:
-			print(chromosome)
-			print(self.fitness_func(chromosome))
+		self.population.fitnessSort(self.fitness_func)
 
-	def execute_mutation(self):
-		for chromosome in self.population.members:
-			if random.random() <= self.mut_prob:
-				new_chromosome = self.mutation_handlers[0](chromosome)
-				print(chromosome, " - > ", new_chromosome)
-				self.population.new_members.append(new_chromosome)
-		print(self.population.new_members)
+	def calculateFitness(self,chromosome):
+		return self.fitness_func(chromosome)
 
-	def execute_one_evolution(self):
-		iteration_size = self.population.population_size
-		if iteration_size%2==1:
-			iteration_size -= 1
-		for i in range(0,iteration_size,2):
-			father, mother = self.population.members[i], self.population.members[i+1]
-			if random.random() <= self.cross_prob:
-				child1, child2 = self.crossover_handlers[0](father,mother)
-				self.population.new_members.append(child1)
-				self.population.new_members.append(child2)
-				print(father, "   ", mother)
-				print('becomes')
-				print(child1, "   ", child2)
-			if random.random() <= self.mut_prob:
-				child = self.mutation_handlers[0](father)
-				self.population.new_members.append(child)
-				print(father , ' - > ', child)
-			if random.random() <= self.mut_prob:
-				child = self.mutation_handlers[0](mother)
-				self.population.new_members.append(child)
-				print(mother, ' - > ', child)
-		print(self.population.new_members)
+	def generateFitnessDict(self):
+		self.fitness_dict = []
+		for member in self.population.members:
+			self.fitness_dict.append((member,self.fitness_func(member)))
+			if self.fitness_func(member) > self.highest_fitness[1]:
+				self.highest_fitness = (member,self.fitness_func(member))
+
+	def handle_selection(self):
+		self.generateFitnessDict()
+		return self.selection_handler(self.population.members,self.fitness_dict)
+
+	def evolve(self,noOfIterations=20):
+		print(noOfIterations)
+		for i in range(noOfIterations):
+			self.population.new_members = self.handle_selection()
+			print(self.highest_fitness[1])
+			if self.highest_fitness[1] == self.fitness_threshold:
+				print('SOLVED')
+				break
+			iteration_size = len(self.population.new_members)
+			if iteration_size%2==1:
+				iteration_size -= 1
+			for i in range(0,iteration_size,2):
+				father, mother = self.population.new_members[i], self.population.new_members[i+1]
+				if random.random() <= self.cross_prob:
+					child1, child2 = self.crossover_handlers[0](father,mother)
+					self.population.new_members.append(child1)
+					self.population.new_members.append(child2)
+				if random.random() <= self.mut_prob:
+					child = self.mutation_handlers[0](father)
+					self.population.new_members.append(child)
+				if random.random() <= self.mut_prob:
+					child = self.mutation_handlers[0](mother)
+					self.population.new_members.append(child)
+
+	def execute_selection(self):
 		self.calculateAllFitness()
+		self.population.new_members = self.population.getPercentOfPopulation(self.cross_prob,self.fitness_func)
+		self.max_fitness = self.population.getMaxFitness(fitness_func)
+		self.calculateAllFitness()
+		print(self.population.new_members)
+		print(len(self.population.new_members))
 
-	def select_next_generation(self):
-		#self.population.members = self.selection_handler(self.population.members,self.population.new_members)
-		self.scores = []
-		self.new_scores = []
-		for chromosome in self.population.members:
-			self.scores.append((self.fitness_func(chromosome),chromosome))
-		for chromosome in self.population.new_members:
-			self.new_scores.append((self.fitness_func(chromosome),chromosome))
-		self.scores.sort(reverse=True)
-		self.new_scores.sort(reverse=True)
-		self.population.members = [x[1] for x in self.scores[:100]] + [x[1] for x in self.new_scores[:100]]
-		self.population.new_members = []
-		#print(self.population.members)
-
-	def evolve(self,iterations=20):
-		for i in range(iterations):
-			self.execute_one_evolution()
-			self.select_next_generation()
 
 if __name__ == '__main__':
 	#factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
@@ -110,7 +107,7 @@ if __name__ == '__main__':
 				fitness += 1
 		return fitness
 
-	ga = GAEngine(fitness,'MAX',factory,20)
+	ga = GAEngine(fitness,8,factory,100)
 	#print(ga.fitness_func)
 	#print(ga.fitness_type)
 	#ga.calculateAllFitness()
@@ -134,9 +131,11 @@ if __name__ == '__main__':
 				new_chromosome2.append(i)
 		return new_chromosome1,new_chromosome2
 
+	def selection(pop,fitness_dict):
+		pop = sorted(pop,key=lambda x:fitness_dict[1])
+		return pop[:20]
+
 	ga.addCrossoverHandler(cross)
 	ga.addMutationHandler(mut)
-	ga.evolve(20)
-	#ga.execute_one_evolution()
-	#ga.calculateAllFitness()
-	#ga.select_next_generation()
+	ga.setSelectionHandler(selection)
+	ga.evolve()
