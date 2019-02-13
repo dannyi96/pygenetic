@@ -58,6 +58,7 @@ class GAEngine:
 		print(noOfIterations)
 		for i in range(noOfIterations):
 			self.population.new_members = self.handle_selection()
+			print(self.population.new_members)
 			print(self.highest_fitness[1])
 			if self.highest_fitness[1] == self.fitness_threshold:
 				print('SOLVED')
@@ -108,25 +109,12 @@ if __name__ == '__main__':
 				fitness += 1
 		return fitness
 
-	ga = GAEngine(fitness,8,factory,100)
-
-	def cross(chrom1,chrom2):
-		r = random.randint(1,6)
-		new_chromosome1 = chrom1[:r]
-		for i in chrom2:
-			if i not in new_chromosome1:
-				new_chromosome1.append(i)
-		new_chromosome2 = chrom2[:r]
-		for i in chrom1:
-			if i not in new_chromosome2:
-				new_chromosome2.append(i)
-		return new_chromosome1,new_chromosome2
-
+	ga = GAEngine(fitness,8,factory,10)
 	def selection(pop,fitness_dict):
 		pop = sorted(pop,key=lambda x:fitness_dict[1])
 		return pop[:20]
 
-	ga.addCrossoverHandler(cross)
+	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct)
 	ga.addMutationHandler(Utils.MutationHandlers.swap)
 	ga.setSelectionHandler(selection)
-	ga.evolve()
+	ga.evolve(1)

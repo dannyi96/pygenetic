@@ -13,13 +13,7 @@ class Population:
 			self.members.append(factory.createChromosome())
 		print(self.members)
 
-	def generateFitnessDict(self,fitness_func):
-		d = {}
-		for member in self.members:
-			d[member] = fitness_func(member)
-		return d
 
-	
 
 
 
