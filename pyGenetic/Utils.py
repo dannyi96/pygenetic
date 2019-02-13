@@ -1,7 +1,11 @@
 import random
 import copy
-#class SelectionHandlers:
 
+class SelectionHandlers:
+	@staticmethod
+	def basic(pop,fitness_dict,ga):
+		pop = sorted(pop,key=lambda x:fitness_dict[1])
+		return pop[:int(ga.mut_prob*len(pop))]
 
 
 class MutationHandlers:

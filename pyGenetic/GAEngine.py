@@ -52,7 +52,7 @@ class GAEngine:
 
 	def handle_selection(self):
 		self.generateFitnessDict()
-		return self.selection_handler(self.population.members,self.fitness_dict)
+		return self.selection_handler(self.population.members,self.fitness_dict,self)
 
 	def evolve(self,noOfIterations=200):
 		print(noOfIterations)
@@ -110,11 +110,7 @@ if __name__ == '__main__':
 		return fitness
 
 	ga = GAEngine(fitness,8,factory,10)
-	def selection(pop,fitness_dict):
-		pop = sorted(pop,key=lambda x:fitness_dict[1])
-		return pop[:20]
-
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct)
 	ga.addMutationHandler(Utils.MutationHandlers.swap)
-	ga.setSelectionHandler(selection)
+	ga.setSelectionHandler(Utils.SelectionHandlers.basic)
 	ga.evolve(1)
