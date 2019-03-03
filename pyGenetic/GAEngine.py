@@ -4,6 +4,7 @@ import random
 import numpy as np
 import collections
 import Utils
+import Evolution
 
 class GAEngine:
 
@@ -21,6 +22,7 @@ class GAEngine:
 		self.mutation_handlers = []
 		self.selection_handler = None
 		self.highest_fitness = None, float("-inf")
+		self.evolution = Evolution.StandardEvolution(100)
 
 	def addCrossoverHandler(self,crossover_handler):
 		self.crossover_handlers.append(crossover_handler)
@@ -37,9 +39,6 @@ class GAEngine:
 	def setSelectionHandler(self,selection_handler):
 		self.selection_handler = selection_handler
 
-	def calculateAllFitness(self):
-		self.population.fitnessSort(self.fitness_func)
-
 	def calculateFitness(self,chromosome):
 		return self.fitness_func(chromosome)
 
@@ -55,38 +54,10 @@ class GAEngine:
 		return self.selection_handler(self.population.members,self.fitness_dict,self)
 
 	def evolve(self,noOfIterations=200):
-		print(noOfIterations)
 		for i in range(noOfIterations):
-			self.population.new_members = self.handle_selection()
-			print(self.population.new_members)
-			print(self.highest_fitness[1])
-			if self.highest_fitness[1] == self.fitness_threshold:
+			if self.evolution.evolve(self):
 				print('SOLVED')
 				break
-			iteration_size = len(self.population.new_members)
-			if iteration_size%2==1:
-				iteration_size -= 1
-			for i in range(0,iteration_size,2):
-				father, mother = self.population.new_members[i], self.population.new_members[i+1]
-				if random.random() <= self.cross_prob:
-					child1, child2 = self.crossover_handlers[0](father,mother)
-					self.population.new_members.append(child1)
-					self.population.new_members.append(child2)
-				if random.random() <= self.mut_prob:
-					child = self.mutation_handlers[0](father)
-					self.population.new_members.append(child)
-				if random.random() <= self.mut_prob:
-					child = self.mutation_handlers[0](mother)
-					self.population.new_members.append(child)
-
-	def execute_selection(self):
-		self.calculateAllFitness()
-		self.population.new_members = self.population.getPercentOfPopulation(self.cross_prob,self.fitness_func)
-		self.max_fitness = self.population.getMaxFitness(fitness_func)
-		self.calculateAllFitness()
-		print(self.population.new_members)
-		print(len(self.population.new_members))
-
 
 if __name__ == '__main__':
 	#factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
@@ -109,8 +80,8 @@ if __name__ == '__main__':
 				fitness += 1
 		return fitness
 
-	ga = GAEngine(fitness,8,factory,10)
+	ga = GAEngine(fitness,8,factory,30)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct)
 	ga.addMutationHandler(Utils.MutationHandlers.swap)
 	ga.setSelectionHandler(Utils.SelectionHandlers.basic)
-	ga.evolve(1)
+	ga.evolve(100)
