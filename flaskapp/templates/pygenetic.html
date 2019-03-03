@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Loading skult -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
+    <script src="http://www.skulpt.org/static/skulpt.min.js" type="text/javascript"></script>
+    <script src="http://www.skulpt.org/static/skulpt-stdlib.js" type="text/javascript"></script>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <title>Py Genetic Demo</title>
+</head>
+<body>
+
+  <div class="container">
+
+  <form action = '/' method = "POST">
+
+    <h4>Chromosome </h4>
+    <input name = "chromosome" placeholder="Enter Chromosome" class="form-control"/> <br/>
+
+    <h4>Fitness Threshold </h4>
+    <input name = "fitness_threshold" placeholder="Enter Fitness Threshold" class="form-control"/> <br/>
+
+    <h4>Factory </h4>
+    <input name = "factory" placeholder="Enter Factory" class="form-control"/> <br/>
+
+    <h4>Population Size </h4>
+    <input name = "population_size" placeholder="Enter Population Size" class="form-control"/> <br/>
+
+    <h4>Crossove Probability </h4>
+    <input name = "crossover_probability" placeholder="Enter Crossove Probability" class="form-control"/> <br/>
+
+    <h4>Mutation Probability </h4>
+    <input name = "mutation_probability" placeholder="Enter Mutation Probability" class="form-control"/> <br/>
+
+    <h4>Adaptive Mutation </h4>
+    <input name = "adaptive_mutation" placeholder="" class="form-control"/> <br/>
+
+    <h4>Smart Fitness </h4>
+    <input name = "smart_fitness" placeholder="" class="form-control"/> <br/>
+
+
+
+    <!--
+    <h4>Genes Per Chromosome</h4>
+    <input name = "no_of_genes" placeholder="Enter number" class="form-control" /> <br/>
+
+    <h4>Crossover Probability</h4>
+    <input name = "crossover_probability" placeholder="Enter number" class="form-control" /> <br/>
+
+    <h4>Mutation Probability</h4>
+    <input name = "mutation_probability"placeholder="Enter number" class="form-control" /> <br/>
+
+    <h4>Population Size</h4>
+    <input name = "population_size" placeholder="Enter number" class="form-control" /> <br/>
+
+    <h4>Fitness Function</h4>
+  	<select name = "fitness_function"placeholder = "Select Fitness function" class="form-control">
+        <option>func 1</option>
+        <option>func 2</option>
+        <option>func 3</option>
+    </select>
+    <br/>
+
+    <h4>Maximum Iterations</h4>
+    <input name = "maximum_iterations" placeholder="Enter number" class="form-control" />
+
+    <br/>
+    <h4>Crossover Type</h4>
+  	<select name = "crossover_type" placeholder = "Select Crossover Type" class="form-control">
+        <option>func 1</option>
+        <option>func 2</option>
+        <option>func 3</option>
+    </select>
+
+    <br/>
+    <h4>Mutation Type</h4>
+  	<select name = "mutation_type" placeholder = "Select Mutation Type" class="form-control">
+        <option>func 1</option>
+        <option>func 2</option>
+        <option>func 3</option>
+    </select>
+
+    <br/>
+    <h4>Selection Type</h4>
+  	<select name = "selection_type" placeholder = "Select Selection Type" class="form-control">
+        <option>func 1</option>
+        <option>func 2</option>
+        <option>func 3</option>
+    </select>
+     -->
+    <br/>
+    <button type="submit" class="btn btn-success">Generate Code and Run</button>
+  </form>
+
+
+  </div>
+<br/>
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
