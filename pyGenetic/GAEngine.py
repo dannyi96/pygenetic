@@ -8,7 +8,7 @@ import Evolution
 
 class GAEngine:
 
-	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.4,adaptive_mutation=False,smart_fitness=False):
+	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.6,adaptive_mutation=False,smart_fitness=False):
 		self.fitness_func = fitness_func
 		self.fitness_threshold = fitness_threshold
 		self.factory = factory
@@ -53,7 +53,7 @@ class GAEngine:
 		self.generateFitnessDict()
 		return self.selection_handler(self.population.members,self.fitness_dict,self)
 
-	def evolve(self,noOfIterations=200):
+	def evolve(self,noOfIterations=50):
 		for i in range(noOfIterations):
 			if self.evolution.evolve(self):
 				print('SOLVED')
@@ -80,7 +80,7 @@ if __name__ == '__main__':
 				fitness += 1
 		return fitness
 
-	ga = GAEngine(fitness,8,factory,30)
+	ga = GAEngine(fitness,8,factory,50)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct)
 	ga.addMutationHandler(Utils.MutationHandlers.swap)
 	ga.setSelectionHandler(Utils.SelectionHandlers.basic)
