@@ -80,7 +80,7 @@ if __name__ == '__main__':
 				fitness += 1
 		return fitness
 
-	ga = GAEngine(fitness,8,factory,50)
+	ga = GAEngine(fitness,8,factory,10)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct)
 	ga.addMutationHandler(Utils.MutationHandlers.swap)
 	ga.setSelectionHandler(Utils.SelectionHandlers.basic)

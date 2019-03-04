@@ -21,7 +21,7 @@ class StandardEvolution(BaseEvolution):
 		#print(self.max_iterations)
 		# get (1-r) * cross_prob new members
 		ga.population.new_members = ga.handle_selection()
-		print(len(ga.population.members))
+		#print(len(ga.population.members))
 		#print(ga.population.new_members)
 		#print(ga.highest_fitness[1])
 		if ga.highest_fitness[1] == ga.fitness_threshold:
@@ -44,6 +44,11 @@ class StandardEvolution(BaseEvolution):
 			father,mother = crossover_chromosomes[i], crossover_chromosomes[i+1]
 			c1,c2 = ga.crossover_handlers[0](father,mother)
 			ga.population.new_members.extend([c1,c2])
-
+		print(ga.population.new_members)
+		mutation_indexes = np.random.choice(len(p),int(ga.mut_prob*len(p)),p)
+		print(mutation_indexes)
+		for index in mutation_indexes:
+			ga.population.new_members[index] = ga.mutation_handlers[0](ga.population.new_members[index])
+		print(ga.population.new_members)
 		ga.population.members = ga.population.new_members
 		ga.population.new_members = []  
