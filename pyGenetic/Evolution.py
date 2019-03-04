@@ -18,11 +18,12 @@ class StandardEvolution(BaseEvolution):
 		BaseEvolution.__init__(self,max_iterations)
 
 	def evolve(self,ga):
-		print(self.max_iterations)
+		#print(self.max_iterations)
 		# get (1-r) * cross_prob new members
 		ga.population.new_members = ga.handle_selection()
+		print(len(ga.population.members))
 		#print(ga.population.new_members)
-		print(ga.highest_fitness[1])
+		#print(ga.highest_fitness[1])
 		if ga.highest_fitness[1] == ga.fitness_threshold:
 			return 1
 		total = 0

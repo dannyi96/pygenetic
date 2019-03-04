@@ -11,7 +11,7 @@ class Population:
 	def createMembers(self,factory):
 		for i in range(self.population_size):
 			self.members.append(factory.createChromosome())
-		print(self.members)
+		#print(self.members)
 
 if __name__ == '__main__':
 	factory = ChromosomeFactory.ChromosomeFactory(int,noOfGenes=4,pattern='0|1')
