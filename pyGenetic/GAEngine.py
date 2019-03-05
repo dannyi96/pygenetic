@@ -51,8 +51,10 @@ class GAEngine:
 		self.fitness_dict = []
 		for member in self.population.members:
 			self.fitness_dict.append((member,self.fitness_func(member)))
-			if self.fitness_func(member) > self.best_fitness[1]:
+			if self.fitness_type == 'max' and self.fitness_func(member) > self.best_fitness[1]:
 				self.best_fitness = (member,self.fitness_func(member))
+			elif self.fitness_type == 'min' and self.fitness_func(member) < self.best_fitness[1]
+				self.best_fitness = (member, self.fitness_func(member))
 
 	def handle_selection(self):
 		self.generateFitnessDict()
