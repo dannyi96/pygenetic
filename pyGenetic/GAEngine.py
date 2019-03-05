@@ -8,7 +8,7 @@ import Evolution
 
 class GAEngine:
 
-	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.6,fitness_type='max',adaptive_mutation=False,smart_fitness=False):
+	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True,smart_fitness=False):
 		self.fitness_func = fitness_func
 		self.fitness_threshold = fitness_threshold
 		self.factory = factory
@@ -16,7 +16,7 @@ class GAEngine:
 		self.population_size = population_size
 		self.cross_prob = cross_prob
 		self.mut_prob = mut_prob
-		self.adaptive_mutation = adaptive_mutation
+		#self.adaptive_mutation = adaptive_mutation
 		self.smart_fitness = smart_fitness
 		self.crossover_handlers = []
 		self.mutation_handlers = []
@@ -26,8 +26,10 @@ class GAEngine:
 			self.best_fitness = None, float("-inf")
 		elif self.fitness_type == 'min':
 			self.best_fitness = None, float("inf")
+		if adaptive_mutation == True:
+			self.dynamic_mutation = None
 		#elif self.fitness_type == 
-		self.evolution = Evolution.StandardEvolution(100)
+		self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation)
 
 	def addCrossoverHandler(self,crossover_handler):
 		self.crossover_handlers.append(crossover_handler)
