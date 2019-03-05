@@ -8,7 +8,7 @@ import Evolution
 
 class GAEngine:
 
-	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.6,adaptive_mutation=False,smart_fitness=False):
+	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.6,fitness_type='max',adaptive_mutation=False,smart_fitness=False):
 		self.fitness_func = fitness_func
 		self.fitness_threshold = fitness_threshold
 		self.factory = factory
@@ -21,7 +21,12 @@ class GAEngine:
 		self.crossover_handlers = []
 		self.mutation_handlers = []
 		self.selection_handler = None
-		self.highest_fitness = None, float("-inf")
+		self.fitness_type = fitness_type
+		if self.fitness_type == 'max':
+			self.best_fitness = None, float("-inf")
+		elif self.fitness_type == 'min':
+			self.best_fitness = None, float("inf")
+		#elif self.fitness_type == 
 		self.evolution = Evolution.StandardEvolution(100)
 
 	def addCrossoverHandler(self,crossover_handler):
@@ -46,8 +51,8 @@ class GAEngine:
 		self.fitness_dict = []
 		for member in self.population.members:
 			self.fitness_dict.append((member,self.fitness_func(member)))
-			if self.fitness_func(member) > self.highest_fitness[1]:
-				self.highest_fitness = (member,self.fitness_func(member))
+			if self.fitness_func(member) > self.best_fitness[1]:
+				self.best_fitness = (member,self.fitness_func(member))
 
 	def handle_selection(self):
 		self.generateFitnessDict()
@@ -80,7 +85,7 @@ if __name__ == '__main__':
 				fitness += 1
 		return fitness
 
-	ga = GAEngine(fitness,8,factory,10)
+	ga = GAEngine(fitness,8,factory,100)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct)
 	ga.addMutationHandler(Utils.MutationHandlers.swap)
 	ga.setSelectionHandler(Utils.SelectionHandlers.basic)

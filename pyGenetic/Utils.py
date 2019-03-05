@@ -1,11 +1,12 @@
 import random
 import copy
+import math
 
 class SelectionHandlers:
 	@staticmethod
 	def basic(pop,fitness_dict,ga):
 		pop = sorted(pop,key=lambda x:fitness_dict[1])
-		return pop[:int(1-ga.cross_prob*len(pop))]
+		return pop[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
 
 
 class MutationHandlers:
