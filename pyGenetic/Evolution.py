@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import random
 import math
 import numpy as np
+import pyspark
 
 class BaseEvolution(ABC):
 
@@ -14,15 +15,14 @@ class BaseEvolution(ABC):
 
 class StandardEvolution(BaseEvolution):
 
-	def __init__(self,max_iterations=100):
+	def __init__(self,max_iterations=100,pyspark=False):
 		BaseEvolution.__init__(self,max_iterations)
+		self.pyspark = pyspark
 
-	def evolve(self,ga):
-		#print(self.max_iterations)
+	def __evolve_normal(self,ga):
 		# get (1-r) * cross_prob new members
 		ga.population.new_members = ga.handle_selection()
-		#print(len(ga.population.members))
-		#print(ga.population.new_members)
+
 		print(ga.best_fitness[1])
 		if ga.best_fitness[1] == ga.fitness_threshold:
 			return 1
@@ -41,26 +41,28 @@ class StandardEvolution(BaseEvolution):
 		if n %2 == 1:
 			n -= 1
 			ga.population.members.append(ga.population.members[0])
-		#print(p)
-		#print(n)
-		#print(ga.population.members)	
-		#print(p)
 
 		crossover_indexes = np.random.choice(len(p),n,p=p, replace=False)
-		#print(crossover_indexes)
+
 		crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
-		#print('no of cross',len(crossover_chromosomes))
+
 		for i in range(0,len(crossover_chromosomes)-1,2):
 			father,mother = crossover_chromosomes[i], crossover_chromosomes[i+1]
 			c1,c2 = ga.crossover_handlers[0](father,mother)
 			ga.population.new_members.extend([c1,c2])
-		#print(len(ga.population.new_members))
 
-		#print(len(p))
 		mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
-		#print(mutation_indexes)
 		for index in mutation_indexes:
 			ga.population.new_members[index] = ga.mutation_handlers[0](ga.population.new_members[index])
-		#print(ga.population.new_members)
 		ga.population.members = ga.population.new_members
 		ga.population.new_members = []  
+
+
+	def evolve(self,ga):
+		#print(self.max_iterations)
+		if self.pyspark == False:
+			if self.__evolve_normal(ga):
+				return 1
+
+
+
