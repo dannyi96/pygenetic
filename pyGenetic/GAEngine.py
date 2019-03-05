@@ -5,6 +5,7 @@ import numpy as np
 import collections
 import Utils
 import Evolution
+import Statistics
 
 class GAEngine:
 
@@ -29,6 +30,7 @@ class GAEngine:
 		if adaptive_mutation == True:
 			self.dynamic_mutation = None
 		#elif self.fitness_type == 
+		self.statistics = Statistics.Statistics()
 		self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation)
 
 	def addCrossoverHandler(self,crossover_handler):
@@ -64,9 +66,13 @@ class GAEngine:
 
 	def evolve(self,noOfIterations=50):
 		for i in range(noOfIterations):
-			if self.evolution.evolve(self):
+			result = self.evolution.evolve(self)
+			self.statistics.compute(ga.best_fitness[1])
+			if result:
 				print('SOLVED')
+				self.statistics.plot()
 				break
+
 
 if __name__ == '__main__':
 	#factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')

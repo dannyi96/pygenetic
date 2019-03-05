@@ -49,8 +49,8 @@ class StandardEvolution(BaseEvolution):
 
 		for i in range(0,len(crossover_chromosomes)-1,2):
 			father,mother = crossover_chromosomes[i], crossover_chromosomes[i+1]
-			c1,c2 = ga.crossover_handlers[0](father,mother)
-			ga.population.new_members.extend([c1,c2])
+			child1, child2 = ga.crossover_handlers[0](father,mother)
+			ga.population.new_members.extend([child1,child2])
 		print(self.adaptive_mutation)
 		if self.adaptive_mutation == True:
 			mean_fitness = sum(fitnesses)/len(fitnesses)
