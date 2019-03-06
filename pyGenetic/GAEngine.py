@@ -84,7 +84,7 @@ class GAEngine:
 			self.crossover_handlers_weights[i] = cumsum/total
 		print("crossover_handlers_weights = ",self.crossover_handlers_weights)
 			
-	def chooseSelectionHandler(self):
+	def chooseCrossoverHandler(self):
 		x = random.random()
 		idx = bisect.bisect(self.crossover_handlers_weights, x)
 		return self.crossover_handlers[idx]
