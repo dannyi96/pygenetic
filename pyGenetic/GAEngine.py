@@ -31,12 +31,12 @@ class GAEngine:
 		elif self.fitness_type == 'min':
 			self.best_fitness = None, float("inf")
 		elif self.fitness_type == 'equal':	# Fitness must be absolute difference between member score and fitness_threshold
-			self.best_fitness = None, float("inf") 
+			self.best_fitness = None, float("inf")
 		if adaptive_mutation == True:
 			self.dynamic_mutation = None
-		#elif self.fitness_type == 
+		#elif self.fitness_type ==
 		self.statistics = Statistics.Statistics()
-		self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation)
+		self.evolution = Evolution.StandardEvolution(1,adaptive_mutation=adaptive_mutation,pyspark=True)
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1):
 		self.crossover_handlers.append(crossover_handler)
@@ -72,7 +72,7 @@ class GAEngine:
 	def handle_selection(self):
 		self.generateFitnessDict()
 		return self.selection_handler(self.population.members,self.fitness_dict,self)
-		
+
 	def normalizeWeights(self):
 		# Normalizing crossover and mutation handler weights, result is a CDF
 		total = sum(self.mutation_handlers_weights)
@@ -87,7 +87,7 @@ class GAEngine:
 			cumsum += self.crossover_handlers_weights[i]
 			self.crossover_handlers_weights[i] = cumsum/total
 		print("crossover_handlers_weights = ",self.crossover_handlers_weights)
-			
+
 	def chooseCrossoverHandler(self):
 		x = random.random()
 		idx = bisect.bisect(self.crossover_handlers_weights, x)
@@ -130,10 +130,11 @@ if __name__ == '__main__':
 				fitness += 1
 		return fitness
 
-	ga = GAEngine(fitness,8,factory,100,fitness_type='equal')
+	ga = GAEngine(fitness,8,factory,20)#,fitness_type='equal')
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 9)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 3)
 	ga.addMutationHandler(Utils.MutationHandlers.swap)
 	ga.setSelectionHandler(Utils.SelectionHandlers.basic)
-	ga.evolve(100)
+	# Provide max iteration here ???
+	ga.evolve(1)

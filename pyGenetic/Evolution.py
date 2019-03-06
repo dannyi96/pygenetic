@@ -23,7 +23,7 @@ class StandardEvolution(BaseEvolution):
 	def __evolve_normal(self,ga):
 		# get (1-r) * cross_prob new members
 		ga.population.new_members = ga.handle_selection()
-		
+
 		print("Best fitness = ",ga.best_fitness[1])
 		if ga.best_fitness[1] == ga.fitness_threshold:
 			return 1
@@ -68,11 +68,19 @@ class StandardEvolution(BaseEvolution):
 			ga.population.new_members[index] = mutationHandler(ga.population.new_members[index])
 		ga.population.members = ga.population.new_members
 		#print("New members = ",ga.population.members)
-		ga.population.new_members = []  
+		ga.population.new_members = []
+
+	def __evolve_pyspark(self,ga):
+		from pyspark import SparkContext
+		sc = SparkContext.getOrCreate()
+		print(ga.population.members)
+		chromosomes_rdd = sc.parallelize(ga.population.members)
+		mapped_chromosomes = chromosomes_rdd.map(lambda x: (x,ga.fitness_func(x)))
+		print(mapped_chromosomes.collect())
+		selected_chromosomes = mapped_chromosomes.takeOrdered(10,key=lambda x: -x[1])
+		print(selected_chromosomes)
 
 
-
-	#def __evolve_pyspark(self,ga):
 
 
 	def evolve(self,ga):
@@ -80,6 +88,6 @@ class StandardEvolution(BaseEvolution):
 		if self.pyspark == False:
 			if self.__evolve_normal(ga):
 				return 1
-
-
-
+		else:
+			if self.__evolve_pyspark(ga):
+				return 1
