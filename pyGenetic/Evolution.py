@@ -23,8 +23,8 @@ class StandardEvolution(BaseEvolution):
 	def __evolve_normal(self,ga):
 		# get (1-r) * cross_prob new members
 		ga.population.new_members = ga.handle_selection()
-
-		print(ga.best_fitness[1])
+		
+		print("Best fitness = ",ga.best_fitness[1])
 		if ga.best_fitness[1] == ga.fitness_threshold:
 			return 1
 
@@ -38,31 +38,36 @@ class StandardEvolution(BaseEvolution):
 			fitnesses.append(fitness)
 
 		p = [ elem/sum(fitnesses) for elem in fitnesses]
+		#print("p = ",p)
 		n = math.ceil(ga.cross_prob * len(p))
 		if n %2 == 1:
 			n -= 1
 			ga.population.members.append(ga.population.members[0])
 
 		crossover_indexes = np.random.choice(len(p),n,p=p, replace=False)
+		print("crossover_indices = ",crossover_indexes)
 
 		crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
 
 		for i in range(0,len(crossover_chromosomes)-1,2):
 			father,mother = crossover_chromosomes[i], crossover_chromosomes[i+1]
-			child1, child2 = ga.crossover_handlers[0](father,mother)
+			crossoverHandler = ga.chooseSelectionHandler()
+			child1, child2 = crossoverHandler(father,mother)
 			ga.population.new_members.extend([child1,child2])
-		print(self.adaptive_mutation)
+		print("adaptive_mutation value passed = ",self.adaptive_mutation)
 		if self.adaptive_mutation == True:
 			mean_fitness = sum(fitnesses)/len(fitnesses)
 			average_square_deviation = math.sqrt(sum((fitness - mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
 			ga.dynamic_mutation = ga.mut_prob * ( 1 + ( (ga.best_fitness[1]-average_square_deviation) / (ga.best_fitness[1]+average_square_deviation) ) )
-			print('Adaptive mutation ',ga.dynamic_mutation)
+			print('Adaptive mutation value = ',ga.dynamic_mutation)
 			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.dynamic_mutation*len(p)), replace=False)
 		else:
 			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
 		for index in mutation_indexes:
-			ga.population.new_members[index] = ga.mutation_handlers[0](ga.population.new_members[index])
+			mutationHandler = ga.chooseMutationHandler()
+			ga.population.new_members[index] = mutationHandler(ga.population.new_members[index])
 		ga.population.members = ga.population.new_members
+		#print("New members = ",ga.population.members)
 		ga.population.new_members = []  
 
 
