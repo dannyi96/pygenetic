@@ -37,6 +37,7 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 		return chromosome
 
 if __name__ == '__main__':
+	print("Entered main in chromosome factory")
 	factory1 = ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1|7')
 	print(factory1.createChromosome())
 	factory2 = ChromosomeRangeFactory(int,8,3,11)

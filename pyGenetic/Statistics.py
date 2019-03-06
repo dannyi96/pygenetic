@@ -10,8 +10,8 @@ class Statistics:
 		self.max_fitnesses.append(max_fitness)
 		self.iterations.append(self.iterationNumber)
 		self.iterationNumber += 1
-		print(self.max_fitnesses)
-		print(self.iterations)
+		print("max fitnesses list = ",self.max_fitnesses)
+		print("iteration number   = ",self.iterations)
 
 	def plot(self):
 		plt.plot(self.iterations,self.max_fitnesses)
