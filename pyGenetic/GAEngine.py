@@ -30,6 +30,8 @@ class GAEngine:
 			self.best_fitness = None, float("-inf")
 		elif self.fitness_type == 'min':
 			self.best_fitness = None, float("inf")
+		elif self.fitness_type == 'equal':	# Fitness must be absolute difference between member score and fitness_threshold
+			self.best_fitness = None, float("inf") 
 		if adaptive_mutation == True:
 			self.dynamic_mutation = None
 		#elif self.fitness_type == 
@@ -63,6 +65,8 @@ class GAEngine:
 			if self.fitness_type == 'max' and self.fitness_func(member) > self.best_fitness[1]:
 				self.best_fitness = (member,self.fitness_func(member))
 			elif self.fitness_type == 'min' and self.fitness_func(member) < self.best_fitness[1]:
+				self.best_fitness = (member, self.fitness_func(member))
+			elif self.fitness_type == 'equal' and abs(self.fitness_func(member)-self.fitness_threshold) < abs(self.best_fitness[1]-self.fitness_threshold):
 				self.best_fitness = (member, self.fitness_func(member))
 
 	def handle_selection(self):
@@ -126,7 +130,7 @@ if __name__ == '__main__':
 				fitness += 1
 		return fitness
 
-	ga = GAEngine(fitness,8,factory,100)
+	ga = GAEngine(fitness,8,factory,100,fitness_type='equal')
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 9)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 3)

@@ -29,10 +29,10 @@ class StandardEvolution(BaseEvolution):
 			return 1
 
 		fitnesses = []
-		total = 0
+		total = 0 #This is not being used
 		for chromosome in ga.population.members:
 			fitness = ga.calculateFitness(chromosome)
-			if fitnesses == 0:
+			if fitness == 0:
 				fitness = random.uniform(0.01, 0.02)
 			total += fitness
 			fitnesses.append(fitness)
