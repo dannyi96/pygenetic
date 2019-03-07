@@ -9,8 +9,47 @@ import Statistics
 import bisect
 
 class GAEngine:
+	"""This Class is the main driver program which contains and calls the operators used in Genetic algorithm
+
+	GAEngine keeps track of specific type of operators the user has specified for running the algorithm
+
+	Methods
+	---------
+	addCrossoverHandler(crossover_handler, weight)
+		Sets the function to be used for crossover operation
+	addMutationHandler(mutation_handler, weight)
+		Sets the function to be used for mutation operation
+	
+	
+
+  	"""
 
 	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True,smart_fitness=False):
+		"""
+		Parameters
+		-----------
+		fitness_func : A function argument
+					The fitness function to be used, passed as a function argument
+		fitness_threshold : int
+					Threshold at which a candidate solution is considered optimal solution to the problem
+		factory : Instance of any subclass of ChromosomeFactory class 
+					Generates and returns the initial population of candidate solutions
+		population_size : int
+					The number of candidate solutions that can exist after every iteration
+		cross_prob : float
+					The Crossover probability of crossover operation which determines the extent to which crossover between parents
+		mutation_prob : float
+					The mutation probability of mutation operation which determines extent to which candidates should be mutated
+		fitness_type : string
+					Indicates the nature of fitness value (higher/lower/equal) to be considered during selection of candidates
+					(default is max)
+		adaptive_mutation : boolean
+					If set rate of mutation of candidates dynamically changes during execution depending on diversity in population
+					(default is true)
+		smart_fitness : boolean
+					TO BE DESCRIBED  
+		"""
+
 		self.fitness_func = fitness_func
 		self.fitness_threshold = fitness_threshold
 		self.factory = factory
@@ -31,14 +70,18 @@ class GAEngine:
 		elif self.fitness_type == 'min':
 			self.best_fitness = None, float("inf")
 		elif self.fitness_type == 'equal':	# Fitness must be absolute difference between member score and fitness_threshold
-			self.best_fitness = None, float("inf") 
+			self.best_fitness = None, float("inf")
 		if adaptive_mutation == True:
 			self.dynamic_mutation = None
-		#elif self.fitness_type == 
+		#elif self.fitness_type ==
 		self.statistics = Statistics.Statistics()
 		self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation)
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1):
+		"""
+
+
+		"""
 		self.crossover_handlers.append(crossover_handler)
 		self.crossover_handlers_weights.append(weight)
 
@@ -72,7 +115,7 @@ class GAEngine:
 	def handle_selection(self):
 		self.generateFitnessDict()
 		return self.selection_handler(self.population.members,self.fitness_dict,self)
-		
+
 	def normalizeWeights(self):
 		# Normalizing crossover and mutation handler weights, result is a CDF
 		total = sum(self.mutation_handlers_weights)
@@ -87,7 +130,7 @@ class GAEngine:
 			cumsum += self.crossover_handlers_weights[i]
 			self.crossover_handlers_weights[i] = cumsum/total
 		print("crossover_handlers_weights = ",self.crossover_handlers_weights)
-			
+
 	def chooseCrossoverHandler(self):
 		x = random.random()
 		idx = bisect.bisect(self.crossover_handlers_weights, x)
