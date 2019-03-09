@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block customCSS %}
+{% endblock %}
+
+{% block customContent %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                {% if isError %}
+                    <div class="alert alert-danger" role="alert">
+                            {{ errorMessage }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" id="search-box">
+        <div class="row" id="patternSearchBoxWrapper">
+            <div class="col-xl-11 col-lg-11 col-md-11 col-sm-11 col-11" id="patternSearchBoxDiv">
+                <input class="form form-control" id="patternSearchBox" type="text" name="patternSearchBox" placeholder="Search">
+            </div>
+            <button id="searchClearBtn">Clear</button>
+        </div>
+    </div>
+    
+    <div class="container-fluid" id="patternContainer">
+        
+        <div class="row">
+            
+            
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 patternDivCol" name="adapter">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 patternDivInfo greenColorDiv">
+                    <a href = {{ url_for("ga_online") }} class="textColor">
+                        <div id="lol">
+                            Run Your Genetic Algorithm Online
+                        </div>
+                    </a>
+                </div>
+            </div>
+        
+        
+        </div>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        var search_bar = document.getElementById("search-box");
+        $(window).on('resize', function(){
+            if ($(document).height() > $(window).height()) { 
+                search_bar.style.display = 'block';
+            } else {
+                search_bar.style.display = 'none';
+            }
+        });
+    </script>
+
+{% endblock %}
+
+{% block customJS %}
+{% endblock %}
+

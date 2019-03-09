@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block customCSS %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/adapter.css') }}">
+{% endblock %}
+
+{% block customContent %}
+
+
+
+<div class="container-fluid entireStateWrapper">
+    <div class="row" style="border-bottom: 1px solid black">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
+                        Step 1.
+                    </div>
+                </div>
+                <hr class="fancyHorLine2">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                        Enter the Chromsome Type
+                    </div>
+                </div>
+                <hr class="fancyHorLine1">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Return Type </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Function Name </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Parameter Types </span>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                    <span style="margin-left: 50px;"> Parameter Names </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName retTypeName" placeholder="Return Type" aria-label="Return Type" aria-describedby="basic-addon3" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="left" data-content="Invalid Name">
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName funcName" placeholder="Function Name" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                            </div>
+
+                                            <div class="col-xl-6 col-lg-6 col-md-6 col-6 paramDiv">
+                                                <div class="input-group repeatableTargetParamListGroup">
+                                                    <input type="text" class="form-control validName paramType" placeholder="Parameter Type" aria-label="Parameter Type" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+
+                                                    <input type="text" class="form-control validName paramName" placeholder="Parameter Name" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary addTargetParameterBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another parameter">+</button>
+                                                        <button class="btn btn-outline-secondary delTargetParameterBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this parameter" style="pointer-events: none;" disabled>-</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                                                        <button class="btn btn-secondary addFuncDeclBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another function">Add</button>
+                                                        <button class="btn btn-danger delFuncDeclBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this function" disabled>Remove</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="border-bottom: 1px solid black">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
+                        Step 1.
+                    </div>
+                </div>
+                <hr class="fancyHorLine2">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                        Enter Target Class Function Declaration(s)
+                    </div>
+                </div>
+                <hr class="fancyHorLine1">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Return Type </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Function Name </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Parameter Types </span>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                    <span style="margin-left: 50px;"> Parameter Names </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName retTypeName" placeholder="Return Type" aria-label="Return Type" aria-describedby="basic-addon3" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="left" data-content="Invalid Name">
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName funcName" placeholder="Function Name" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                            </div>
+
+                                            <div class="col-xl-6 col-lg-6 col-md-6 col-6 paramDiv">
+                                                <div class="input-group repeatableTargetParamListGroup">
+                                                    <input type="text" class="form-control validName paramType" placeholder="Parameter Type" aria-label="Parameter Type" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+
+                                                    <input type="text" class="form-control validName paramName" placeholder="Parameter Name" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary addTargetParameterBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another parameter">+</button>
+                                                        <button class="btn btn-outline-secondary delTargetParameterBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this parameter" style="pointer-events: none;" disabled>-</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                                                        <button class="btn btn-secondary addFuncDeclBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another function">Add</button>
+                                                        <button class="btn btn-danger delFuncDeclBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this function" disabled>Remove</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row" style="border-bottom: 1px solid black">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
+                        Step 2.
+                    </div>
+                </div>
+                <hr class="fancyHorLine2">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                        Enter Adaptee Class Function Declaration(s)
+                    </div>
+                </div>
+                <hr class="fancyHorLine1">
+                <div class="row" id="adapteeFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Return Type </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Function Name </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Parameter Types </span>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                    <span style="margin-left: 50px;"> Parameter Names </span>
+                                </div>
+                            </div>
+                            <div class="row" id="adapteeFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableAdapteeFuncDeclList">
+                                        <div class="row">
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName retTypeName" placeholder="Return Type" aria-label="Return Type" aria-describedby="basic-addon3" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="left" data-content="Invalid Name">
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName funcName" placeholder="Function Name" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                            </div>
+
+                                            <div class="col-xl-6 col-lg-6 col-md-6 col-6 paramDiv">
+                                                <div class="input-group repeatableParamListGroup">
+                                                    <input type="text" class="form-control validName paramType" placeholder="Parameter Type" aria-label="Parameter Type" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+
+                                                    <input type="text" class="form-control validName paramName" placeholder="Parameter Name" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary addParameterBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another parameter">+</button>
+                                                        <button class="btn btn-outline-secondary delParameterBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this parameter" style="pointer-events: none;" disabled>-</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                                                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                                                        <button class="btn btn-secondary addFuncDeclBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another function">Add</button>
+                                                        <button class="btn btn-danger delFuncDeclBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this function" disabled>Remove</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+	{% block buttons %}
+		{{ super() }}
+	{% endblock %}
+</div>
+
+{% endblock %}
+
+
+{% block customJS %}
+    <script src="{{ url_for('static',filename='./js/Adapter/adapter.js') }}"></script>
+{% endblock %}

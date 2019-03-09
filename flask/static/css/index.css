@@ -1,0 +1,251 @@
+/*
+    Start - Don't touch this code
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+body {
+    font-family: 'Roboto',  sans-serif;
+    background: #f2f2f2;
+    overflow-x: hidden;
+}
+
+nav a,
+nav a:hover,
+nav a:focus,
+footer a,
+footer a:hover,
+footer a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+/* ---------------------------------------------------
+    NAVBAR STYLE
+----------------------------------------------------- */
+.navbar {
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 40px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-btn {
+    box-shadow: none;
+    outline: none !important;
+    border: none;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+#topNav{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    /*height: 50px;*/
+    z-index: 9999;
+    width: 100%;
+    background-color: #141411;
+    color: #FFFFFF;
+}
+
+#navbarBrand{
+    font-size: 24px;
+    text-align: center;
+}
+
+#navbarList li{
+    display: inline;
+}
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+
+#content {
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#customContent{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+/* ---------------------------------------------------
+    FOOTER STYLE
+----------------------------------------------------- */
+.footer {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: #164719;
+    color: #FFFFFF;
+}
+
+#footerDiv{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.footerSocialIcons{
+    margin-left: 20px;
+}
+/*
+    End - Don't touch this code
+*/
+
+/*
+    Start - Writing your custom CSS here, or make your own CSS file.
+*/
+
+#patternSearchBoxDiv
+{
+    margin-top: 10px;
+    font-size: 30px;
+}
+
+#patternSearchBoxWrapper
+{
+    border-bottom: 1px solid black;    
+}
+
+#patternSearchBox
+{
+    font-size: 30px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    border-radius: 0px;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    background-color: inherit;
+    transition: all .2s ease;
+}
+
+#patternSearchBox:hover,
+#patternSearchBox:active
+{
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    outline:0px !important;
+    -webkit-appearance:none; /* to remove bootstrap blue borders*/
+}
+
+#patternContainer{
+    margin-top: 50px;
+    font-size: 20px;
+}
+
+.textColor{
+    color: #FFFFFF;
+}
+
+.textColor:hover{
+    color: #FFFFFF;
+}
+
+.greenColorDiv{
+    background-color: #218838!important;
+}
+
+.patternDivInfo
+{
+    cursor: pointer;
+    background-color: #C82333;
+    color: #FFFFFF;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.patternDivCol{
+    /*border: 1px solid black;*/
+    margin-top: 10px;
+    /*cursor: pointer;*/
+}
+
+.patternDivInfo a:-webkit-any-link{
+    text-decoration:none !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#patternHeading{
+    margin-top: 50px;
+    font-size: 24px;
+}
+
+.headings{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.textCenter{
+    text-align: center;
+}
+
+#searchClearBtn{
+    margin-top: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #000000;
+    border-radius: 0px;
+    background-color: inherit;
+}
+
+#searchClearBtn:hover{
+    color: #C40000;
+    border-radius: 0px;
+    background-color: inherit;
+}
+
+#searchClearBtn:focus {
+    outline:0;
+}
+.popover{
+    z-index: 1000!important;
+}
+.modal-backdrop.show{
+    /*z-index: 99999!important;*/
+}
+.modal-content{
+    z-index: 99999!important;
+}
+
+/* Button CSS */
+.file{
+	position: relative;
+	overflow: hidden;
+}
+
+#fileinput{
+	position: absolute;
+	font-size: 50px;
+	opacity: 0;
+	right: 0;
+	top: 0;
+    cursor: pointer;
+}
+
+
+/*
+    End - Writing your custom CSS here, or make your own CSS file.
+*/

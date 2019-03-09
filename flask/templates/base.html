@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>{{ title }}</title>
+
+        <!-- Bootstrap CSS CDN -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+        <!-- Font Awesome JS -->
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>
+
+        <!-- Font Awesome CSS -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+        <!-- Our Custom CSS -->
+        <link rel="stylesheet" href={{url_for('static', filename='css/index.css')}}>
+        {% block customCSS %}
+        {% endblock %}
+
+    </head>
+
+    <body>
+
+        <div class="wrapper">
+            <!-- Page Content  -->
+            <div id="content">
+                <nav class="navbar navbar-expand-md justify-content-between" id="topNav">
+                    <div class="container-fluid">
+                        <button class="btn btn-dark navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-nav">
+                                <i class="fas fa-align-justify"></i>
+                            <!-- <span class="navbar-toggler-icon"></span> -->
+                        </button>
+                        <div class="navbar-collapse collapse dual-nav w-50 order-1 order-md-0" id="navbarCollapseBtn">
+                            <ul class="navbar-nav">
+                                <li class="nav-item active" id="sidebarCollapse">
+                                    <a class="nav-link pl-0" href="#" id="navbarCollapseBtnLink">
+                                        <!-- <i class="fas fa-align-justify"></i> -->
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <a href="{{ url_for('home') }}" class="navbar-brand mx-auto d-block text-center order-0 order-md-1 w-25">
+                            pyGenetic - An efficient GA Framework
+                        </a>
+                        
+                        <div class="navbar-collapse collapse dual-nav w-50 order-2">
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- START EDITING FROM HERE -->
+                <div id="patternHeading">
+                    {{ title }} 
+                </div>
+                <div id="customContent">
+                {% block customContent %}
+                {% endblock %}
+				
+                </div>
+				
+                <!-- END EDITING HERE -->
+                <footer class="footer">
+                      <div class="container-fluid" id="footerDiv">
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-2 col-xs-2">
+                                <a href="https://creativecommons.org/licenses/by-sa/4.0">
+                                    <i class="far fa-copyright"></i> Copyright pyGenetic 2019.
+                                </a>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-5 col-sm-6 col-xs-5">
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-xs-5">
+                                <a href="https://www.youtube.com/user/PewDiePie" class="float-right footerSocialIcons"><i class="fab fa-youtube"></i></a>
+                                <a href="https://github.com/danny311296/pygenetic" class="float-right footerSocialIcons"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                      </div>
+                </footer>
+
+            </div>
+        </div>
+
+        <div class="overlay"></div>
+
+        <!-- jQuery CDN-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- tether 1.4.0 (for using bootstrap's tooltip component) -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" crossorigin="anonymous"></script>
+
+        <!-- Popper.JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+
+        <!-- Bootstrap JS -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+        <!-- Our Suffix Tree JS -->
+        <script src={{url_for("static",filename="js/suffixTree.js")}}></script>
+
+        <!-- Our Custom JS -->
+        <script src={{url_for("static",filename="js/index.js")}}></script>
+        
+        {% block customJS %}
+        {% endblock %}
+
+    </body>
+
+</html>
+
+{% block buttons %}
+<!-- Upload Buttons JS -->
+<script src={{url_for("static",filename="js/upload.js")}}></script>
+<!-- Buttons -->
+<div class="row" style="margin-top: 10px;">
+	<div class="col-xl-6 col-lg-6 col-md-6 col-6">
+		
+		<button class="btn btn-secondary btn-block dropdown-toggle" id="fileTypeBtn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">What file format would you like the code to be downloaded in?</button>
+		<div class="dropdown-menu" name="fileType">
+			<h6 class="dropdown-header">What file format would you like the code to be downloaded in?</h6>
+			<a class="dropdown-item fileType" value=".tar.gz">.tar.gz</a>
+			<a class="dropdown-item fileType" value=".tar.bz2">.tar.bz2</a>
+			<a class="dropdown-item fileType" value=".tar.xz">.tar.xz</a>
+			<a class="dropdown-item fileType" value=".zip">.zip</a>
+		</div>
+
+	</div>
+	<div class="col-xl-4 col-lg-4 col-md-4 col-4">
+		<button type="button" class="btn btn-info btn-block" id="codeDownload">Create Code!</button>
+	</div>
+	<div class="col-xl-2 col-lg-2 col-md-2 col-2">
+		<div id="fileHandle" class="file btn btn-secondary btn-block" data-toggle="tooltipupload" data-placement="right" title="Upload meta.json present in previous downloads to restore state">
+			Upload
+			<div class="file-upload-wrapper">
+				<input type="file" name="file" id = "fileinput" accept=".json"/>
+			</div>
+		</div>
+	</div>
+	<div>
+		<form method="POST" id="downloadCodeForm" action={{ url_for("downloadCode") }}>
+			<input name="hiddenCodeDownload" value="yes" hidden>
+			<input type="submit" class="btn btn-success btn-block" id="codeForDownload" value="Download Code!" hidden>
+		</form>
+	</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalTitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="errorModalTitle">Error in entries</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="errorModalBody">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div> 
+
+{% endblock %}
