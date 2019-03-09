@@ -36,7 +36,7 @@ class GAEngine:
 			self.dynamic_mutation = None
 		#elif self.fitness_type ==
 		self.statistics = Statistics.Statistics()
-		self.evolution = Evolution.StandardEvolution(1,adaptive_mutation=adaptive_mutation,pyspark=True)
+		self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation,pyspark=False)
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1):
 		self.crossover_handlers.append(crossover_handler)
@@ -137,4 +137,4 @@ if __name__ == '__main__':
 	ga.addMutationHandler(Utils.MutationHandlers.swap)
 	ga.setSelectionHandler(Utils.SelectionHandlers.basic)
 	# Provide max iteration here ???
-	ga.evolve(1)
+	ga.evolve(100)

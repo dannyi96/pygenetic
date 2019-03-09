@@ -75,10 +75,25 @@ class StandardEvolution(BaseEvolution):
 		sc = SparkContext.getOrCreate()
 		print(ga.population.members)
 		chromosomes_rdd = sc.parallelize(ga.population.members)
-		mapped_chromosomes = chromosomes_rdd.map(lambda x: (x,ga.fitness_func(x)))
-		print(mapped_chromosomes.collect())
-		selected_chromosomes = mapped_chromosomes.takeOrdered(10,key=lambda x: -x[1])
+		# Fitness Value Mapping and making selection
+		mapped_chromosomes_rdd = chromosomes_rdd.map(lambda x: (x,ga.fitness_func(x)))
+		print(mapped_chromosomes_rdd.collect())
+		selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: -x[1])
 		print(selected_chromosomes)
+		ga.population.new_members = selected_chromosomes
+
+		#n = math.ceil(ga.cross_prob * len(ga.population.members))
+		#if n %2 == 1:
+		#	n -= 1
+		#	ga.population.members.append(ga.population.members[0])
+		# Crossover Mapping
+		#crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
+		#print("crossover_indices = ",crossover_indexes)
+		#crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
+
+
+
+
 
 
 
