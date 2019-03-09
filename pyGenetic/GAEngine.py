@@ -17,9 +17,42 @@ class GAEngine:
 	---------
 	addCrossoverHandler(crossover_handler, weight)
 		Sets the function to be used for crossover operation
+
 	addMutationHandler(mutation_handler, weight)
 		Sets the function to be used for mutation operation
-	
+
+	setCrossoverProbability(cross_prob)
+		Sets value for cross_prob instance variable for crossover operation
+
+	setMutationProbability(mut_prob)
+		Sets value for mut_prob instance variable
+
+	setSelectionHandler(selection_handler)
+		Sets the function to be used for selection operation
+
+	calculateFitness(chromosome)
+		Calls fitness function (fitness_func) to compute the fitness score of a chromosome
+
+	generateFitnessDict()
+		Generates a  dictionary of (individual, fitness_score) and also stores the dictionary 
+		containing fittest chromosome depending on fitness_type(max/min/equal)
+
+	handle_selection()
+		Calls generateFitnessDict() and  selection_handler specified 
+		SET TO NONE CURRENTLY
+
+	normalizeWeights()
+		Normalizes crossover and mutation handler weights, result is a CDF
+
+	chooseCrossoverHandler()
+		TO BE DESCRIBED
+
+	chooseMutationHandler()
+		TO BE DESCRIBED
+		
+	evolve()
+		Calls evolve method in Evolution module  which Executes the operations of Genetic algorithm till
+		a fitness score reaches a threshold or the number of iterations reach max iterations specified by user
 	
 
   	"""
@@ -79,6 +112,8 @@ class GAEngine:
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1):
 		"""
+		Sets the function to be used for crossover operation
+
 
 
 		"""
@@ -93,12 +128,40 @@ class GAEngine:
 		self.cross_prob = cross_prob
 
 	def setMutationProbability(self,mut_prob):
+		"""
+		Sets mutation probability instance variable
+
+		Parameters:
+		----------
+		Mutation probability
+
+		"""
 		self.mut_prob = mut_prob
 
 	def setSelectionHandler(self,selection_handler):
+		"""
+		Sets function to be used for selection_handler
+
+		Parameters:
+		----------
+		Function to be used for selection_handler
+
+		"""
 		self.selection_handler = selection_handler
 
 	def calculateFitness(self,chromosome):
+		"""
+		Calls fitness function (fitness_func) to compute the fitness score of a chromosome
+
+		Parameters:
+		----------
+		chromosome for which fitness is to be calculated
+
+		Returns:
+		--------
+		Fitness value of chromosome	
+
+		"""
 		return self.fitness_func(chromosome)
 
 	def generateFitnessDict(self):
