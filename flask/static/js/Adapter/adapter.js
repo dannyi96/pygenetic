@@ -476,6 +476,9 @@ $(document).ready(function() {
             $(this).css('color', 'black');
         }
     });
+
     // END : State name validation
 
 });
+
+

@@ -5,8 +5,26 @@
 {% endblock %}
 
 {% block customContent %}
-
-
+<!--<script src="{{ url_for('static',filename='./js/Adapter/adapter2.js') }}"></script>-->
+<script>
+    function addGeneGenerationBoxes(selectObject) {
+        var value = selectObject.value;
+        console.log(value);
+        document.getElementById('fillgenegeneration').removeChild(document.getElementById('fillgenegeneration').childNodes[1]);
+        if(value == "range") {
+            var newspan = document.createElement('span');
+            newspan.className = "monkeyPatchShiftToRight";
+            newspan.innerHTML = "Enter range";
+            document.getElementById('fillgenegeneration').appendChild(newspan);
+        }
+        else if(value == "regex") {
+            var newspan = document.createElement('span');
+            newspan.className = "monkeyPatchShiftToRight";
+            newspan.innerHTML = "Enter regex";
+            document.getElementById('fillgenegeneration').appendChild(newspan);
+        }
+    }
+</script>
 
 <div class="container-fluid entireStateWrapper">
     <div class="row" style="border-bottom: 1px solid black">
@@ -29,16 +47,16 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Return Type </span>
+                                    <span class="monkeyPatchShiftToRight"> Chromosome Data Type </span>
                                 </div>
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Function Name </span>
+                                    <span class="monkeyPatchShiftToRight"> Gene Generation </span>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Parameter Types </span>
+                                <div class="col-xl-3 col-lg-3 col-md-3 col-3">
+                                    <span class="monkeyPatchShiftToRight"> No of genes/chromosome </span>
                                 </div>
-                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
-                                    <span style="margin-left: 50px;"> Parameter Names </span>
+                                <div class="col-xl-3 col-lg-3 col-md-3 col-3" id="fillgenegeneration">
+                                <!--    <span class="monkeyPatchShiftToRight"> No of genes/chromosome </span>-->
                                 </div>
                             </div>
                             <div class="row" id="targetFuncDeclDivRow">
@@ -46,11 +64,23 @@
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName retTypeName" placeholder="Return Type" aria-label="Return Type" aria-describedby="basic-addon3" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="left" data-content="Invalid Name">
+                                                <select class="form-control">
+                                                    <option value="1d">1D List</option>
+                                                    <option value="2d">2D List</option>
+                                                    <option value="custom_chromsome">Custom</option>
+                                                </select>
                                             </div>
 
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Function Name" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                                <select id="genegeneration" class="form-control" onchange="addGeneGenerationBoxes(this)">
+                                                    <option value="range">Range</option>
+                                                    <option value="regex">Regex</option>
+                                                    <option value="custom_gene">Custom</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control" placeholder="Number of genes" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
                                             </div>
 
                                             <div class="col-xl-6 col-lg-6 col-md-6 col-6 paramDiv">
@@ -58,19 +88,6 @@
                                                     <input type="text" class="form-control validName paramType" placeholder="Parameter Type" aria-label="Parameter Type" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
 
                                                     <input type="text" class="form-control validName paramName" placeholder="Parameter Name" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-outline-secondary addTargetParameterBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another parameter">+</button>
-                                                        <button class="btn btn-outline-secondary delTargetParameterBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this parameter" style="pointer-events: none;" disabled>-</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                                                    <div class="btn-group mr-2" role="group" aria-label="First group">
-                                                        <button class="btn btn-secondary addFuncDeclBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another function">Add</button>
-                                                        <button class="btn btn-danger delFuncDeclBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this function" disabled>Remove</button>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -241,5 +258,5 @@
 
 
 {% block customJS %}
-    <script src="{{ url_for('static',filename='./js/Adapter/adapter.js') }}"></script>
+    <script src="{{ url_for('static',filename='./js/Adapter/adapter.js') }}"></script>      
 {% endblock %}
