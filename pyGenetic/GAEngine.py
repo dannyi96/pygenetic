@@ -53,42 +53,42 @@ class GAEngine:
 		Invokes evolve method in Evolution module  which Executes the operations of Genetic algorithm till
 		a fitness score reaches a threshold or the number of iterations reach max iterations specified by user
 	
+	
+	Instance Members
+	-----------
+	fitness_func : A function argument
+				The fitness function to be used, passed as a function argument
+
+	fitness_threshold : int
+				Threshold at which a candidate solution is considered optimal solution to the problem
+
+	factory : Instance of any subclass of ChromosomeFactory class 
+				Generates and returns the initial population of candidate solutions
+
+	population_size : int
+				The number of candidate solutions that can exist after every iteration
+
+	cross_prob : float
+				The Crossover probability of crossover operation which determines the extent to which crossover between parents
+	
+	mutation_prob : float
+				The mutation probability of mutation operation which determines extent to which candidates should be mutated
+	
+	fitness_type : string
+				Indicates the nature of fitness value (higher/lower/equal) to be considered during selection of candidates
+				(default is max)
+	
+	adaptive_mutation : boolean
+				If set rate of mutation of candidates dynamically changes during execution depending on diversity in population
+				(default is true)
+	
+	smart_fitness : boolean
+				TO BE DESCRIBED  
 
   	"""
 
 	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True,smart_fitness=False):
-		"""
-		Parameters
-		-----------
-		fitness_func : A function argument
-					The fitness function to be used, passed as a function argument
-
-		fitness_threshold : int
-					Threshold at which a candidate solution is considered optimal solution to the problem
-
-		factory : Instance of any subclass of ChromosomeFactory class 
-					Generates and returns the initial population of candidate solutions
-
-		population_size : int
-					The number of candidate solutions that can exist after every iteration
-
-		cross_prob : float
-					The Crossover probability of crossover operation which determines the extent to which crossover between parents
 		
-		mutation_prob : float
-					The mutation probability of mutation operation which determines extent to which candidates should be mutated
-		
-		fitness_type : string
-					Indicates the nature of fitness value (higher/lower/equal) to be considered during selection of candidates
-					(default is max)
-		
-		adaptive_mutation : boolean
-					If set rate of mutation of candidates dynamically changes during execution depending on diversity in population
-					(default is true)
-		
-		smart_fitness : boolean
-					TO BE DESCRIBED  
-		"""
 
 		self.fitness_func = fitness_func
 		self.fitness_threshold = fitness_threshold

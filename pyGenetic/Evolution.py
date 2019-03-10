@@ -5,22 +5,78 @@ import numpy as np
 #import pyspark
 
 class BaseEvolution(ABC):
+	"""
+	Abstract class to be inherited to implement the specific evolution procedure
+
+	Instance Members :
+	------------------
+	max_iterations ; int
+
+	Methods :
+	---------
+	evolve() : abstract method to be implemeted by derived classes
+
+	"""
 
 	def __init__(self,max_iterations):
 		self.max_iterations = max_iterations
 
 	@abstractmethod
 	def evolve(self,ga):
+		"""
+		Abstract method to be implemeted by derived classes
+		
+		Parameters :
+		-------------
+		ga : reference to the GAEngine object
+
+		"""
+
 		pass
 
 class StandardEvolution(BaseEvolution):
+	"""
+	Class inherits from BaseEvolution and contain implementations of abstract 
+	evolution method in  BaseEvolution
 
+	Instance Members :
+	------------------
+
+	max_iterations : int
+	adaptive_mutation : boolean to indicated if rate of mutation should 
+						change dynamically during each iteration
+	pyspark : boolean to indicated if parallelization should be supported by using pyspark
+
+	"""
 	def __init__(self,max_iterations=100,adaptive_mutation=True,pyspark=False):
 		BaseEvolution.__init__(self,max_iterations)
 		self.adaptive_mutation = adaptive_mutation
 		self.pyspark = pyspark
 
 	def __evolve_normal(self,ga):
+
+		"""
+		Private method which performs an iteration
+
+		Outline of Algorithm :
+		---------------------
+		Selection : fittest members of population are selected by invoking 
+					selection handler in Utils.py module
+		Crossover : A probability score is generated from fitness value of each chromosome
+					Chromosomes for crossover are selected based on this probablity score 
+					of each chromosome
+					Crossover is performed by invoking a crossover handler from Utils.py
+		Mutation : If adaptive mutation is set then average square deviation of fitness values
+					is used for determining (the indexes of chromosome)/genes to be mutated 
+					If false then genes to be mutated are chosen randomly
+					Once indexes of Chromomsome / genes to be mutated are determined, a mutation
+					handler from Utils.py module is invoked 
+
+		Each iteration consists of repeating the above operations until an optimal solution 
+		determined by fitness threshold is reached  or number of iterations specified are complete
+
+		"""
+
 		# get (1-r) * cross_prob new members
 		ga.population.new_members = ga.handle_selection()
 		
@@ -55,6 +111,7 @@ class StandardEvolution(BaseEvolution):
 			child1, child2 = crossoverHandler(father,mother)
 			ga.population.new_members.extend([child1,child2])
 		print("adaptive_mutation value passed = ",self.adaptive_mutation)
+
 		if self.adaptive_mutation == True:
 			mean_fitness = sum(fitnesses)/len(fitnesses)
 			average_square_deviation = math.sqrt(sum((fitness - mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
@@ -76,6 +133,12 @@ class StandardEvolution(BaseEvolution):
 
 
 	def evolve(self,ga):
+		"""
+		Invokes the private method __evolve_normal to perform an iteration Genetic Algorithm
+
+		Returns : 1 if optimal solution was found
+
+		"""
 		#print(self.max_iterations)
 		if self.pyspark == False:
 			if self.__evolve_normal(ga):
