@@ -9,8 +9,87 @@ import Statistics
 import bisect
 
 class GAEngine:
+	"""This Class is the main driver program which contains and invokes the operators used in Genetic algorithm
+
+	GAEngine keeps track of specific type of operators the user has specified for running the algorithm
+
+	Methods
+	---------
+	addCrossoverHandler(crossover_handler, weight)
+		Sets the function to be used for crossover operation
+
+	addMutationHandler(mutation_handler, weight)
+		Sets the function to be used for mutation operation
+
+	setCrossoverProbability(cross_prob)
+		Sets value for cross_prob instance variable for crossover operation
+
+	setMutationProbability(mut_prob)
+		Sets value for mut_prob instance variable
+
+	setSelectionHandler(selection_handler)
+		Sets the function to be used for selection operation
+
+	calculateFitness(chromosome)
+		Invokes fitness function (fitness_func) to compute the fitness score of a chromosome
+
+	generateFitnessDict()
+		Generates a  dictionary of (individual, fitness_score) and also stores the dictionary 
+		containing fittest chromosome depending on fitness_type(max/min/equal)
+
+	handle_selection()
+		Invokes generateFitnessDict() and  selection_handler specified 
+
+	normalizeWeights()
+		Normalizes crossover and mutation handler weights, result is a CDF
+
+	chooseCrossoverHandler()
+		Selects crossover handler from available handlers based on weightage given to handlers
+
+	chooseMutationHandler()
+		Selects mutation handler from available handlers based on weightage given to handlers
+		
+	evolve()
+		Invokes evolve method in Evolution module  which Executes the operations of Genetic algorithm till
+		a fitness score reaches a threshold or the number of iterations reach max iterations specified by user
+	
+	
+	Instance Members
+	-----------
+	fitness_func : A function argument
+				The fitness function to be used, passed as a function argument
+
+	fitness_threshold : int
+				Threshold at which a candidate solution is considered optimal solution to the problem
+
+	factory : Instance of any subclass of ChromosomeFactory class 
+				Generates and returns the initial population of candidate solutions
+
+	population_size : int
+				The number of candidate solutions that can exist after every iteration
+
+	cross_prob : float
+				The Crossover probability of crossover operation which determines the extent to which crossover between parents
+	
+	mutation_prob : float
+				The mutation probability of mutation operation which determines extent to which candidates should be mutated
+	
+	fitness_type : string
+				Indicates the nature of fitness value (higher/lower/equal) to be considered during selection of candidates
+				(default is max)
+	
+	adaptive_mutation : boolean
+				If set rate of mutation of candidates dynamically changes during execution depending on diversity in population
+				(default is true)
+	
+	smart_fitness : boolean
+				TO BE DESCRIBED  
+
+  	"""
 
 	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True,smart_fitness=False):
+		
+
 		self.fitness_func = fitness_func
 		self.fitness_threshold = fitness_threshold
 		self.factory = factory
@@ -39,26 +118,90 @@ class GAEngine:
 		self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation,pyspark=False)
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1):
+		"""
+		Adds crossover handler staticmethod defined in Utils.py and 
+		appends the weightage to be given to the handler
+
+		Parameters :
+		----------
+		crossover_handler : Method defined in Utils.py
+		weight : int
+
+		"""
 		self.crossover_handlers.append(crossover_handler)
 		self.crossover_handlers_weights.append(weight)
 
 	def addMutationHandler(self,mutation_handler, weight = 1):
+		"""
+		Adds mutation handler staticmethod defined in Utils.py and 
+		appends the weightage to be given to the handler
+
+		Parameters :
+		----------
+		mutation_handler : Method defined in Utils.py
+		weight : int
+
+		"""
+
 		self.mutation_handlers.append(mutation_handler)
 		self.mutation_handlers_weights.append(weight)
 
 	def setCrossoverProbability(self,cross_prob):
+		"""
+		Sets crossover probability value 
+
+		Parameters :
+		-----------
+		cross_prob : float
+
+		"""
+
 		self.cross_prob = cross_prob
 
 	def setMutationProbability(self,mut_prob):
+		"""
+		Sets mutation probability instance variable
+
+		Parameters:
+		----------
+		Mutation probability
+
+		"""
 		self.mut_prob = mut_prob
 
 	def setSelectionHandler(self,selection_handler):
+		"""
+		Sets function to be used for selection_handler
+
+		Parameters:
+		----------
+		Function to be used for selection_handler
+
+		"""
 		self.selection_handler = selection_handler
 
 	def calculateFitness(self,chromosome):
+		"""
+		Invokes fitness function (fitness_func) to compute the fitness score of a chromosome
+
+		Parameters:
+		----------
+		chromosome for which fitness is to be calculated
+
+		Returns:
+		--------
+		Fitness value of chromosome	
+
+		"""
 		return self.fitness_func(chromosome)
 
 	def generateFitnessDict(self):
+		"""
+		Generates a  dictionary of (individual, fitness_score) and also stores the dictionary 
+		containing fittest chromosome depending on fitness_type(max/min/equal)
+		
+		"""
+
 		self.fitness_dict = []
 		for member in self.population.members:
 			self.fitness_dict.append((member,self.fitness_func(member)))
@@ -70,10 +213,25 @@ class GAEngine:
 				self.best_fitness = (member, self.fitness_func(member))
 
 	def handle_selection(self):
+
+		"""
+		Invokes generateFitnessDict() to generate dictionary of (chromosome,fitness) 
+		Invokes selection_handler staticmethod defined in Utils.py module
+
+		Returns :
+		---------
+		List of  fittest members of population  
+		
+		"""
 		self.generateFitnessDict()
 		return self.selection_handler(self.population.members,self.fitness_dict,self)
 
 	def normalizeWeights(self):
+		"""
+		Normalizes the weights of mutation and crossover handlers
+
+		"""
+
 		# Normalizing crossover and mutation handler weights, result is a CDF
 		total = sum(self.mutation_handlers_weights)
 		cumsum = 0
@@ -89,16 +247,47 @@ class GAEngine:
 		print("crossover_handlers_weights = ",self.crossover_handlers_weights)
 
 	def chooseCrossoverHandler(self):
+		"""
+		Selects crossover handler from available handlers based on weightage given to handlers
+
+		Returns :
+		--------
+		The selected crossover handler function
+
+		"""
+
 		x = random.random()
 		idx = bisect.bisect(self.crossover_handlers_weights, x)
 		return self.crossover_handlers[idx]
 
 	def chooseMutationHandler(self):
+		"""
+		Selects mutation handler from available handlers based on weightage given to handlers
+
+		Returns :
+		--------
+		The selected mutation handler function
+		
+		"""
+
 		x = random.random()
 		idx = bisect.bisect(self.mutation_handlers_weights, x)
 		return self.mutation_handlers[idx]
 
 	def evolve(self,noOfIterations=50):
+		"""
+		Performs the evolution by invoking the evolve method from Evolution.py module 
+		as many times as number of iterations specified by user or terminates if optimal
+		solution is found.
+		Also invokes compute method from Statistics.py module to generate graph
+
+		Parameters :
+		-----------
+		noOfIterations : int 
+						default value : 50
+
+		"""
+
 		self.normalizeWeights()
 		for i in range(noOfIterations):
 			result = self.evolution.evolve(self)
