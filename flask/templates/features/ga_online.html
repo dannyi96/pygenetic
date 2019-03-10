@@ -10,18 +10,31 @@
     function addGeneGenerationBoxes(selectObject) {
         var value = selectObject.value;
         console.log(value);
-        document.getElementById('fillgenegeneration').removeChild(document.getElementById('fillgenegeneration').childNodes[1]);
+        
+        
+        
+        
+        
+        //document.getElementById('fillgenegeneration').removeChild(document.getElementById('fillgenegeneration').childNodes[1]);
         if(value == "range") {
-            var newspan = document.createElement('span');
-            newspan.className = "monkeyPatchShiftToRight";
-            newspan.innerHTML = "Enter range";
-            document.getElementById('fillgenegeneration').appendChild(newspan);
+            document.getElementById('input1').style.display = '';
+            document.getElementById('input2').style.display = '';
+            document.getElementById('fillgenegeneration1').innerHTML = "Input min of range";
+            document.getElementById('fillgenegeneration2').innerHTML = "Input max of range";
+            //var newspan = document.createElement('span');
+            //newspan.className = "monkeyPatchShiftToRight";
+            //newspan.innerHTML = "Enter range";
+            //document.getElementById('fillgenegeneration').appendChild(newspan);
         }
         else if(value == "regex") {
-            var newspan = document.createElement('span');
-            newspan.className = "monkeyPatchShiftToRight";
-            newspan.innerHTML = "Enter regex";
-            document.getElementById('fillgenegeneration').appendChild(newspan);
+            document.getElementById('input1').style.display = '';
+            document.getElementById('input2').style.display = 'none';
+            document.getElementById('fillgenegeneration1').innerHTML = "Input regex";
+            document.getElementById('fillgenegeneration2').innerHTML = "";
+//            var newspan = document.createElement('span');
+//            newspan.className = "monkeyPatchShiftToRight";
+//            newspan.innerHTML = "Enter regex";
+//            document.getElementById('fillgenegeneration').appendChild(newspan);
         }
     }
 </script>
@@ -55,8 +68,11 @@
                                 <div class="col-xl-3 col-lg-3 col-md-3 col-3">
                                     <span class="monkeyPatchShiftToRight"> No of genes/chromosome </span>
                                 </div>
-                                <div class="col-xl-3 col-lg-3 col-md-3 col-3" id="fillgenegeneration">
-                                <!--    <span class="monkeyPatchShiftToRight"> No of genes/chromosome </span>-->
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2" id="fillgenegeneration">
+                                    <span class="monkeyPatchShiftToRight" id="fillgenegeneration1">  </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2" id="fillgenegeneration">
+                                    <span class="monkeyPatchShiftToRight" id="fillgenegeneration2">  </span>
                                 </div>
                             </div>
                             <div class="row" id="targetFuncDeclDivRow">
@@ -85,9 +101,9 @@
 
                                             <div class="col-xl-6 col-lg-6 col-md-6 col-6 paramDiv">
                                                 <div class="input-group repeatableTargetParamListGroup">
-                                                    <input type="text" class="form-control validName paramType" placeholder="Parameter Type" aria-label="Parameter Type" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                                    <input id="input1" type="text" class="form-control validName paramType" placeholder="Parameter Type" aria-label="Parameter Type" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name' style="display:none;">
 
-                                                    <input type="text" class="form-control validName paramName" placeholder="Parameter Name" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                                    <input id="input2" type="text" class="form-control validName paramName" placeholder="Parameter Name" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name' style="display:none;">
                                                 </div>
                                             </div>
                                         </div>
