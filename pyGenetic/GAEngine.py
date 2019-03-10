@@ -10,7 +10,7 @@ import bisect
 
 class GAEngine:
 
-	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True,smart_fitness=False):
+	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True,smart_fitness=False, tournsize = 3):
 		self.fitness_func = fitness_func
 		self.fitness_threshold = fitness_threshold
 		self.factory = factory
@@ -135,5 +135,5 @@ if __name__ == '__main__':
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 3)
 	ga.addMutationHandler(Utils.MutationHandlers.swap)
-	ga.setSelectionHandler(Utils.SelectionHandlers.basic)
+	ga.setSelectionHandler(Utils.SelectionHandlers.SUS)
 	ga.evolve(100)

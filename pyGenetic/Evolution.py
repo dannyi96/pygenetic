@@ -45,7 +45,7 @@ class StandardEvolution(BaseEvolution):
 			ga.population.members.append(ga.population.members[0])
 
 		crossover_indexes = np.random.choice(len(p),n,p=p, replace=False)
-		print("crossover_indices = ",crossover_indexes)
+		#print("crossover_indices = ",crossover_indexes)
 
 		crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
 
