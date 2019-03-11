@@ -96,5 +96,12 @@ class CrossoverHandlers:
 
 class Fitness:
 	@staticmethod
-	def sum(chromosome):
+	def addition(chromosome):
 		return sum(chromosome)
+		
+	@staticmethod
+	def TSP(chromosome, matrix):
+		total = 0
+		for i in range(len(chromosome)-1):
+			total += matrix[chromosome[i]][chromosome[i+1]]
+		return total
