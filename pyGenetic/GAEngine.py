@@ -10,8 +10,8 @@ import bisect
 
 class GAEngine:
 
-	def __init__(self,fitness_func,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True,smart_fitness=False, tournsize = 3):
-		self.fitness_func = fitness_func
+	def __init__(self,fitness_threshold,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True,smart_fitness=False, tournsize = 3):
+		self.fitness_func = None
 		self.fitness_threshold = fitness_threshold
 		self.factory = factory
 		self.population = Population.Population(factory,population_size)
@@ -37,6 +37,7 @@ class GAEngine:
 		#elif self.fitness_type == 
 		self.statistics = Statistics.Statistics()
 		self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation)
+		self.fitness_external_data = []
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1):
 		self.crossover_handlers.append(crossover_handler)
@@ -54,20 +55,29 @@ class GAEngine:
 
 	def setSelectionHandler(self,selection_handler):
 		self.selection_handler = selection_handler
+		
+	def setFitnessHandler(self, fit_function, *args):
+		self.fitness_func = fit_function
+		for arg in args:
+			self.fitness_external_data.append(arg)
 
 	def calculateFitness(self,chromosome):
-		return self.fitness_func(chromosome)
+		if self.fitness_external_data:
+			return self.fitness_func(chromosome, *(self.fitness_external_data))
+		else:
+			return self.fitness_func(chromosome)
 
 	def generateFitnessDict(self):
 		self.fitness_dict = []
 		for member in self.population.members:
-			self.fitness_dict.append((member,self.fitness_func(member)))
-			if self.fitness_type == 'max' and self.fitness_func(member) > self.best_fitness[1]:
-				self.best_fitness = (member,self.fitness_func(member))
-			elif self.fitness_type == 'min' and self.fitness_func(member) < self.best_fitness[1]:
-				self.best_fitness = (member, self.fitness_func(member))
-			elif self.fitness_type == 'equal' and abs(self.fitness_func(member)-self.fitness_threshold) < abs(self.best_fitness[1]-self.fitness_threshold):
-				self.best_fitness = (member, self.fitness_func(member))
+			this_member_fitness = self.calculateFitness(member)
+			self.fitness_dict.append((member, this_member_fitness))
+			if self.fitness_type == 'max' and this_member_fitness > self.best_fitness[1]:
+				self.best_fitness = (member,this_member_fitness)
+			elif self.fitness_type == 'min' and this_member_fitness < self.best_fitness[1]:
+				self.best_fitness = (member, this_member_fitness)
+			elif self.fitness_type == 'equal' and abs(this_member_fitness-self.fitness_threshold) < abs(self.best_fitness[1]-self.fitness_threshold):
+				self.best_fitness = (member, this_member_fitness)
 
 	def handle_selection(self):
 		self.generateFitnessDict()
@@ -130,10 +140,11 @@ if __name__ == '__main__':
 				fitness += 1
 		return fitness
 
-	ga = GAEngine(fitness,8,factory,100,fitness_type='equal')
+	ga = GAEngine(8,factory,100,fitness_type='equal')
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 9)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 3)
 	ga.addMutationHandler(Utils.MutationHandlers.swap)
 	ga.setSelectionHandler(Utils.SelectionHandlers.SUS)
+	ga.setFitnessHandler(fitness)
 	ga.evolve(100)
