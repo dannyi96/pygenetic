@@ -186,7 +186,13 @@ class StandardEvolution(BaseEvolution):
 		print(mutation_results.collect())
 		mutation_results = mutation_results.map(lambda x:(x[0],x[1],ga.chooseMutationHandler()(list(x[1])))).collect()
 		print(mutation_results)
+		print('BEFORE')
+		print(ga.population.new_members)
+		for entry in mutation_results:
+			ga.population.new_members[entry[0]] = entry[2]
 
+		print('AFTER')
+		print(ga.population.new_members)
 
 
 		# Crossover Mapping
