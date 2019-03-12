@@ -138,8 +138,9 @@ class StandardEvolution(BaseEvolution):
 		selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
 		#selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
 		print(selected_chromosomes)
-		ga.population.new_members = selected_chromosomes
-
+		ga.population.new_members = [x[0] for x in selected_chromosomes]
+		print(ga.population.new_members)
+		#exit()
 		n = math.ceil(ga.cross_prob * len(ga.population.members))
 		if n %2 == 1:
 			n -= 1
@@ -175,6 +176,18 @@ class StandardEvolution(BaseEvolution):
 
 		print(len(ga.population.members))
 		print(len(ga.population.new_members))
+		print(ga.population.new_members)
+
+		# Mutation Handling
+		mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
+		print(mutation_indexes)
+		mutation_indexes_rdd = sc.parallelize(mutation_indexes)
+		mutation_results = mutation_indexes_rdd.map(lambda x:(x,ga.population.new_members[x]))
+		print(mutation_results.collect())
+		mutation_results = mutation_results.map(lambda x:(x[0],x[1],ga.chooseMutationHandler()(list(x[1])))).collect()
+		print(mutation_results)
+
+
 
 		# Crossover Mapping
 		#crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
