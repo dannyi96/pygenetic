@@ -163,10 +163,18 @@ class StandardEvolution(BaseEvolution):
 		print(crossover_pair_indexes)
 		
 		crossover_pair_indexes_rdd = sc.parallelize(crossover_pair_indexes)
-		crossover_results = crossover_pair_indexes_rdd.map(lambda x: (ga.population.members[0],ga.population.members[1])).map(lambda x:(x,ga.chooseCrossoverHandler()(x[0],x[1])))
+		crossover_before = crossover_pair_indexes_rdd.map(lambda x: (ga.population.members[0],ga.population.members[1]))
+		print(crossover_before.collect())
+		crossover_results = crossover_before.map(lambda x:(x,ga.chooseCrossoverHandler()(x[0],x[1])))#.flatmap
 		print(crossover_results.collect())
+		result_test = crossover_results.flatMap(lambda x:x[1]).collect()
+		print(result_test)
+		print(type(result_test))
 
+		ga.population.new_members.extend(result_test)
 
+		print(len(ga.population.members))
+		print(len(ga.population.new_members))
 
 		# Crossover Mapping
 		#crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
