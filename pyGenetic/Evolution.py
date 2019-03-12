@@ -133,16 +133,34 @@ class StandardEvolution(BaseEvolution):
 		print(ga.population.members)
 		chromosomes_rdd = sc.parallelize(ga.population.members)
 		# Fitness Value Mapping and making selection
-		mapped_chromosomes_rdd = chromosomes_rdd.map(lambda x: (x,ga.fitness_func(x)))
+		mapped_chromosomes_rdd = chromosomes_rdd.map(lambda x: (x,ga.calculateFitness(x)))
 		print(mapped_chromosomes_rdd.collect())
-		selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: -x[1])
+		selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
+		#selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
 		print(selected_chromosomes)
 		ga.population.new_members = selected_chromosomes
 
-		#n = math.ceil(ga.cross_prob * len(ga.population.members))
-		#if n %2 == 1:
-		#	n -= 1
-		#	ga.population.members.append(ga.population.members[0])
+		n = math.ceil(ga.cross_prob * len(ga.population.members))
+		if n %2 == 1:
+			n -= 1
+			ga.population.members.append(ga.population.members[0])
+
+		total_fitness = mapped_chromosomes_rdd.values().sum()
+		print(total_fitness)
+		print(type(total_fitness))
+		p = mapped_chromosomes_rdd.map(lambda x: x/total_fitness)
+		print(p)
+		print(type(p))
+
+		# Crossover Mapping
+		crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
+		#print("crossover_indices = ",crossover_indexes)
+		#crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
+
+		crossover_pair_indexes = [(crossover_indexes[i],crossover_indexes[i+1]) for i in range(0,len(crossover_indexes),2)]
+		print(crossover_indexes)
+		
+
 		# Crossover Mapping
 		#crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
 		#print("crossover_indices = ",crossover_indexes)
