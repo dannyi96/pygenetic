@@ -5,25 +5,80 @@ import numpy as np
 #import pyspark
 
 class BaseEvolution(ABC):
+	"""
+	Abstract class to be inherited to implement the specific evolution procedure
+
+	Instance Members :
+	------------------
+	max_iterations ; int
+
+	Methods :
+	---------
+	evolve() : abstract method to be implemeted by derived classes
+
+	"""
 
 	def __init__(self,max_iterations):
 		self.max_iterations = max_iterations
 
 	@abstractmethod
 	def evolve(self,ga):
+		"""
+		Abstract method to be implemeted by derived classes
+		
+		Parameters :
+		-------------
+		ga : reference to the GAEngine object
+
+		"""
+
 		pass
 
 class StandardEvolution(BaseEvolution):
+	"""
+	Class inherits from BaseEvolution and contain implementations of abstract 
+	evolution method in  BaseEvolution
 
+	Instance Members :
+	------------------
+
+	max_iterations : int
+	adaptive_mutation : boolean to indicated if rate of mutation should 
+						change dynamically during each iteration
+	pyspark : boolean to indicated if parallelization should be supported by using pyspark
+
+	"""
 	def __init__(self,max_iterations=100,adaptive_mutation=True,pyspark=False):
 		BaseEvolution.__init__(self,max_iterations)
 		self.adaptive_mutation = adaptive_mutation
 		self.pyspark = pyspark
 
 	def __evolve_normal(self,ga):
+
+		"""
+		Private method which performs an iteration
+
+		Outline of Algorithm :
+		---------------------
+		Selection : fittest members of population are selected by invoking 
+					selection handler in Utils.py module
+		Crossover : A probability score is generated from fitness value of each chromosome
+					Chromosomes for crossover are selected based on this probablity score 
+					of each chromosome
+					Crossover is performed by invoking a crossover handler from Utils.py
+		Mutation : If adaptive mutation is set then average square deviation of fitness values
+					is used for determining (the indexes of chromosome)/genes to be mutated 
+					If false then genes to be mutated are chosen randomly
+					Once indexes of Chromomsome / genes to be mutated are determined, a mutation
+					handler from Utils.py module is invoked 
+
+		Each iteration consists of repeating the above operations until an optimal solution 
+		determined by fitness threshold is reached  or number of iterations specified are complete
+
+		"""
+
 		# get (1-r) * cross_prob new members
 		ga.population.new_members = ga.handle_selection()
-		
 		print("Best member = ",ga.best_fitness[0])
 		print("Best fitness = ",ga.best_fitness[1])
 		if ga.best_fitness[1] == ga.fitness_threshold:
@@ -56,6 +111,7 @@ class StandardEvolution(BaseEvolution):
 			child1, child2 = crossoverHandler(father,mother)
 			ga.population.new_members.extend([child1,child2])
 		print("adaptive_mutation value passed = ",self.adaptive_mutation)
+
 		if self.adaptive_mutation == True:
 			mean_fitness = sum(fitnesses)/len(fitnesses)
 			average_square_deviation = math.sqrt(sum((fitness - mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
@@ -69,18 +125,47 @@ class StandardEvolution(BaseEvolution):
 			ga.population.new_members[index] = mutationHandler(ga.population.new_members[index])
 		ga.population.members = ga.population.new_members
 		#print("New members = ",ga.population.members)
-		ga.population.new_members = []  
+		ga.population.new_members = []
+
+	def __evolve_pyspark(self,ga):
+		from pyspark import SparkContext
+		sc = SparkContext.getOrCreate()
+		print(ga.population.members)
+		chromosomes_rdd = sc.parallelize(ga.population.members)
+		# Fitness Value Mapping and making selection
+		mapped_chromosomes_rdd = chromosomes_rdd.map(lambda x: (x,ga.fitness_func(x)))
+		print(mapped_chromosomes_rdd.collect())
+		selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: -x[1])
+		print(selected_chromosomes)
+		ga.population.new_members = selected_chromosomes
+
+		#n = math.ceil(ga.cross_prob * len(ga.population.members))
+		#if n %2 == 1:
+		#	n -= 1
+		#	ga.population.members.append(ga.population.members[0])
+		# Crossover Mapping
+		#crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
+		#print("crossover_indices = ",crossover_indexes)
+		#crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
 
 
 
-	#def __evolve_pyspark(self,ga):
+
+
+
 
 
 	def evolve(self,ga):
+		"""
+		Invokes the private method __evolve_normal to perform an iteration Genetic Algorithm
+
+		Returns : 1 if optimal solution was found
+
+		"""
 		#print(self.max_iterations)
 		if self.pyspark == False:
 			if self.__evolve_normal(ga):
 				return 1
-
-
-
+		else:
+			if self.__evolve_pyspark(ga):
+				return 1

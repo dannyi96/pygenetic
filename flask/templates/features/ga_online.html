@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+
+{% block customCSS %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/adapter.css') }}">
+{% endblock %}
+
+{% block customContent %}
+<!--<script src="{{ url_for('static',filename='./js/Adapter/adapter2.js') }}"></script>-->
+<script>
+    function addGeneGenerationBoxes(selectObject) {
+        var value = selectObject.value;
+        console.log(value);
+
+
+
+
+
+        //document.getElementById('fillgenegeneration').removeChild(document.getElementById('fillgenegeneration').childNodes[1]);
+        if(value == "range") {
+            document.getElementById('input1').style.display = '';
+            document.getElementById('input2').style.display = '';
+            document.getElementById('fillgenegeneration1').innerHTML = "Input min of range";
+            document.getElementById('fillgenegeneration2').innerHTML = "Input max of range";
+            //var newspan = document.createElement('span');
+            //newspan.className = "monkeyPatchShiftToRight";
+            //newspan.innerHTML = "Enter range";
+            //document.getElementById('fillgenegeneration').appendChild(newspan);
+        }
+        else if(value == "regex") {
+            document.getElementById('input1').style.display = '';
+            document.getElementById('input2').style.display = 'none';
+            document.getElementById('fillgenegeneration1').innerHTML = "Input regex";
+            document.getElementById('fillgenegeneration2').innerHTML = "";
+//            var newspan = document.createElement('span');
+//            newspan.className = "monkeyPatchShiftToRight";
+//            newspan.innerHTML = "Enter regex";
+//            document.getElementById('fillgenegeneration').appendChild(newspan);
+        }
+    }
+</script>
+
+<div class="container-fluid entireStateWrapper">
+    <div class="row" style="border-bottom: 1px solid black">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
+                        Step 1.
+                    </div>
+                </div>
+                <hr class="fancyHorLine2">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                        Enter the Chromsome Type
+                    </div>
+                </div>
+                <hr class="fancyHorLine1">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Chromosome Data Type </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Gene Generation </span>
+                                </div>
+                                <div class="col-xl-3 col-lg-3 col-md-3 col-3">
+                                    <span class="monkeyPatchShiftToRight"> No of genes/chromosome </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2" id="fillgenegeneration">
+                                    <span class="monkeyPatchShiftToRight" id="fillgenegeneration1">  </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2" id="fillgenegeneration">
+                                    <span class="monkeyPatchShiftToRight" id="fillgenegeneration2">  </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <select class="form-control">
+                                                    <option value="1d">1D List</option>
+                                                    <option value="2d">2D List</option>
+                                                    <option value="custom_chromsome">Custom</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <select id="genegeneration" class="form-control" onchange="addGeneGenerationBoxes(this)">
+                                                    <option value="range">Range</option>
+                                                    <option value="regex">Regex</option>
+                                                    <option value="custom_gene">Custom</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control" placeholder="Number of genes" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                            </div>
+
+                                            <div class="col-xl-6 col-lg-6 col-md-6 col-6 paramDiv">
+                                                <div class="input-group repeatableTargetParamListGroup">
+                                                    <input id="input1" type="text" class="form-control validName paramType" placeholder="Parameter Type" aria-label="Parameter Type" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name' style="display:none;">
+
+                                                    <input id="input2" type="text" class="form-control validName paramName" placeholder="Parameter Name" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name' style="display:none;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="border-bottom: 1px solid black">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
+                        Step 2.
+                    </div>
+                </div>
+                <hr class="fancyHorLine2">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                        Population Details
+                    </div>
+                </div>
+                <hr class="fancyHorLine1">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Population Size </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Crossover rate </span>
+                                </div>
+                                <div class="col-xl-3 col-lg-3 col-md-3 col-3">
+                                    <span class="monkeyPatchShiftToRight"> Mutation rate </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control" placeholder="Population Size" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control" placeholder="Crossover rate" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control" placeholder="Mutation rate" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row" style="border-bottom: 1px solid black">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
+                        Step 3.
+                    </div>
+                </div>
+                <hr class="fancyHorLine2">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                        Iteration Details
+                    </div>
+                </div>
+                <hr class="fancyHorLine1">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Maximum Iterations </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Fitness Score Type </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control" placeholder="Maximum Iterations" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <select class="form-control">
+                                                    <option value="max">Max</option>
+                                                    <option value="min">Min</option>
+                                                    <option value="equal">Equal</option>
+                                                </select>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="border-bottom: 1px solid black">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
+                        Step 4.
+                    </div>
+                </div>
+                <hr class="fancyHorLine2">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                      Selection Handler
+                    </div>
+                </div>
+                <hr class="fancyHorLine1">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Selection Handler </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <select class="form-control">
+                                                    <option value="Basic">Basic</option>
+                                                    <option value="Handler 1">Handler 1</option>
+                                                    <option value="Handler 2">Handler 2</option>
+                                                </select>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row" style="border-bottom: 1px solid black">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
+                        Step 5.
+                    </div>
+                </div>
+                <hr class="fancyHorLine2">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                      Crossover Handler
+                    </div>
+                </div>
+                <hr class="fancyHorLine1">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Crossover Handler </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <select class="form-control">
+                                                    <option value="distinct">Distinct</option>
+                                                    <option value="handler 1">Handler 1</option>
+                                                    <option value="handler 2">Handler 2</option>
+                                                </select>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row" style="border-bottom: 1px solid black">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
+                        Step 6.
+                    </div>
+                </div>
+                <hr class="fancyHorLine2">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                      Mutation Handler
+                    </div>
+                </div>
+                <hr class="fancyHorLine1">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Mutation Handler </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <select class="form-control">
+                                                    <option value="swap">swap</option>
+                                                    <option value="handler 1">Handler 1</option>
+                                                    <option value="handler 2">Handler 2</option>
+                                                </select>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+	{% block buttons %}
+		{{ super() }}
+	{% endblock %}
+</div>
+
+{% endblock %}
+
+
+{% block customJS %}
+    <script src="{{ url_for('static',filename='./js/Adapter/adapter.js') }}"></script>
+{% endblock %}
