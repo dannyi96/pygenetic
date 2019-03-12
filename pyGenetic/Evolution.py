@@ -79,7 +79,7 @@ class StandardEvolution(BaseEvolution):
 
 		# get (1-r) * cross_prob new members
 		ga.population.new_members = ga.handle_selection()
-
+		print("Best member = ",ga.best_fitness[0])
 		print("Best fitness = ",ga.best_fitness[1])
 		if ga.best_fitness[1] == ga.fitness_threshold:
 			return 1
@@ -101,7 +101,7 @@ class StandardEvolution(BaseEvolution):
 			ga.population.members.append(ga.population.members[0])
 
 		crossover_indexes = np.random.choice(len(p),n,p=p, replace=False)
-		print("crossover_indices = ",crossover_indexes)
+		#print("crossover_indices = ",crossover_indexes)
 
 		crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
 
