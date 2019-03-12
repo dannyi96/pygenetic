@@ -148,9 +148,10 @@ class StandardEvolution(BaseEvolution):
 		total_fitness = mapped_chromosomes_rdd.values().sum()
 		print(total_fitness)
 		print(type(total_fitness))
-		p = mapped_chromosomes_rdd.map(lambda x: x/total_fitness)
+		p = mapped_chromosomes_rdd.map(lambda x: (x[0],x[1]/total_fitness)).values().collect()
 		print(p)
 		print(type(p))
+		print(sum(p))
 
 		# Crossover Mapping
 		crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
@@ -159,7 +160,13 @@ class StandardEvolution(BaseEvolution):
 
 		crossover_pair_indexes = [(crossover_indexes[i],crossover_indexes[i+1]) for i in range(0,len(crossover_indexes),2)]
 		print(crossover_indexes)
+		print(crossover_pair_indexes)
 		
+		crossover_pair_indexes_rdd = sc.parallelize(crossover_pair_indexes)
+		crossover_results = crossover_pair_indexes_rdd.map(lambda x: (ga.population.members[0],ga.population.members[1])).map(lambda x:(x,ga.chooseCrossoverHandler()(x[0],x[1])))
+		print(crossover_results.collect())
+
+
 
 		# Crossover Mapping
 		#crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
