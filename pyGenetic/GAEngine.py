@@ -303,8 +303,8 @@ class GAEngine:
 			self.statistics.compute(ga.best_fitness[1])
 			if result:
 				print('SOLVED')
-				self.statistics.plot()
 				break
+		self.statistics.plot()
 
 
 if __name__ == '__main__':
@@ -346,4 +346,4 @@ if __name__ == '__main__':
 	ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
 	# ga.setSelectionHandler(Utils.SelectionHandlers.basic)
 	# Provide max iteration here ???
-	ga.evolve(1)
+	ga.evolve(20)
