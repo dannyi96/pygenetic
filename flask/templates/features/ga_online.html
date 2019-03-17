@@ -1,46 +1,65 @@
 {% extends "base.html" %}
-
+{% block customJS %}
+    <script src="{{ url_for('static',filename='./js/State/state.js') }}"></script>
+{% endblock %}
 {% block customCSS %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/adapter.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='./css/state.css') }}">
 {% endblock %}
 
 {% block customContent %}
-<!--<script src="{{ url_for('static',filename='./js/Adapter/adapter2.js') }}"></script>-->
+
 <script>
-    function addGeneGenerationBoxes(selectObject) {
-        var value = selectObject.value;
-        console.log(value);
-
-
-
-
-
-        //document.getElementById('fillgenegeneration').removeChild(document.getElementById('fillgenegeneration').childNodes[1]);
-        if(value == "range") {
-            document.getElementById('input1').style.display = '';
-            document.getElementById('input2').style.display = '';
-            document.getElementById('fillgenegeneration1').innerHTML = "Input min of range";
-            document.getElementById('fillgenegeneration2').innerHTML = "Input max of range";
-            //var newspan = document.createElement('span');
-            //newspan.className = "monkeyPatchShiftToRight";
-            //newspan.innerHTML = "Enter range";
-            //document.getElementById('fillgenegeneration').appendChild(newspan);
+    function displayGenerationOptions()
+    {
+        var option = document.getElementById('gene-generation').value;
+        if(option == "1dregex")
+        {
+            document.getElementById('regex').style.display = '';
+            document.getElementById('range').style.display = 'none';
         }
-        else if(value == "regex") {
-            document.getElementById('input1').style.display = '';
-            document.getElementById('input2').style.display = 'none';
-            document.getElementById('fillgenegeneration1').innerHTML = "Input regex";
-            document.getElementById('fillgenegeneration2').innerHTML = "";
-//            var newspan = document.createElement('span');
-//            newspan.className = "monkeyPatchShiftToRight";
-//            newspan.innerHTML = "Enter regex";
-//            document.getElementById('fillgenegeneration').appendChild(newspan);
+        else if(option == "1drange")
+        {
+            document.getElementById('range').style.display = '';
+            document.getElementById('regex').style.display = 'none';               
+        }
+    }
+    
+    function placeFitnessTextArea()
+    {
+        var option = document.getElementById('fitness-select').value;
+        if(option=="custom")
+        {
+            document.getElementById('fitness-code').style.display = '';
+            document.getElementById('fitness-data').style.display = '';
+            
+        }
+        else
+        {
+            document.getElementById('fitness-code').style.display = 'none';
+            document.getElementById('fitness-data').style.display = 'none';
+        }
+    }
+    
+    function placeAchieveTag()
+    {
+        var option = document.getElementById('fitness-achieve-select').value;
+        if(option=="EQUAL")
+        {
+            document.getElementById('fitness-achive-tag').style.display = '';
+            document.getElementById('fitness-achive-value').style.display = '';
+        }
+        else
+        {
+            document.getElementById('fitness-achive-tag').style.display = 'none';
+            document.getElementById('fitness-achive-value').style.display = 'none';
         }
     }
 </script>
 
 <div class="container-fluid entireStateWrapper">
-    <div class="row" style="border-bottom: 1px solid black">
+    
+    
+        <div class="row" style="border-bottom: 1px solid black">
         <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
             <div class="container-fluid">
                 <div class="row">
@@ -60,19 +79,44 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Chromosome Data Type </span>
+                                    <span class="monkeyPatchShiftToRight"> Chromosome Factory </span>
                                 </div>
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Gene Generation </span>
+                                    <span class="monkeyPatchShiftToRight"> Genes/chromosome </span>
                                 </div>
-                                <div class="col-xl-3 col-lg-3 col-md-3 col-3">
-                                    <span class="monkeyPatchShiftToRight"> No of genes/chromosome </span>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <select class="form-control" id="gene-generation" onchange="displayGenerationOptions()">
+                                                    <option value="1dregex"> 1DRegex </option>
+                                                    <option value="1drange"> 1DRange </option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName funcName" placeholder="No of genes" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-2 col-2" id="fillgenegeneration">
-                                    <span class="monkeyPatchShiftToRight" id="fillgenegeneration1">  </span>
+                            </div>
+                        </div>
+                        <div class="container-fluid" id="range" style="display:none;">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Data Type </span>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-2 col-2" id="fillgenegeneration">
-                                    <span class="monkeyPatchShiftToRight" id="fillgenegeneration2">  </span>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Min Value </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Max Value </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Repetition allowed </span>
                                 </div>
                             </div>
                             <div class="row" id="targetFuncDeclDivRow">
@@ -81,30 +125,50 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <select class="form-control">
-                                                    <option value="1d">1D List</option>
-                                                    <option value="2d">2D List</option>
-                                                    <option value="custom_chromsome">Custom</option>
+                                                    <option value="1dregex"> Integer </option>
+                                                    <option value="1drange"> Character </option>
                                                 </select>
                                             </div>
 
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select id="genegeneration" class="form-control" onchange="addGeneGenerationBoxes(this)">
-                                                    <option value="range">Range</option>
-                                                    <option value="regex">Regex</option>
-                                                    <option value="custom_gene">Custom</option>
+                                                <input type="text" class="form-control validName funcName" placeholder="Min Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                            </div>
+                                            
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName funcName" placeholder="Max Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                            </div>
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <select class="form-control">
+                                                    <option value="1dregex"> Yes </option>
+                                                    <option value="1drange"> No </option>
                                                 </select>
                                             </div>
-
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid" id="regex" style="display:none;">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Regex </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Data Type </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control" placeholder="Number of genes" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                                <input type="text" class="form-control validName funcName" placeholder="Regex" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
                                             </div>
-
-                                            <div class="col-xl-6 col-lg-6 col-md-6 col-6 paramDiv">
-                                                <div class="input-group repeatableTargetParamListGroup">
-                                                    <input id="input1" type="text" class="form-control validName paramType" placeholder="Parameter Type" aria-label="Parameter Type" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name' style="display:none;">
-
-                                                    <input id="input2" type="text" class="form-control validName paramName" placeholder="Parameter Name" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name' style="display:none;">
-                                                </div>
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <select class="form-control">
+                                                    <option value="1dregex"> Integer </option>
+                                                    <option value="1drange"> Character </option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -116,7 +180,6 @@
             </div>
         </div>
     </div>
-
     <div class="row" style="border-bottom: 1px solid black">
         <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
             <div class="container-fluid">
@@ -128,7 +191,7 @@
                 <hr class="fancyHorLine2">
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
-                        Population Details
+                        Enter Fitness Details
                     </div>
                 </div>
                 <hr class="fancyHorLine1">
@@ -137,30 +200,66 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Population Size </span>
-                                </div>
-                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Crossover rate </span>
-                                </div>
-                                <div class="col-xl-3 col-lg-3 col-md-3 col-3">
-                                    <span class="monkeyPatchShiftToRight"> Mutation rate </span>
+                                    <span class="monkeyPatchShiftToRight"> Fitness Function </span>
                                 </div>
                             </div>
                             <div class="row" id="targetFuncDeclDivRow">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
-
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control" placeholder="Population Size" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                                <select class="form-control" id="fitness-select" onchange="placeFitnessTextArea()">
+                                                    <option value="addition"> Addition </option>
+                                                    <option value="custom"> Custom </option>
+                                                </select>
                                             </div>
-
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid" id="fitness-code" style="display:none;">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Fitness function code </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control" placeholder="Crossover rate" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                                <textarea class="form-control" cols="1000" rows="5">#Enter fitness func here</textarea>
                                             </div>
-
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid" id="fitness-data" style="display:none;">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Extra Data </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control" placeholder="Mutation rate" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                                <textarea class="form-control" cols="1000" rows="5">#Enter data here</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -172,8 +271,6 @@
             </div>
         </div>
     </div>
-
-
     <div class="row" style="border-bottom: 1px solid black">
         <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
             <div class="container-fluid">
@@ -185,7 +282,7 @@
                 <hr class="fancyHorLine2">
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
-                        Iteration Details
+                        Enter the Global Population Level Details
                     </div>
                 </div>
                 <hr class="fancyHorLine1">
@@ -194,41 +291,61 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Maximum Iterations </span>
+                                    <span class="monkeyPatchShiftToRight"> Population Size </span>
                                 </div>
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Fitness Score Type </span>
+                                    <span class="monkeyPatchShiftToRight"> Crossover Rate </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Mutation Rate </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Max Iterations </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Fitness Type </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2" id="fitness-achive-tag" style="display:none;">
+                                    <span class="monkeyPatchShiftToRight"> Fitness to achieve </span>
                                 </div>
                             </div>
                             <div class="row" id="targetFuncDeclDivRow">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
-
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control" placeholder="Maximum Iterations" aria-label="Parameter Name" aria-describedby="basic-addon2" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>
+                                                <input type="text" class="form-control validName funcName" placeholder="Population size" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
                                             </div>
-
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control">
-                                                    <option value="max">Max</option>
-                                                    <option value="min">Min</option>
-                                                    <option value="equal">Equal</option>
+                                                <input type="text" class="form-control validName funcName" placeholder="Crossover Rate" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                            </div>
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName funcName" placeholder="Mutation Rate" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                            </div>
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName funcName" placeholder="Max Iterations" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                            </div>
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <select class="form-control" id="fitness-achieve-select" onchange="placeAchieveTag()">
+                                                    <option> MAX </option>
+                                                    <option> MIN </option>
+                                                    <option> EQUAL </option>
                                                 </select>
                                             </div>
-
-
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName funcName" placeholder="Fitness value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" style="display:none;">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> 
+                        
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    </div> 
     <div class="row" style="border-bottom: 1px solid black">
         <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
             <div class="container-fluid">
@@ -240,7 +357,7 @@
                 <hr class="fancyHorLine2">
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
-                      Selection Handler
+                        Crossover Details
                     </div>
                 </div>
                 <hr class="fancyHorLine1">
@@ -249,141 +366,52 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Selection Handler </span>
+                                    <span class="monkeyPatchShiftToRight"> Crossover Type </span>
                                 </div>
-                            </div>
-                            <div class="row" id="targetFuncDeclDivRow">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
-                                    <div class="container-fluid repeatableTargetFuncDeclList">
-                                        <div class="row">
-                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control">
-                                                    <option value="Basic">Basic</option>
-                                                    <option value="Handler 1">Handler 1</option>
-                                                    <option value="Handler 2">Handler 2</option>
-                                                </select>
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="row" style="border-bottom: 1px solid black">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
-                        Step 5.
-                    </div>
-                </div>
-                <hr class="fancyHorLine2">
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
-                      Crossover Handler
-                    </div>
-                </div>
-                <hr class="fancyHorLine1">
-                <div class="row" id="targetFuncDeclWrapperRow">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
-                        <div class="container-fluid">
-                            <div class="row">
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Crossover Handler </span>
+                                    <span class="monkeyPatchShiftToRight"> Crossover Weight </span>
                                 </div>
-                            </div>
-                            <div class="row" id="targetFuncDeclDivRow">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
-                                    <div class="container-fluid repeatableTargetFuncDeclList">
-                                        <div class="row">
-
-                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control">
-                                                    <option value="distinct">Distinct</option>
-                                                    <option value="handler 1">Handler 1</option>
-                                                    <option value="handler 2">Handler 2</option>
-                                                </select>
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="row" style="border-bottom: 1px solid black">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
-                        Step 6.
-                    </div>
-                </div>
-                <hr class="fancyHorLine2">
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
-                      Mutation Handler
-                    </div>
-                </div>
-                <hr class="fancyHorLine1">
-                <div class="row" id="targetFuncDeclWrapperRow">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
-                        <div class="container-fluid">
-                            <div class="row">
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Mutation Handler </span>
+                                    <span class="monkeyPatchShiftToRight">  </span>
                                 </div>
                             </div>
                             <div class="row" id="targetFuncDeclDivRow">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
-                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                    <div class="container-fluid repeatableTargetFuncDeclList" id="stateListColDiv">
                                         <div class="row">
-
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control">
-                                                    <option value="swap">swap</option>
-                                                    <option value="handler 1">Handler 1</option>
-                                                    <option value="handler 2">Handler 2</option>
-                                                </select>
+                                                <div class="input-group repeatableStateListGroup">
+                                                    <select class="form-control crossover-type"> 
+                                                        <option> Distinct </option>
+                                                        <option> OnePoint </option>
+                                                        <option> TwoPoint </option>
+                                                        <option> PMX </option>
+                                                        <option> OX </option>
+                                                    </select>
+                                                </div>
                                             </div>
-
-
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value">
+                                            </div>
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary addStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another state">+</button>
+                                                    <button class="btn btn-outline-secondary delStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this state" style="pointer-events: none;" disabled>-</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+                           
 
 	{% block buttons %}
 		{{ super() }}
 	{% endblock %}
+
 </div>
 
 {% endblock %}
 
-
-{% block customJS %}
-    <script src="{{ url_for('static',filename='./js/Adapter/adapter.js') }}"></script>
-{% endblock %}

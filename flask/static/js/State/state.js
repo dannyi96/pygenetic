@@ -43,21 +43,31 @@ $(document).ready(function() {
 	$("#fileinput").change(UploadState.handleFileSelect);
 	
     // START: Add a state functionality.
-    $("#stateListColDiv").off('click').on("click", ".addStateBtn", function(event) {
+    $("#stateListColDiv").on("click", ".addStateBtn", function(event) {
+        
         console.log("add clicked",$(this));
-        $("#stateListColDiv").append("\
-            <div class='input-group repeatableStateListGroup'>\
-                <input type='text' class='form-control validName stateName' placeholder='State Name' aria-label='State Name' aria-describedby='basic-addon2'\
-                 tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>\
-                <div class='input-group-append'>\
-                    <button class='btn btn-outline-secondary addStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Add another state'>\
-                        +\
-                    </button>\
-                    <button class='btn btn-outline-secondary delStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Delete this state'>\
-                        -\
-                    </button>\
-                </div>\
-            </div>\
+        $("#stateListColDiv").append("  <div class='row'> \
+                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
+                                                <div class='input-group repeatableStateListGroup'>\
+                                                    <select class='form-control crossover-type'> \
+                                                        <option> Distinct </option>\
+                                                        <option> OnePoint </option>\
+                                                        <option> TwoPoint </option>\
+                                                        <option> PMX </option>\
+                                                        <option> OX </option>\
+                                                    </select>\
+                                                </div>\
+                                            </div>\
+                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
+                                                <input type='text' class='form-control validName funcName' placeholder='Weight' aria-label='Function Name' aria-describedby='basic-addon4' tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id='fitness-achive-value'>\
+                                            </div>\
+                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
+                                                <div class='input-group-append'>\
+                                                    <button class='btn btn-outline-secondary addStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Add another state'>+</button> \
+                                                    <button class='btn btn-outline-secondary delStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Delete this state' style='pointer-events: none;' disabled>-</button> \
+                                                </div> \
+                                            </div> \
+                                        </div> \
         ");
     });
     // END: Add a state functionality.
