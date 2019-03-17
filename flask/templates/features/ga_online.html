@@ -410,6 +410,66 @@
         </div>
     </div>
                 
+    <div class="row" style="border-bottom: 1px solid black">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowName">
+                        Step 5.
+                    </div>
+                </div>
+                <hr class="fancyHorLine2">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                        Mutation Details
+                    </div>
+                </div>
+                <hr class="fancyHorLine1">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Mutation Type </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Mutation Weight </span>
+                                </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight">  </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList" id="stateListColDiv">
+                                        <div class="row">
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <div class="input-group repeatableStateListGroup">
+                                                    <select class="form-control mutation-type"> 
+                                                        <option> Swap </option>
+                                                        <option> Bit Flip </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value">
+                                            </div>
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary addStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another state">+</button>
+                                                    <button class="btn btn-outline-secondary delStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this state" style="pointer-events: none;" disabled>-</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
                            
 
 	{% block buttons %}
