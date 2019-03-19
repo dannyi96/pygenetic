@@ -96,7 +96,7 @@ class GAEngine:
 		self.population_size = population_size
 		self.cross_prob = cross_prob
 		self.mut_prob = mut_prob
-		#self.adaptive_mutation = adaptive_mutation
+		self.adaptive_mutation = adaptive_mutation
 		self.smart_fitness = smart_fitness
 		self.crossover_handlers = []
 		self.crossover_handlers_weights = []
@@ -112,9 +112,10 @@ class GAEngine:
 			self.best_fitness = None, float("inf")
 		if adaptive_mutation == True:
 			self.dynamic_mutation = None
+			self.diversity = None
 		#elif self.fitness_type ==
 		self.statistics = Statistics.Statistics()
-		self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation,pyspark=True)
+		self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation,pyspark=False)
 		self.fitness_external_data = []
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1):
@@ -210,7 +211,13 @@ class GAEngine:
 		
 		"""
 
-		self.fitness_dict = []
+		self.fitness_dict = [(member, self.calculateFitness(member)) for member in self.population.members]
+		if self.fitness_type == 'max':
+			self.fitness_dict.sort(key=lambda x:x[1],reverse=True)
+		elif self.fitness_type == 'min':
+			self.fitness_dict.sort(key=lambda x:x[1])
+		elif self.fitness_type == 'equal':
+			self.fitness_dict.sort(key=lambda x:abs(x[1]-self.fitness_threshold))
 		for member in self.population.members:
 			this_member_fitness = self.calculateFitness(member)
 			self.fitness_dict.append((member, this_member_fitness))
@@ -300,11 +307,20 @@ class GAEngine:
 		self.normalizeWeights()
 		for i in range(noOfIterations):
 			result = self.evolution.evolve(self)
-			self.statistics.compute(ga.best_fitness[1])
+			self.statistics.add_statistic('max',self.fitness_dict[0][1])
+			self.statistics.add_statistic('min',self.fitness_dict[-1][1])
+			print('Fitness Dict', self.fitness_dict)
+			fitnesses = [x[1] for x in self.fitness_dict]
+			self.statistics.add_statistic('avg',sum(fitnesses)/len(fitnesses))
+			if self.adaptive_mutation:
+				self.statistics.add_statistic('mutation_rate',ga.dynamic_mutation)
+				self.statistics.add_statistic('diversity',ga.diversity)
 			if result:
 				print('SOLVED')
 				break
-		self.statistics.plot()
+		self.statistics.plot_statistics(['max','min','avg'])
+		if self.adaptive_mutation:
+			self.statistics.plot_statistics(['diversity','mutation_rate'])
 
 
 if __name__ == '__main__':
