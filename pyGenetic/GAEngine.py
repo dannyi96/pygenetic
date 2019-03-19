@@ -313,8 +313,8 @@ class GAEngine:
 			fitnesses = [x[1] for x in self.fitness_dict]
 			self.statistics.add_statistic('avg',sum(fitnesses)/len(fitnesses))
 			if self.adaptive_mutation:
-				self.statistics.add_statistic('mutation_rate',ga.dynamic_mutation)
-				self.statistics.add_statistic('diversity',ga.diversity)
+				self.statistics.add_statistic('mutation_rate',self.dynamic_mutation)
+				self.statistics.add_statistic('diversity',self.diversity)
 			if result:
 				print('SOLVED')
 				break
