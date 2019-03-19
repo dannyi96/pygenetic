@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to Pygenetic’s documentation! &#8212; Pygenetic 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Pygenetic 1.0 documentation" href="#" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Pygenetic 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-pygenetic-s-documentation">
+<h1>Welcome to Pygenetic&#8217;s documentation!<a class="headerlink" href="#welcome-to-pygenetic-s-documentation" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div>Efficient Python Genetic Algorithm Framework provides its users a highly efficient and usable way to explore the problem solving ability of Genetic Algorithms. It seeks to reduce the task of solving a problem using genetic algorithms to just choosing the appropriate operators and values which are provided internally. Further, support is also provided for a user to input his own operators for variation or for solving more specific problems.
+Students, teachers, researchers, company employees / entrepreneurs can all use our genetic algorithm framework while experimenting with different Machine Learning Algorithms and observing performance. They can also play around and simulate different Genetic Algorithms online on our website.</div></blockquote>
+</div>
+<div class="section" id="modules">
+<h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="gaengine-module">
+<h2>GAEngine Module<a class="headerlink" href="#gaengine-module" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>&#8220;Contains GAEngine Class which is the main driver program which contains and invokes the operators used in Genetic algorithm
+GAEngine keeps track of specific type of operators the user has specified for running the algorithm&#8221;</div></blockquote>
+<div class="section" id="instance-members">
+<h3>Instance Members<a class="headerlink" href="#instance-members" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="docutils">
+<dt>fitness_func</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">A function argument</span><dd>The fitness function to be used, passed as a function argument</dd>
+<dt>fitness_threshold</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Threshold at which a candidate solution is considered optimal solution to the problem</dd>
+<dt>factory</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">Instance of any subclass of ChromosomeFactory class</span><dd>Generates and returns the initial population of candidate solutions</dd>
+<dt>population_size</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>The number of candidate solutions that can exist after every iteration</dd>
+<dt>cross_prob</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd>The Crossover probability of crossover operation which determines the extent to which crossover between parents</dd>
+<dt>mutation_prob</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd>The mutation probability of mutation operation which determines extent to which candidates should be mutated</dd>
+<dt>fitness_type</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">string</span><dd>Indicates the nature of fitness value (higher/lower/equal) to be considered during selection of candidates
+(default is max)</dd>
+<dt>adaptive_mutation</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span><dd>If set rate of mutation of candidates dynamically changes during execution depending on diversity in population
+(default is true)</dd>
+<dt>smart_fitness</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span><dd>TO BE DESCRIBED</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><dl class="docutils">
+<dt>addCrossoverHandler(crossover_handler, weight)</dt>
+<dd>Sets the function to be used for crossover operation</dd>
+<dt>addMutationHandler(mutation_handler, weight)</dt>
+<dd>Sets the function to be used for mutation operation</dd>
+<dt>setCrossoverProbability(cross_prob)</dt>
+<dd>Sets value for cross_prob instance variable for crossover operation</dd>
+<dt>setMutationProbability(mut_prob)</dt>
+<dd>Sets value for mut_prob instance variable</dd>
+<dt>setSelectionHandler(selection_handler)</dt>
+<dd>Sets the function to be used for selection operation</dd>
+<dt>calculateFitness(chromosome)</dt>
+<dd>Invokes fitness function (fitness_func) to compute the fitness score of a chromosome</dd>
+<dt>generateFitnessDict()</dt>
+<dd>Generates a  dictionary of (individual, fitness_score) and also stores the dictionary
+containing fittest chromosome depending on fitness_type(max/min/equal)</dd>
+<dt>handle_selection()</dt>
+<dd>Invokes generateFitnessDict() and  selection_handler specified</dd>
+<dt>normalizeWeights()</dt>
+<dd>Normalizes crossover and mutation handler weights, result is a CDF</dd>
+<dt>chooseCrossoverHandler()</dt>
+<dd>Selects crossover handler from available handlers based on weightage given to handlers</dd>
+<dt>chooseMutationHandler()</dt>
+<dd>Selects mutation handler from available handlers based on weightage given to handlers</dd>
+<dt>evolve()</dt>
+<dd>Invokes evolve method in Evolution module  which Executes the operations of Genetic algorithm till
+a fitness score reaches a threshold or the number of iterations reach max iterations specified by user</dd>
+</dl>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="chromosomefactory-module">
+<h2>ChromosomeFactory Module<a class="headerlink" href="#chromosomefactory-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="chromosomefactory">
+<h3>ChromosomeFactory<a class="headerlink" href="#chromosomefactory" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Abstract Class to be inherited for implemention of different
+ways of generating initial population of chromosomes</p>
+<ul>
+<li><p class="first">Instance variables :</p>
+<blockquote>
+<div><p>data_type : type of data of each gene in chromosome</p>
+<p>noOfGenes : number of genes in each chromosome</p>
+</div></blockquote>
+</li>
+<li><p class="first">Methods :</p>
+<blockquote>
+<div><p>createChromosome () : Abstract method to be implemented by derived classes</p>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="chromosomeregexfactory-chromosomefactory">
+<h3>ChromosomeRegexFactory(ChromosomeFactory)<a class="headerlink" href="#chromosomeregexfactory-chromosomefactory" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Class derived from ChromosomeFactory, implements the method createChromosome()
+which generates initial population of candidates by using regex module in python
+on genes</p>
+<ul>
+<li><p class="first">Instance variables :</p>
+<blockquote>
+<div><p>data_type : datatype of each gene</p>
+<p>noOfGenes : int ,  number of genes in each chromosome</p>
+<p>pattern : string containing individual genes</p>
+</div></blockquote>
+</li>
+<li><p class="first">Methods :</p>
+<blockquote>
+<div><p>createChromosome() : Generates a chromosome from given genes using python regex module</p>
+<blockquote>
+<div><p>Returns : chromosome : List containing individual genes of chromosome</p>
+</div></blockquote>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="chromosomerangefactory-chromosomefactory">
+<h3>ChromosomeRangeFactory(ChromosomeFactory)<a class="headerlink" href="#chromosomerangefactory-chromosomefactory" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Class derived from ChromosomeFactory, implements the method createChromosome()
+which generates initial population of candidates by randomly sampling genes from a
+range of genes</p>
+<ul>
+<li><p class="first">Instance variables :</p>
+<blockquote>
+<div><p>data_type : datatype of each gene</p>
+<p>noOfGenes : int , number of genes in each chromosome</p>
+<p>minValue : int , lower bound of range</p>
+<p>maxValue : int , upper bound of range</p>
+<p>duplicates : boolean , indicates if gene can be repeated in chromosome</p>
+</div></blockquote>
+</li>
+<li><p class="first">Methods :</p>
+<blockquote>
+<div><p>createChromosome(self) : Generates a chromosome by randomly sampling genes from a given range</p>
+<blockquote>
+<div><p>Returns : chromosome : List of genes representing each chromosome</p>
+</div></blockquote>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to Pygenetic&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#modules">Modules</a><ul>
+<li><a class="reference internal" href="#gaengine-module">GAEngine Module</a><ul>
+<li><a class="reference internal" href="#instance-members">Instance Members</a></li>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chromosomefactory-module">ChromosomeFactory Module</a><ul>
+<li><a class="reference internal" href="#chromosomefactory">ChromosomeFactory</a></li>
+<li><a class="reference internal" href="#chromosomeregexfactory-chromosomefactory">ChromosomeRegexFactory(ChromosomeFactory)</a></li>
+<li><a class="reference internal" href="#chromosomerangefactory-chromosomefactory">ChromosomeRangeFactory(ChromosomeFactory)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Pygenetic 1.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Shreyas.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    </div>
+  </body>
+</html>
