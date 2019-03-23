@@ -100,7 +100,7 @@ $(document).ready(function() {
     // END: Add a state functionality.
 
     // START: Delete a state functionality.
-    $("#stateListColDiv").on("click", ".delStateBtn", function(event) {
+    $("#mutationListColDiv").on("click", ".delStateBtn", function(event) {
         console.log("del clicked",$(this));
         var eleToBeDeleted = $(this).parents(".repeatableStateListGroup");
         console.log(eleToBeDeleted);
