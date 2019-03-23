@@ -2,6 +2,7 @@ import sys
 sys.path.append('../../pyGenetic/')
 
 import GAEngine, ChromosomeFactory, Utils
+import matplotlib.pyplot as plt
 
 def fitness(board):
 		fitness = 0
@@ -28,3 +29,8 @@ ga.setSelectionHandler(Utils.SelectionHandlers.best)
 ga.setFitnessHandler(fitness)
 
 ga.evolve(100)
+
+fig = ga.statistics.plot_statistics(['best','worst','avg'])
+plt.show()
+fig = ga.statistics.plot_statistics(['diversity','mutation_rate'])
+plt.show()

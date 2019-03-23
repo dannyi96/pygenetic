@@ -16,7 +16,7 @@ class Statistics:
 		self.max_fitnesses = []
 		self.iterations = []
 		self.iterationNumber = 1
-		self.statistic_dict = {'max':[],'min':[],'avg':[],'diversity':[],'mutation_rate':[]}
+		self.statistic_dict = {'best':[],'worst':[],'avg':[],'diversity':[],'mutation_rate':[]}
 
 	def add_statistic(self,statistic,value):
 		"""
@@ -41,20 +41,23 @@ class Statistics:
 		Generates a line graph to display change in fitness values over iterations 
 
 		"""
+		fig,ax = plt.subplots()
 		for statistic in self.statistic_dict:
 			print(statistic,self.statistic_dict[statistic])
-			plt.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
-		plt.legend(loc='upper left')
-		plt.show()
+			ax.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
+		fig.legend(loc='upper left')
+		return fig
 
 	def plot_statistics(self,statistics):
+		fig,ax = plt.subplots()
 		for statistic in statistics:
 			print(statistic,self.statistic_dict[statistic])
-			plt.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
-		plt.legend(loc='upper left')
-		plt.show()
+			ax.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
+		fig.legend(loc='upper left')
+		return fig
 
 	def plot_statistic(self,statistic):
-		plt.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
-		plt.legend(loc='upper left')
-		plt.show()
+		fig,ax = plt.subplots()
+		ax.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
+		fig.legend(loc='upper left')
+		return fig

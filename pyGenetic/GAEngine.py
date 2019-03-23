@@ -300,8 +300,8 @@ class GAEngine:
 		self.normalizeWeights()
 		for i in range(noOfIterations):
 			result = self.evolution.evolve(self)
-			self.statistics.add_statistic('max',self.fitness_dict[0][1])
-			self.statistics.add_statistic('min',self.fitness_dict[-1][1])
+			self.statistics.add_statistic('best',self.fitness_dict[0][1])
+			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
 			print('Fitness Dict', self.fitness_dict)
 			fitnesses = [x[1] for x in self.fitness_dict]
 			self.statistics.add_statistic('avg',sum(fitnesses)/len(fitnesses))
@@ -311,9 +311,9 @@ class GAEngine:
 			if result:
 				print('SOLVED')
 				break
-		self.statistics.plot_statistics(['max','min','avg'])
-		if self.adaptive_mutation:
-			self.statistics.plot_statistics(['diversity','mutation_rate'])
+		#self.statistics.plot_statistics(['max','min','avg'])
+		#if self.adaptive_mutation:
+		#	self.statistics.plot_statistics(['diversity','mutation_rate'])
 
 
 if __name__ == '__main__':
