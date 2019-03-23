@@ -88,34 +88,35 @@ class GAEngine:
   	"""
 
 
-	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True,smart_fitness=False, tournsize = 3):
+	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True,evolution=None):
 		self.fitness_func = None
-		#self.fitness_threshold = fitness_threshold
 		self.factory = factory
 		self.population = Population.Population(factory,population_size)
-		self.population_size = population_size
 		self.cross_prob = cross_prob
 		self.mut_prob = mut_prob
 		self.adaptive_mutation = adaptive_mutation
-		self.smart_fitness = smart_fitness
 		self.crossover_handlers = []
 		self.crossover_handlers_weights = []
 		self.mutation_handlers = []
 		self.mutation_handlers_weights = []
 		self.selection_handler = None
 		self.fitness_type = fitness_type
-		if self.fitness_type == 'max':
-			self.best_fitness = None, float("-inf")
-		elif self.fitness_type == 'min':
-			self.best_fitness = None, float("inf")
-		elif self.fitness_type[0] == 'equal':	# Fitness must be absolute difference between member score and fitness_threshold
-			self.best_fitness = None, float("inf")
+		if type(self.fitness_type) == str:
+			if self.fitness_type == 'max':
+				self.best_fitness = None, float("-inf")
+			elif self.fitness_type == 'min':
+				self.best_fitness = None, float("inf")
+		elif type(self.fitness_type) == tuple or type(self.fitness_type) == list:
+			if self.fitness_type[0] == 'equal':	
+				self.best_fitness = None, float("inf")
 		if adaptive_mutation == True:
 			self.dynamic_mutation = None
 			self.diversity = None
-		#elif self.fitness_type ==
 		self.statistics = Statistics.Statistics()
-		self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation,pyspark=False)
+		if evolution:
+			self.evolution = evolution
+		else:
+			self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation,pyspark=False)
 		self.fitness_external_data = []
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1):
@@ -218,15 +219,7 @@ class GAEngine:
 			self.fitness_dict.sort(key=lambda x:x[1])
 		elif self.fitness_type[0] == 'equal':
 			self.fitness_dict.sort(key=lambda x:abs(x[1]-self.fitness_type[1]))
-		for member in self.population.members:
-			this_member_fitness = self.calculateFitness(member)
-			self.fitness_dict.append((member, this_member_fitness))
-			if self.fitness_type == 'max' and this_member_fitness > self.best_fitness[1]:
-				self.best_fitness = (member,this_member_fitness)
-			elif self.fitness_type == 'min' and this_member_fitness < self.best_fitness[1]:
-				self.best_fitness = (member, this_member_fitness)
-			elif self.fitness_type[0] == 'equal' and abs(this_member_fitness-self.fitness_type[1]) < abs(self.best_fitness[1]-self.fitness_type[1]):
-				self.best_fitness = (member, this_member_fitness)
+		self.best_fitness = self.fitness_dict[0]
 
 	def handle_selection(self):
 
