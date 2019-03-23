@@ -18,8 +18,8 @@ class BaseEvolution(ABC):
 
 	"""
 
-	def __init__(self,max_iterations):
-		self.max_iterations = max_iterations
+	def __init__(self):
+		pass
 
 	@abstractmethod
 	def evolve(self,ga):
@@ -48,8 +48,7 @@ class StandardEvolution(BaseEvolution):
 	pyspark : boolean to indicated if parallelization should be supported by using pyspark
 
 	"""
-	def __init__(self,max_iterations=100,adaptive_mutation=True,pyspark=False):
-		BaseEvolution.__init__(self,max_iterations)
+	def __init__(self,adaptive_mutation=True,pyspark=False):
 		self.adaptive_mutation = adaptive_mutation
 		self.pyspark = pyspark
 

@@ -88,7 +88,7 @@ class GAEngine:
   	"""
 
 
-	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True,evolution=None):
+	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True):
 		self.fitness_func = None
 		self.factory = factory
 		self.population = Population.Population(factory,population_size)
@@ -113,10 +113,7 @@ class GAEngine:
 			self.dynamic_mutation = None
 			self.diversity = None
 		self.statistics = Statistics.Statistics()
-		if evolution:
-			self.evolution = evolution
-		else:
-			self.evolution = Evolution.StandardEvolution(100,adaptive_mutation=adaptive_mutation,pyspark=False)
+		self.evolution = Evolution.StandardEvolution(adaptive_mutation=adaptive_mutation,pyspark=False)
 		self.fitness_external_data = []
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1):
@@ -283,6 +280,9 @@ class GAEngine:
 		idx = bisect.bisect(self.mutation_handlers_weights, x)
 		return self.mutation_handlers[idx]
 
+	def setEvolution(self,evolution):
+		self.evolution = evolution
+		
 	def evolve(self,noOfIterations=50):
 		"""
 		Performs the evolution by invoking the evolve method from Evolution.py module 
