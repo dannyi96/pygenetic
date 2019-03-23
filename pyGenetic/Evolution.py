@@ -81,8 +81,9 @@ class StandardEvolution(BaseEvolution):
 		ga.population.new_members = ga.handle_selection()
 		print("Best member = ",ga.best_fitness[0])
 		print("Best fitness = ",ga.best_fitness[1])
-		if ga.best_fitness[1] == ga.fitness_threshold:
-			return 1
+		if ga.fitness_type[0] == 'equal':
+			if ga.best_fitness[1] == ga.fitness_type[1]:
+				return 1
 
 		fitnesses = []
 		total = 0 #This is not being used
@@ -117,6 +118,10 @@ class StandardEvolution(BaseEvolution):
 			average_square_deviation = math.sqrt(sum((fitness - mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
 			ga.diversity = average_square_deviation
 			ga.dynamic_mutation = ga.mut_prob * ( 1 + ((ga.best_fitness[1]-average_square_deviation) / (ga.best_fitness[1]+average_square_deviation) ) )
+			print(mean_fitness)
+			print(average_square_deviation)
+			print(ga.diversity)
+			print(ga.best_fitness)
 			print('Adaptive mutation value = ',ga.dynamic_mutation)
 			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.dynamic_mutation*len(p)), replace=False)
 		else:
