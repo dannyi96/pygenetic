@@ -24,6 +24,7 @@ def ga_online():
 
 @app.route("/commonCodeCreate",methods=["POST"])
 def commonCodeCreate():
+<<<<<<< HEAD
 	import sys
 	sys.path.insert(0, '../pyGenetic')
 	# import GAEngine
@@ -36,6 +37,11 @@ def commonCodeCreate():
 
 	# for i in range(20):
 	# 	print(payload[i])
+=======
+	form_data = request.form
+	print(form_data)
+	code_lines = ["import GAEngine, ChromosomeFactory, Utils"]
+>>>>>>> ef9538a0eb2e2f63b1af8701c3cceb7be7155d9d
 	#session["fileType"] = ".tar.gz"
 
 	#if(len(payload["fileType"])<=8): # else, use what user chose
@@ -43,6 +49,7 @@ def commonCodeCreate():
 
 	#del payload["fileType"]
 
+<<<<<<< HEAD
 	print("Payload Data: ", payload)
 
 	if(payload["gene-generation"]=="1drange"):
@@ -90,6 +97,45 @@ def commonCodeCreate():
 	exec(code)
 	
 
+=======
+	print("Payload Data: ", form_data)
+	if form_data["gene-generation"] == "1dregex":
+		code_lines.append("factory = ChromosomeFactory.ChromosomeRegexFactory(%s,%s,'%s')"%(form_data["1dregex-datatype"],
+							form_data["no-of-genes"], form_data["1dregex-regex"]))
+	# Handle other stuff here
+    
+
+
+	
+
+	if form_data["fitness-type"] == "equal":
+		code_lines.append("ga = GAEngine.GAEngine(factory,%s,fitness_type=('equal',%s), cross_prob=%s, mut_prob = %s)"%(form_data["population-size"],
+				form_data['fitness-equal'], form_data['crossover-rate'], form_data['mutation-rate']	))
+	else:
+		code_lines.append("ga = GAEngine.GAEngine(factory,%s,fitness_type='%s', cross_prob=%s, mut_prob = %s)"%(form_data["population-size"],
+				form_data['fitness-type'], form_data['crossover-rate'], form_data['mutation-rate']	))
+
+	if form_data["fitness"] != "custom":
+		code_lines.append("ga.setFitnessHandler(Utils.Fitness.%s)"%(form_data["fitness"]))
+	# Handle other stuff here
+
+
+
+
+	if form_data["crossover-type"] != "custom":
+		code_lines.append("ga.addCrossoverHandler(Utils.CrossoverHandlers.%s, %s)"%(form_data['crossover-type'],
+				form_data['crossover-weight']))
+
+	if form_data["mutation-type"] != "custom":
+		code_lines.append("ga.addMutationHandler(Utils.MutationHandlers.%s,%s)"%(form_data['mutation-type'],
+				form_data['mutation-weight']))
+
+	if form_data["selection-type"] != "custom":
+		code_lines.append("ga.setSelectionHandler(Utils.SelectionHandlers.%s)"%(form_data["selection-type"]))
+
+	code_lines.append("ga.evolve(%s)"%(form_data['no-of-evolutions']))
+	print('\n'.join(code_lines))
+>>>>>>> ef9538a0eb2e2f63b1af8701c3cceb7be7155d9d
 	#print("Session Data: ", session)
 
 	#if(payload["pattern"] == "adapter"):
