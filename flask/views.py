@@ -24,38 +24,39 @@ def ga_online():
 
 @app.route("/commonCodeCreate",methods=["POST"])
 def commonCodeCreate():
-	payload = request.get_json()
-	session["fileType"] = ".tar.gz"
+	payload = request.form
+	print(payload)
+	#session["fileType"] = ".tar.gz"
 
-	if(len(payload["fileType"])<=8): # else, use what user chose
-		session["fileType"] = payload["fileType"]
+	#if(len(payload["fileType"])<=8): # else, use what user chose
+	#	session["fileType"] = payload["fileType"]
 
-	del payload["fileType"]
+	#del payload["fileType"]
 
 	print("Payload Data: ", payload)
-	print("Session Data: ", session)
+	#print("Session Data: ", session)
 
-	if(payload["pattern"] == "adapter"):
-		session["pattern"] = "adapter"
-		s = render.Adapter(json.loads(json.dumps(payload)))
-		s.render()
+	#if(payload["pattern"] == "adapter"):
+	#	session["pattern"] = "adapter"
+	#	s = render.Adapter(json.loads(json.dumps(payload)))
+	#	s.render()
 
-	elif(payload["pattern"] == "state"):
-		session["pattern"] = "state"
-		s = render.State(json.loads(json.dumps(payload)))
-		s.render()
+	#elif(payload["pattern"] == "state"):
+	#	session["pattern"] = "state"
+	#	s = render.State(json.loads(json.dumps(payload)))
+	#	s.render()
 
-	elif(payload["pattern"] == "iterator"):
-		session["pattern"] = "iterator"
-		s = render.Iterator(json.loads(json.dumps(payload)))
-		s.render()
+	#elif(payload["pattern"] == "iterator"):
+	#	session["pattern"] = "iterator"
+	#	s = render.Iterator(json.loads(json.dumps(payload)))
+	#	s.render()
 
-	elif(payload["pattern"] == "policy"):
-		session["pattern"] = "policy"
-		s = render.Policy(json.loads(json.dumps(payload)))
-		s.render()
+	#elif(payload["pattern"] == "policy"):
+	#	session["pattern"] = "policy"
+	#	s = render.Policy(json.loads(json.dumps(payload)))
+	#	s.render()
 
-	print("Session Data: ", session)
+	#print("Session Data: ", session)
 
 	return jsonify({
 			"success":True

@@ -58,7 +58,7 @@
 
 <div class="container-fluid entireStateWrapper">
     
-    
+    <form action="{{ url_for('commonCodeCreate') }}" method="POST" id="main_form">
         <div class="row" style="border-bottom: 1px solid black">
         <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
             <div class="container-fluid">
@@ -90,14 +90,14 @@
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control" id="gene-generation" onchange="displayGenerationOptions()">
+                                                <select class="form-control" id="gene-generation" onchange="displayGenerationOptions()" name="gene-generation">
                                                     <option value="1dregex"> 1DRegex </option>
                                                     <option value="1drange"> 1DRange </option>
                                                 </select>
                                             </div>
 
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="No of genes" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                                <input type="text" class="form-control validName funcName" placeholder="No of genes" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="no-of-genes">
                                             </div>
                                         </div>
                                     </div>
@@ -124,23 +124,23 @@
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control">
-                                                    <option value="1dregex"> Integer </option>
-                                                    <option value="1drange"> Character </option>
+                                                <select class="form-control" name="1drange-datatype">
+                                                    <option value="int"> Integer </option>
+                                                    <option value="char"> Character </option>
                                                 </select>
                                             </div>
 
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Min Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                                <input type="text" class="form-control validName funcName" placeholder="Min Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1drange-min">
                                             </div>
                                             
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Max Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                                <input type="text" class="form-control validName funcName" placeholder="Max Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1drange-max">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control">
-                                                    <option value="1dregex"> Yes </option>
-                                                    <option value="1drange"> No </option>
+                                                <select class="form-control" name="1drange-duplicate">
+                                                    <option value="yes"> Yes </option>
+                                                    <option value="no"> No </option>
                                                 </select>
                                             </div>
                                         </div>
@@ -162,12 +162,12 @@
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Regex" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                                <input type="text" class="form-control validName funcName" placeholder="Regex" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1dregex-regex">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control">
-                                                    <option value="1dregex"> Integer </option>
-                                                    <option value="1drange"> Character </option>
+                                                <select class="form-control" name="1dregex-datatype">
+                                                    <option value="int"> Integer </option>
+                                                    <option value="char"> Character </option>
                                                 </select>
                                             </div>
                                         </div>
@@ -208,7 +208,7 @@
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control" id="fitness-select" onchange="placeFitnessTextArea()">
+                                                <select class="form-control" id="fitness-select" onchange="placeFitnessTextArea()" name="fitness">
                                                     <option value="addition"> Addition </option>
                                                     <option value="custom"> Custom </option>
                                                 </select>
@@ -314,26 +314,26 @@
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Population size" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                                <input type="text" class="form-control validName funcName" placeholder="Population size" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="population-size">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Crossover Rate" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                                <input type="text" class="form-control validName funcName" placeholder="Crossover Rate" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="crossover-rate">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Mutation Rate" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                                <input type="text" class="form-control validName funcName" placeholder="Mutation Rate" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="mutation-rate">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <input type="text" class="form-control validName funcName" placeholder="Max Iterations" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control" id="fitness-achieve-select" onchange="placeAchieveTag()">
+                                                <select class="form-control" id="fitness-achieve-select" onchange="placeAchieveTag()" name="fitness-type">
                                                     <option> MAX </option>
                                                     <option> MIN </option>
                                                     <option> EQUAL </option>
                                                 </select>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Fitness value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" style="display:none;">
+                                                <input type="text" class="form-control validName funcName" placeholder="Fitness value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" style="display:none;" name="fitness-equal">
                                             </div>
                                         </div>
                                     </div>
@@ -378,17 +378,17 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <select class="form-control crossover-type"> 
-                                                        <option> Distinct </option>
-                                                        <option> OnePoint </option>
-                                                        <option> TwoPoint </option>
-                                                        <option> PMX </option>
-                                                        <option> OX </option>
+                                                    <select class="form-control crossover-type" name="crossover-type"> 
+                                                        <option value="distinct"> Distinct </option>
+                                                        <option value="OnePoint"> OnePoint </option>
+                                                        <option value="TwoPoint"> TwoPoint </option>
+                                                        <option value="PMX"> PMX </option>
+                                                        <option value="OX"> OX </option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value">
+                                                <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="crossover-weight">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group-append">
@@ -439,14 +439,14 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <select class="form-control mutation-type"> 
-                                                        <option> Swap </option>
-                                                        <option> Bit Flip </option>
+                                                    <select class="form-control mutation-type" name="mutation-type"> 
+                                                        <option value="Swap"> Swap </option>
+                                                        <option value="Bit Flip"> Bit Flip </option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value">
+                                                <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="mutation-weight">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group-append">
@@ -494,15 +494,15 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <select class="form-control selection-type"> 
-                                                        <option> Basic </option>
-                                                        <option> Random </option>
-                                                        <option> Worst </option>
-                                                        <option> Best </option>
-                                                        <option> Tournament </option>
-                                                        <option> Roulette </option>
-                                                        <option> Rank </option>
-                                                        <option> SUS </option>
+                                                    <select class="form-control selection-type" name="selection-type"> 
+                                                        <option value="Basic"> Basic </option>
+                                                        <option value="Random"> Random </option>
+                                                        <option value="Worst"> Worst </option>
+                                                        <option value="Best"> Best </option>
+                                                        <option value="Tournament"> Tournament </option>
+                                                        <option value="Roulette"> Roulette </option>
+                                                        <option value="Rank"> Rank </option>
+                                                        <option value="SUS"> SUS </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -552,22 +552,22 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <input type="text" class="form-control validName funcName" placeholder="Number of evolutions" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name'>
+                                                    <input type="text" class="form-control validName funcName" placeholder="Number of evolutions" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="no-of-evolutions">
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <select class="form-control"> 
-                                                        <option> Yes </option>
-                                                        <option> No </option>
+                                                    <select class="form-control" name="adaptive-mutation"> 
+                                                        <option value="yes"> Yes </option>
+                                                        <option value="no"> No </option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <select class="form-control"> 
-                                                        <option> Yes </option>
-                                                        <option> No </option>
+                                                    <select class="form-control" name="pySpark"> 
+                                                        <option value="yes"> Yes </option>
+                                                        <option value="no"> No </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -581,10 +581,61 @@
             </div>
         </div>
     </div>
+        
+    </form>
+    <button type="submit" form="main_form" value="Submit">Submit</button>
+    <!-- Upload Buttons JS -->
+    <script src={{url_for("static",filename="js/upload.js")}}></script>
+    <!-- Buttons -->
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-6">
 
-	{% block buttons %}
-		{{ super() }}
-	{% endblock %}
+            <button class="btn btn-secondary btn-block dropdown-toggle" id="fileTypeBtn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">What file format would you like the code to be downloaded in?</button>
+            <div class="dropdown-menu" name="fileType">
+                <h6 class="dropdown-header">What file format would you like the code to be downloaded in?</h6>
+                <a class="dropdown-item fileType" value=".tar.gz">.tar.gz</a>
+                <a class="dropdown-item fileType" value=".tar.bz2">.tar.bz2</a>
+                <a class="dropdown-item fileType" value=".tar.xz">.tar.xz</a>
+                <a class="dropdown-item fileType" value=".zip">.zip</a>
+            </div>
+
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-4">
+            <button type="button" class="btn btn-info btn-block" id="codeDownload" onclick="{{url_for('commonCodeCreate')}}">Create Code!</button>
+        </div>
+        <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+            <div id="fileHandle" class="file btn btn-secondary btn-block" data-toggle="tooltipupload" data-placement="right" title="Upload meta.json present in previous downloads to restore state">
+                Upload
+                <div class="file-upload-wrapper">
+                    <input type="file" name="file" id = "fileinput" accept=".json"/>
+                </div>
+            </div>
+        </div>
+        <div>
+            <form method="POST" id="downloadCodeForm" action="{{ url_for('commonCodeCreate') }}">
+                <input name="hiddenCodeDownload" value="yes" hidden>
+                <input type="submit" class="btn btn-success btn-block" id="codeForDownload" value="Download Code!" hidden>
+            </form>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalTitle">Error in entries</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="errorModalBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div> 
 
 </div>
 
