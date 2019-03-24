@@ -1,22 +1,21 @@
 $(document).ready(function() {
-	// console.log(UploadState.handleFileSelect);
-	// Button events initialize
-	UploadState.receivedText = UploadState.receivedText.bind(UploadState)
-	UploadState.receivedText = function() {
+	
+	UploadPolicy.receivedText = UploadPolicy.receivedText.bind(UploadPolicy)
+	UploadPolicy.receivedText = function() {
 		var data = (JSON.parse(self.fr.result));
-		if(!Upload.validateJSON("state", data)) {
+		if(!Upload.validateJSON("policy", data)) {
 			return;
 		}
 		console.log(data);
 		
-		// For States
-		data['states'].forEach(function(state, i) {
-			jQuery("#stateListColDiv > div:nth-child("+(i+1)+") > div > button.btn.btn-outline-secondary.addStateBtn").first().trigger("click");
-			jQuery("#stateListColDiv > div:nth-child("+(i+1)+") > input").val(state.name);
-			console.log(state.name);
+		// For Policies
+		data['policies'].forEach(function(policy, i) {
+			jQuery("#policyListColDiv > div:nth-child("+(i+1)+") > div > button.btn.btn-outline-secondary.addPolicyBtn").first().trigger("click");
+			jQuery("#policyListColDiv > div:nth-child("+(i+1)+") > input").val(policy.name);
+			console.log(policy.name);
 		});
 		// Remove Extra
-		jQuery("#stateListColDiv > div:last-child > div > button.btn.btn-outline-secondary.delStateBtn").first().trigger("click");
+		jQuery("#policyListColDiv > div:last-child > div > button.btn.btn-outline-secondary.delPolicyBtn").first().trigger("click");
 		
 		data['functions'].forEach(function(functions, i) {
 			jQuery("#funcDeclDivRow > div:nth-child("+(i+1)+") > div > div > div:nth-child(4) > div > div > button.btn.btn-secondary.addFuncDeclBtn").first().trigger("click")
@@ -36,77 +35,39 @@ $(document).ready(function() {
 		});	
 		
 		jQuery("#funcDeclDivRow > div:last-child > div > div > div:nth-child(4) > div > div > button.btn.btn-danger.delFuncDeclBtn").first().trigger("click")
-
 		Upload.validate();
 	}
-	UploadState.handleFileSelect = UploadState.handleFileSelect.bind(UploadState)
-	$("#fileinput").change(UploadState.handleFileSelect);
+	UploadPolicy.handleFileSelect = UploadPolicy.handleFileSelect.bind(UploadPolicy)
+	$("#fileinput").change(UploadPolicy.handleFileSelect);
 	
-    // START: Add a state functionality.
-    $("#crossoverListColDiv").on("click", ".addStateBtn", function(event) {
-        
+    // START: Add a policy functionality.
+    $("#policyListColDiv").on("click", ".addPolicyBtn", function(event) {
         console.log("add clicked",$(this));
-        $("#crossoverListColDiv").append("  <div class='row'> \
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <div class='input-group repeatableStateListGroup'>\
-                                                    <select class='form-control crossover-type'> \
-                                                        <option> Distinct </option>\
-                                                        <option> OnePoint </option>\
-                                                        <option> TwoPoint </option>\
-                                                        <option> PMX </option>\
-                                                        <option> OX </option>\
-                                                    </select>\
-                                                </div>\
-                                            </div>\
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <input type='text' class='form-control validName funcName' placeholder='Weight' aria-label='Function Name' aria-describedby='basic-addon4' tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id='fitness-achive-value'>\
-                                            </div>\
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <div class='input-group-append'>\
-                                                    <button class='btn btn-outline-secondary addStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Add another state'>+</button> \
-                                                    <button class='btn btn-outline-secondary delStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Delete this state' style='pointer-events: none;' disabled>-</button> \
-                                                </div> \
-                                            </div> \
-                                        </div> \
+        $("#policyListColDiv").append("\
+            <div class='input-group repeatablePolicyListGroup'>\
+                <input type='text' class='form-control validName policyName' placeholder='Policy Name' aria-label='Policy Name' aria-describedby='basic-addon2'\
+                 tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='left' data-content='Invalid Name'>\
+                <div class='input-group-append'>\
+                    <button class='btn btn-outline-secondary addPolicyBtn' type='button' data-toggle='tooltip' data-placement='top' title='Add another policy'>\
+                        +\
+                    </button>\
+                    <button class='btn btn-outline-secondary delPolicyBtn' type='button' data-toggle='tooltip' data-placement='top' title='Delete this policy'>\
+                        -\
+                    </button>\
+                </div>\
+            </div>\
         ");
     });
-    
-    $("#mutationListColDiv").on("click", ".addStateBtn", function(event) {
-        
-        console.log("add clicked",$(this));
-        $("#mutationListColDiv").append("  <div class='row'> \
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <div class='input-group repeatableStateListGroup'>\
-                                                    <select class='form-control crossover-type'> \
-                                                        <option> Swap </option>\
-                                                        <option> Bit Flip </option>\
-                                                    </select>\
-                                                </div>\
-                                            </div>\
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <input type='text' class='form-control validName funcName' placeholder='Weight' aria-label='Function Name' aria-describedby='basic-addon4' tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id='fitness-achive-value'>\
-                                            </div>\
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <div class='input-group-append'>\
-                                                    <button class='btn btn-outline-secondary addStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Add another state'>+</button> \
-                                                    <button class='btn btn-outline-secondary delStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Delete this state' style='pointer-events: none;' disabled>-</button> \
-                                                </div> \
-                                            </div> \
-                                        </div> \
-        ");
-    });
-    
-    
-    // END: Add a state functionality.
+    // END: Add a policy functionality.
 
-    // START: Delete a state functionality.
-    $("#stateListColDiv").on("click", ".delStateBtn", function(event) {
+    // START: Delete a policy functionality.
+    $("#policyListColDiv").on("click", ".delPolicyBtn", function(event) {
         console.log("del clicked",$(this));
-        var eleToBeDeleted = $(this).parents(".repeatableStateListGroup");
+        var eleToBeDeleted = $(this).parents(".repeatablePolicyListGroup");
         console.log(eleToBeDeleted);
         eleToBeDeleted.remove();
     });
-    // END: Delete a state functionality.
+    // END: Delete a policy functionality.
 
     // START: Add a paramter functionality.
     $("#funcDeclWrapperRow").on('click', '.addParameterBtn', function(event) {
@@ -206,11 +167,11 @@ $(document).ready(function() {
 
         // Step 0: The JSON required by render.py is mentioned
         // {
-        //     'pattern': 'state',
-        //     'states':[
-        //         {'name': 'S1'},
-        //         {'name': 'S2'},
-        //         {'name': 'S3'}
+        //     'pattern': 'policy',
+        //     'policies':[
+        //         {'name': 'P1'},
+        //         {'name': 'P2'},
+        //         {'name': 'P3'}
         //     ],
         //     'functions':[
         //         {
@@ -246,7 +207,7 @@ $(document).ready(function() {
         };
 
 
-        // Step 1: Get All variables
+        // Step 1: Get All variables (haha, seems so simple :) )
 
         function getParamTypesList(scope) {
             var paramTypeList = [];
@@ -286,11 +247,11 @@ $(document).ready(function() {
             return ele.val();
         }
 
-        function getStatesList(){
-            var statesList = [];
-            $(".stateName").each(function(index, el) {
+        function getPoliciesList(){
+            var policiesList = [];
+            $(".policyName").each(function(index, el) {
                 if($(this).attr('isValidInput')=="true"){
-                    statesList.push({
+                    policiesList.push({
                         "name":$(this).val()
                     });
                 }
@@ -299,7 +260,7 @@ $(document).ready(function() {
                     $(this).popover('show');
                 }
             });
-            return statesList;
+            return policiesList;
         }
 
         function getFunctionDeclList() {
@@ -320,14 +281,14 @@ $(document).ready(function() {
         getFuncRetType = checkPopover(getFuncRetType);
 
         var inpData = {
-            "pattern":"state",
-            "states":getStatesList(),
+            "pattern":"policy",
+            "policies":getPoliciesList(),
             "functions":getFunctionDeclList(),
             "fileType":$("#fileTypeBtn").text(), //this key will be removed in backend.
         }
         console.log("inpData:",inpData)
         if(!errorCheckAttributes["isErraneousForm"]){
-            // do AJAX POST and send it away
+            // do AJAX POST and send it away, woo
             console.log(inpData);
 
             $.ajax({
@@ -356,6 +317,8 @@ $(document).ready(function() {
             
         }
         else{
+            // terrible guy decided to test the system's error handling.
+            // not today bitch
             if(errorNumber<2){
                 $("#errorModal").on('show.bs.modal', function(event) {
                     $("#errorModalBody").text("Check and correct the inputs which are being pointed to.Whenever you are ready, click Download again.");
@@ -381,17 +344,18 @@ $(document).ready(function() {
 
     // END : Code Download Functionality (includes form submission without forms per se)
     
-    // START : State name validation
+    // START : Policy name validation
     function matchExact(r, str) {
        var match = str.match(r);
        return match != null && str == match[0];
     }
-    $(".entireStateWrapper").on("focus",".validName", function(event) {
+    $(".entirePolicyWrapper").on("focus",".validName", function(event) {
         $(this).popover("hide");
     });
 
-    $(".entireStateWrapper").on("input",".validName", function(event) {
+    $(".entirePolicyWrapper").on("input",".validName", function(event) {
         // data-toggle="tooltip" data-placement="left" title="Tooltip on top"
+
         var res;
         
         res = matchExact(/[A-Za-z_]+[A-Za-z0-9_]*/g,$(this).val()); //basically it's a valid variable in a language like C++
@@ -412,7 +376,7 @@ $(document).ready(function() {
         }
     });
 
-    $(".entireStateWrapper").on("focus",".validName", function(event) {
+    $(".entirePolicyWrapper").on("focus",".validName", function(event) {
         if($(this).attr("isValidInput") == "true"){
             $(this).css('color', 'green');
         }
@@ -422,11 +386,11 @@ $(document).ready(function() {
         }
     });
 
-    $(".entireStateWrapper").on("blur",".validName", function(event) {
+    $(".entirePolicyWrapper").on("blur",".validName", function(event) {
         if($(this).attr("isValidInput") == "true"){
             $(this).css('color', 'black');
         }
     });
-    // END : State name validation
+    // END : Policy name validation
 
 });
