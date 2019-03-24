@@ -88,7 +88,7 @@ class GAEngine:
   	"""
 
 
-	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True):
+	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True, use_pyspark=False):
 		self.fitness_func = None
 		self.factory = factory
 		self.population = Population.Population(factory,population_size)
@@ -113,7 +113,7 @@ class GAEngine:
 			self.dynamic_mutation = None
 			self.diversity = None
 		self.statistics = Statistics.Statistics()
-		self.evolution = Evolution.StandardEvolution(adaptive_mutation=adaptive_mutation,pyspark=False)
+		self.evolution = Evolution.StandardEvolution(adaptive_mutation=adaptive_mutation,pyspark=use_pyspark)
 		self.fitness_external_data = []
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1):
