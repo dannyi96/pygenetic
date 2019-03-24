@@ -34,11 +34,11 @@ class GAEngine:
 		Invokes fitness function (fitness_func) to compute the fitness score of a chromosome
 
 	generateFitnessDict()
-		Generates a  dictionary of (individual, fitness_score) and also stores the dictionary 
+		Generates a  dictionary of (individual, fitness_score) and also stores the dictionary
 		containing fittest chromosome depending on fitness_type(max/min/equal)
 
 	handle_selection()
-		Invokes generateFitnessDict() and  selection_handler specified 
+		Invokes generateFitnessDict() and  selection_handler specified
 
 	normalizeWeights()
 		Normalizes crossover and mutation handler weights, result is a CDF
@@ -48,12 +48,12 @@ class GAEngine:
 
 	chooseMutationHandler()
 		Selects mutation handler from available handlers based on weightage given to handlers
-		
+
 	evolve()
 		Invokes evolve method in Evolution module  which Executes the operations of Genetic algorithm till
 		a fitness score reaches a threshold or the number of iterations reach max iterations specified by user
-	
-	
+
+
 	Instance Members
 	-----------
 	fitness_func : A function argument
@@ -62,7 +62,7 @@ class GAEngine:
 	fitness_threshold : int
 				Threshold at which a candidate solution is considered optimal solution to the problem
 
-	factory : Instance of any subclass of ChromosomeFactory class 
+	factory : Instance of any subclass of ChromosomeFactory class
 				Generates and returns the initial population of candidate solutions
 
 	population_size : int
@@ -70,20 +70,20 @@ class GAEngine:
 
 	cross_prob : float
 				The Crossover probability of crossover operation which determines the extent to which crossover between parents
-	
+
 	mutation_prob : float
 				The mutation probability of mutation operation which determines extent to which candidates should be mutated
-	
+
 	fitness_type : string
 				Indicates the nature of fitness value (higher/lower/equal) to be considered during selection of candidates
 				(default is max)
-	
+
 	adaptive_mutation : boolean
 				If set rate of mutation of candidates dynamically changes during execution depending on diversity in population
 				(default is true)
-	
+
 	smart_fitness : boolean
-				TO BE DESCRIBED  
+				TO BE DESCRIBED
 
   	"""
 
@@ -107,7 +107,7 @@ class GAEngine:
 			elif self.fitness_type == 'min':
 				self.best_fitness = None, float("inf")
 		elif type(self.fitness_type) == tuple or type(self.fitness_type) == list:
-			if self.fitness_type[0] == 'equal':	
+			if self.fitness_type[0] == 'equal':
 				self.best_fitness = None, float("inf")
 		if adaptive_mutation == True:
 			self.dynamic_mutation = None
@@ -118,7 +118,7 @@ class GAEngine:
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1):
 		"""
-		Adds crossover handler staticmethod defined in Utils.py and 
+		Adds crossover handler staticmethod defined in Utils.py and
 		appends the weightage to be given to the handler
 
 		Parameters :
@@ -132,7 +132,7 @@ class GAEngine:
 
 	def addMutationHandler(self,mutation_handler, weight = 1):
 		"""
-		Adds mutation handler staticmethod defined in Utils.py and 
+		Adds mutation handler staticmethod defined in Utils.py and
 		appends the weightage to be given to the handler
 
 		Parameters :
@@ -147,7 +147,7 @@ class GAEngine:
 
 	def setCrossoverProbability(self,cross_prob):
 		"""
-		Sets crossover probability value 
+		Sets crossover probability value
 
 		Parameters :
 		-----------
@@ -178,7 +178,7 @@ class GAEngine:
 
 		"""
 		self.selection_handler = selection_handler
-		
+
 	def setFitnessHandler(self, fit_function, *args):
 		self.fitness_func = fit_function
 		for arg in args:
@@ -194,7 +194,7 @@ class GAEngine:
 
 		Returns:
 		--------
-		Fitness value of chromosome	
+		Fitness value of chromosome
 
 		"""
 		if self.fitness_external_data:
@@ -204,9 +204,9 @@ class GAEngine:
 
 	def generateFitnessDict(self):
 		"""
-		Generates a  dictionary of (individual, fitness_score) and also stores the dictionary 
+		Generates a  dictionary of (individual, fitness_score) and also stores the dictionary
 		containing fittest chromosome depending on fitness_type(max/min/equal)
-		
+
 		"""
 
 		self.fitness_dict = [(member, self.calculateFitness(member)) for member in self.population.members]
@@ -221,13 +221,13 @@ class GAEngine:
 	def handle_selection(self):
 
 		"""
-		Invokes generateFitnessDict() to generate dictionary of (chromosome,fitness) 
+		Invokes generateFitnessDict() to generate dictionary of (chromosome,fitness)
 		Invokes selection_handler staticmethod defined in Utils.py module
 
 		Returns :
 		---------
-		List of  fittest members of population  
-		
+		List of  fittest members of population
+
 		"""
 		self.generateFitnessDict()
 		return self.selection_handler(self.population.members,self.fitness_dict,self)
@@ -273,7 +273,7 @@ class GAEngine:
 		Returns :
 		--------
 		The selected mutation handler function
-		
+
 		"""
 
 		x = random.random()
@@ -282,17 +282,17 @@ class GAEngine:
 
 	def setEvolution(self,evolution):
 		self.evolution = evolution
-		
+
 	def evolve(self,noOfIterations=50):
 		"""
-		Performs the evolution by invoking the evolve method from Evolution.py module 
+		Performs the evolution by invoking the evolve method from Evolution.py module
 		as many times as number of iterations specified by user or terminates if optimal
 		solution is found.
 		Also invokes compute method from Statistics.py module to generate graph
 
 		Parameters :
 		-----------
-		noOfIterations : int 
+		noOfIterations : int
 						default value : 50
 
 		"""
@@ -336,7 +336,7 @@ if __name__ == '__main__':
 			if(isSafe==True):
 				fitness += 1
 		return fitness'''
-		
+
 	matrix = [[0,172,145,607,329,72,312,120],[172,0,192,494,209,158,216,92],[145,192,0,490,237,75,205,100],[607,494,490,0,286,545,296,489],[329,209,237,286,0,421,49,208],[72,158,75,545,421,0,249,75],[312,216,205,296,49,249,9,194],[120,92,100,489,208,75,194,0]]
 	# best sequence i found: 0 5 2 7 1 6 4 3
 

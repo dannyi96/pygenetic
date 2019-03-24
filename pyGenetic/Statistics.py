@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 
 class Statistics:
 	"""
-	Class to generate Statistics on operation of Genetic Algorithm 
-	
+	Class to generate Statistics on operation of Genetic Algorithm
+
 	Instance Members:
 	-----------------
 	max_fitnesses : List containing the maximum fitness scores discovered in each iteration
@@ -20,7 +20,7 @@ class Statistics:
 
 	def add_statistic(self,statistic,value):
 		"""
-		Keeps track of max fitness scores of each iteration and iteration number 
+		Keeps track of max fitness scores of each iteration and iteration number
 
 		Parameters :
 		------------
@@ -38,7 +38,7 @@ class Statistics:
 
 	def plot(self):
 		"""
-		Generates a line graph to display change in fitness values over iterations 
+		Generates a line graph to display change in fitness values over iterations
 
 		"""
 		fig,ax = plt.subplots()
