@@ -1,6 +1,7 @@
 import sys 
 sys.path.append('../../pyGenetic/')
-
+sys.path.append('pyGenetic/')
+print(sys.path)
 import GAEngine, ChromosomeFactory, Utils
 import matplotlib.pyplot as plt
 
