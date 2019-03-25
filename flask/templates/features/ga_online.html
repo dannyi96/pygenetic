@@ -43,7 +43,7 @@
     function placeAchieveTag()
     {
         var option = document.getElementById('fitness-achieve-select').value;
-        if(option=="EQUAL")
+        if(option=="equal")
         {
             document.getElementById('fitness-achive-tag').style.display = '';
             document.getElementById('fitness-achive-value').style.display = '';
@@ -209,7 +209,8 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <select class="form-control" id="fitness-select" onchange="placeFitnessTextArea()" name="fitness">
-                                                    <option value="addition"> Addition </option>
+                                                    <option value="addition"> addition </option>
+                                                    <option value="TSP"> TSP </option>
                                                     <option value="custom"> Custom </option>
                                                 </select>
                                             </div>
@@ -234,7 +235,7 @@
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
-                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                            <div class="col-xl-8 col-lg-8 col-md-8 col-8">
                                                 <textarea class="form-control" cols="1000" rows="5">#Enter fitness func here</textarea>
                                             </div>
                                         </div>
@@ -258,7 +259,7 @@
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
-                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                            <div class="col-xl-8 col-lg-8 col-md-8 col-8">
                                                 <textarea class="form-control" cols="1000" rows="5">#Enter data here</textarea>
                                             </div>
                                         </div>
@@ -321,9 +322,9 @@
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <select class="form-control" id="fitness-achieve-select" onchange="placeAchieveTag()" name="fitness-type">
-                                                    <option> MAX </option>
-                                                    <option> MIN </option>
-                                                    <option> EQUAL </option>
+                                                    <option> max </option>
+                                                    <option> min </option>
+                                                    <option> equal </option>
                                                 </select>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
@@ -373,9 +374,9 @@
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
                                                     <select class="form-control crossover-type" name="crossover-type"> 
-                                                        <option value="distinct"> Distinct </option>
-                                                        <option value="OnePoint"> OnePoint </option>
-                                                        <option value="TwoPoint"> TwoPoint </option>
+                                                        <option value="distinct"> distinct </option>
+                                                        <option value="onePoint"> onePoint </option>
+                                                        <option value="twoPoint"> twoPoint </option>
                                                         <option value="PMX"> PMX </option>
                                                         <option value="OX"> OX </option>
                                                     </select>
@@ -434,8 +435,8 @@
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
                                                     <select class="form-control mutation-type" name="mutation-type"> 
-                                                        <option value="Swap"> Swap </option>
-                                                        <option value="Bit Flip"> Bit Flip </option>
+                                                        <option value="swap"> swap </option>
+                                                        <option value="bitFlip"> bitFlip </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -489,13 +490,13 @@
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
                                                     <select class="form-control selection-type" name="selection-type"> 
-                                                        <option value="Basic"> Basic </option>
-                                                        <option value="Random"> Random </option>
-                                                        <option value="Worst"> Worst </option>
-                                                        <option value="Best"> Best </option>
-                                                        <option value="Tournament"> Tournament </option>
-                                                        <option value="Roulette"> Roulette </option>
-                                                        <option value="Rank"> Rank </option>
+                                                        <option value="basic"> basic </option>
+                                                        <option value="random"> random </option>
+                                                        <option value="worst"> worst </option>
+                                                        <option value="best"> best </option>
+                                                        <option value="tournament"> tournament </option>
+                                                        <option value="roulette"> roulette </option>
+                                                        <option value="rank"> rank </option>
                                                         <option value="SUS"> SUS </option>
                                                     </select>
                                                 </div>
