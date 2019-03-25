@@ -49,8 +49,16 @@ class ChromosomeRegexFactory(ChromosomeFactory):
 
 		"""
 
-		ChromosomeFactory.__init__(self,data_type,noOfGenes)
-		self.pattern = pattern
+		try : 
+
+			if noOfGenes < 0:
+				raise ValueError('No of genes cannot be negative')
+
+			ChromosomeFactory.__init__(self,data_type,noOfGenes)
+			self.pattern = pattern
+		
+		except ValueError as ve :
+			print(ve)
 
 	def createChromosome(self):
 		"""
