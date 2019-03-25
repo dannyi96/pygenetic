@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<title> Generation Evolution </title>
+	</head>
+	<script type="text/javascript">
+		function getNextGenerationData()
+		{
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+    			if (this.readyState == 4 && this.status == 200) {
+    				var response = JSON.parse(xhr.response)['Best-Fitnesses'];
+    				console.log(response[0][0]);
+    			
+    				for (var i = 0; i < response.length ; i++) {
+    					console.log(response[i]);
+    					var innerdiv = document.createElement("div");
+    					innerdiv.innerHTML = response[i][0] + "-->" + response[i][1];
+    					document.getElementById('outer').append(innerdiv);
+    				}
+    				
+    			}
+			};
+			xhr.open("GET", "/ga_evolve", true);
+			xhr.send()
+ 		}
+
+	</script>
+	<body>
+		<div id="outer">
+			{% for element in fitness_dict %}
+			<div>
+				{{element[0]}}   ---> {{element[1]}}
+			</div>
+			{% endfor %}
+		</div>
+		
+		<button onclick="getNextGenerationData()">NEXT</button>
+	</body>
+</html>

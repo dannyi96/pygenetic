@@ -579,6 +579,8 @@
         
     </form>
     <button type="submit" form="main_form" value="Submit">Submit</button>
+    run_ga
+    <button type="submit" form="main_form" formaction="{{ url_for('ga_init') }}" value="Run">Run</button>
     <!-- Upload Buttons JS -->
     <script src={{url_for("static",filename="js/upload.js")}}></script>
     <!-- Buttons -->
