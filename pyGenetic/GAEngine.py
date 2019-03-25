@@ -127,8 +127,20 @@ class GAEngine:
 		weight : int
 
 		"""
+
+		#try: 
+		#	crossoverhandlers = dir(Utils.CrossoverHandlers)
+		#	if crossover_handler not in crossoverhandlers:
+		#		raise NotImplementedError('No such crossover handler found')
+
+
 		self.crossover_handlers.append(crossover_handler)
 		self.crossover_handlers_weights.append(weight)
+		
+		#except NotImplementedError as ni:
+		#	print(ni)
+
+			
 
 	def addMutationHandler(self,mutation_handler, weight = 1):
 		"""

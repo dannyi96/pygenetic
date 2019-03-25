@@ -4,14 +4,14 @@ import random
 
 class ChromosomeFactory(ABC):
 	"""
-	Abstract Class to be inherited for implemention of different 
+	Abstract Class to be inherited for implemention of different
 	ways of generating initial population of chromosomes
 
 	Instance variables :
 	------------------
 	data_type : type of data of each gene in chromosome
 	noOfGenes : number of genes in each chromosome
-	
+
 	Methods :
 	---------
 	createChromosome () : Abstract method to be implemented by derived classes
@@ -54,11 +54,11 @@ class ChromosomeRegexFactory(ChromosomeFactory):
 
 	def createChromosome(self):
 		"""
-		Generates a chromosome from given genes using python regex module 
+		Generates a chromosome from given genes using python regex module
 
 		Returns :
 		---------
-		chromosome : List containing individual genes of chromosome 
+		chromosome : List containing individual genes of chromosome
 
 		"""
 
@@ -71,7 +71,7 @@ class ChromosomeRegexFactory(ChromosomeFactory):
 class ChromosomeRangeFactory(ChromosomeFactory):
 	"""
 	Class derived from ChromosomeFactory, implements the method createChromosome()
-	which generates initial population of candidates by randomly sampling genes from a 
+	which generates initial population of candidates by randomly sampling genes from a
 	range of genes
 
 	"""
@@ -85,27 +85,38 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 		noOfGenes : int , number of genes in each chromosome
 		minValue : int , lower bound of range
 		maxValue : int , upper bound of range
-		duplicates : boolean , indicates if gene can be repeated in chromosome 
+		duplicates : boolean , indicates if gene can be repeated in chromosome
 
 		"""
 
-		ChromosomeFactory.__init__(self,data_type,noOfGenes)
-		self.minValue = minValue
-		self.maxValue = maxValue
+		try:
+			if noOfGenes < 0 :
+				raise ValueError('No of genes cannot be negative')
 
+			if minValue > maxValue:
+				raise ValueError('minValue cannot be greater than maxValue')
+
+
+			ChromosomeFactory.__init__(self,data_type,noOfGenes)
+			self.minValue = minValue
+			self.maxValue = maxValue
+
+		except ValueError as ve:
+			print(ve)
+	
 	def createChromosome(self):
 		"""
 		Generates a chromosome by randomly sampling genes from a given range
 
 		Returns :
 		---------
-		chromosome : List of genes representing each chromosome 
+		chromosome : List of genes representing each chromosome
 
 		"""
 
-
 		chromosome = random.sample(range(self.minValue,self.maxValue), self.noOfGenes)
 		return chromosome
+
 
 if __name__ == '__main__':
 	print("Entered main in chromosome factory")

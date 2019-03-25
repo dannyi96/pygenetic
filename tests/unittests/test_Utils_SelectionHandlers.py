@@ -1,5 +1,5 @@
 import sys
-sys.path.append('./pyGenetic/')
+sys.path.append('../pyGenetic/')
 
 import Utils
 
@@ -16,7 +16,7 @@ def test_worst():
     pass
 
 
-def best():
+def test_best():
     pass
 
 
@@ -24,7 +24,7 @@ def test_tournament():
     pass
 
 
-def roulette():
+def test_roulette():
     pass
 
 

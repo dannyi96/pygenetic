@@ -1,5 +1,5 @@
 import sys
-sys.path.append('./pyGenetic/')
+sys.path.append('../pyGenetic/')
 
 import  Utils
 
