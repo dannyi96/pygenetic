@@ -50,9 +50,9 @@ $(document).ready(function() {
                                             <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
                                                 <div class='input-group repeatableStateListGroup'>\
                                                     <select class='form-control crossover-type'> \
-                                                        <option> Distinct </option>\
-                                                        <option> OnePoint </option>\
-                                                        <option> TwoPoint </option>\
+                                                        <option> distinct </option>\
+                                                        <option> onePoint </option>\
+                                                        <option> twoPoint </option>\
                                                         <option> PMX </option>\
                                                         <option> OX </option>\
                                                     </select>\
@@ -78,8 +78,8 @@ $(document).ready(function() {
                                             <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
                                                 <div class='input-group repeatableStateListGroup'>\
                                                     <select class='form-control crossover-type'> \
-                                                        <option> Swap </option>\
-                                                        <option> Bit Flip </option>\
+                                                        <option> swap </option>\
+                                                        <option> bitFlip </option>\
                                                     </select>\
                                                 </div>\
                                             </div>\
