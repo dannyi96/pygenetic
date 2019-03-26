@@ -58,7 +58,7 @@
 
 <div class="container-fluid entireStateWrapper">
     
-    <form action="{{ url_for('commonCodeCreate') }}" method="POST" id="main_form">
+    <form method="POST" id="main_form">
         <div class="row" style="border-bottom: 1px solid black">
         <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
             <div class="container-fluid">
@@ -578,9 +578,111 @@
     </div>
         
     </form>
-    <button type="submit" form="main_form" value="Submit">Submit</button>
+    <button type="submit" form="main_form" value="Submit" formaction="{{ url_for('commonCodeCreate') }}">Submit</button>
     run_ga
-    <button type="submit" form="main_form" formaction="{{ url_for('ga_init') }}" value="Run">Run</button>
+    <button type="submit" form="main_form" value="Run" formaction="{{ url_for('ga_init') }}">Run</button>
+    <div id="patternHeading">
+            GA Results formaction=""
+    </div>
+    <div id="results">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                            Generation 1
+                        </div>
+                    </div>
+                    <hr class="fancyHorLine1">
+                    <div class="row" id="targetFuncDeclWrapperRow">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                        <span class="monkeyPatchShiftToRight"> Chromosome </span>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                        <span class="monkeyPatchShiftToRight"> Fitness </span>
+                                    </div>
+                                </div>
+                                <div class="row" id="targetFuncDeclDivRow">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                        <div class="container-fluid repeatableTargetFuncDeclList">
+                                            <div class="row">
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                                    [ 10, 20, 30, 40]
+                                                </div>
+
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                                    100
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                                    [ 10, 20, 30, 50]
+                                                </div>
+
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                                    110
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn" id="funcDeclWrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-12" id="stepsRowInfo">
+                            Generation 2
+                        </div>
+                    </div>
+                    <hr class="fancyHorLine1">
+                    <div class="row" id="targetFuncDeclWrapperRow">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                        <span class="monkeyPatchShiftToRight"> Chromosome </span>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                        <span class="monkeyPatchShiftToRight"> Fitness </span>
+                                    </div>
+                                </div>
+                                <div class="row" id="targetFuncDeclDivRow">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                        <div class="container-fluid repeatableTargetFuncDeclList">
+                                            <div class="row">
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                                    [ 10, 20, 30, 40]
+                                                </div>
+
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                                    100
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                                    [ 10, 20, 30, 50]
+                                                </div>
+
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-6">
+                                                    110
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Upload Buttons JS -->
     <script src={{url_for("static",filename="js/upload.js")}}></script>
     <!-- Buttons -->

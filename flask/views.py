@@ -176,7 +176,8 @@ def ga_init():
 	print(ga.calculateFitness([1,2]))
 	ga.evolve(1)
 	print('swah')
-	return render_template("features/generations.html", fitness_dict=ga.fitness_dict[:10])
+	return jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
+	#return render_template("features/generations.html", fitness_dict=ga.fitness_dict[:10])
 
 @app.route('/ga_evolve')
 def ga_evolve():

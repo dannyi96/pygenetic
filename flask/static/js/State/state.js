@@ -1,6 +1,74 @@
 $(document).ready(function() {
 	// console.log(UploadState.handleFileSelect);
 	// Button events initialize
+    var $form = $('#main_form')
+    $form.submit(function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $.ajax({
+            type: "POST",
+            url: '/ga_init',
+            data: form.serialize(),
+            success: function(data) {
+                console.log(data);
+                console.log(data['Best-Fitnesses']);
+                var fitness_response = data['Best-Fitnesses'];
+                var str = `<div class='col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn' id='funcDeclWrapper'> 
+                <div class='container-fluid'> 
+                    <div class='row'> 
+                        <div class='col-xl-12 col-lg-12 col-md-12 col-12' id='stepsRowInfo'> 
+                            Generation 1 
+                        </div> 
+                    </div> 
+                    <hr class='fancyHorLine1'> 
+                    <div class='row' id='targetFuncDeclWrapperRow'> 
+                        <div class='col-xl-12 col-lg-12 col-md-12 col-12'> 
+                            <div class='container-fluid'> 
+                                <div class='row'> 
+                                    <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                        <span class='monkeyPatchShiftToRight'> Chromosome </span> 
+                                    </div> 
+                                    <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                        <span class='monkeyPatchShiftToRight'> Fitness </span> 
+                                    </div> 
+                                </div> 
+                                <div class='row' id='targetFuncDeclDivRow'> 
+                                    <div class='col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn'> 
+                                        <div class='container-fluid repeatableTargetFuncDeclList'> 
+                                            <div class='row'>
+                                                <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                    ` + fitness_response[0][0]+ ` 
+                                                </div> 
+                                                <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
+                                                    fitness_response[0][1] + ` 
+                                                </div> 
+                                            </div> 
+                                            <div class='row'> 
+                                                <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                    [ 10, 20, 30, 50] 
+                                                </div> 
+                                                <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                    110 
+                                                </div> 
+                                            </div> 
+                                        </div> 
+                                    </div> 
+                                </div> 
+                          </div> 
+                    </div> 
+                </div> 
+            </div> 
+        </div>`;
+        console.log(str);
+        $('#results').append(str); 
+
+
+            }
+        });
+        return false;
+    });
+
+
 	UploadState.receivedText = UploadState.receivedText.bind(UploadState)
 	UploadState.receivedText = function() {
 		var data = (JSON.parse(self.fr.result));
