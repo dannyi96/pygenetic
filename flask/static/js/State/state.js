@@ -2,69 +2,195 @@ $(document).ready(function() {
 	// console.log(UploadState.handleFileSelect);
 	// Button events initialize
     var $form = $('#main_form')
-    $form.submit(function(e) {
+    $form.submit(function(e) 
+    {
         e.preventDefault();
         var form = $(this);
-        $.ajax({
-            type: "POST",
-            url: '/ga_init',
-            data: form.serialize(),
-            success: function(data) {
-                console.log(data);
-                console.log(data['Best-Fitnesses']);
-                var fitness_response = data['Best-Fitnesses'];
-                var str = `<div class='col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn' id='funcDeclWrapper'> 
-                <div class='container-fluid'> 
-                    <div class='row'> 
-                        <div class='col-xl-12 col-lg-12 col-md-12 col-12' id='stepsRowInfo'> 
-                            Generation 1 
-                        </div> 
-                    </div> 
-                    <hr class='fancyHorLine1'> 
-                    <div class='row' id='targetFuncDeclWrapperRow'> 
-                        <div class='col-xl-12 col-lg-12 col-md-12 col-12'> 
+        console.log(document.getElementById('results').childElementCount);
+        var noOfGenerations = document.getElementById('results').childElementCount;
+        var MAX_ITER = parseInt(document.getElementById('no-of-evolutions').value)
+        while(noOfGenerations<MAX_ITER)
+        {
+            noOfGenerations += 1;
+            console.log(noOfGenerations);
+            if(noOfGenerations == 1)
+            {
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: '/ga_init',
+                        data: form.serialize(),
+                        async: false,
+                        success: function(data) 
+                        {
+                            
+                            var fitness_response = data['Best-Fitnesses'];
+                            var str = `<div class='col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn' id='funcDeclWrapper'> 
+                                        <div class='container-fluid'> 
+                                            <div class='row'> 
+                                                <div class='col-xl-12 col-lg-12 col-md-12 col-12' id='stepsRowInfo'> 
+                                                    Generation ` + noOfGenerations + ` 
+                                                </div> 
+                                            </div> 
+                                            <hr class='fancyHorLine1'> 
+                                            <div class='row' id='targetFuncDeclWrapperRow'> 
+                                                <div class='col-xl-12 col-lg-12 col-md-12 col-12'> 
+                                                    <div class='container-fluid'> 
+                                                        <div class='row'> 
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                <span class='monkeyPatchShiftToRight'> Chromosome </span> 
+                                                            </div> 
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                <span class='monkeyPatchShiftToRight'> Fitness </span> 
+                                                            </div> 
+                                                        </div> 
+                                                        <div class='row' id='targetFuncDeclDivRow'> 
+                                                            <div class='col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn'> 
+                                                                <div class='container-fluid repeatableTargetFuncDeclList'> 
+                                                                    <div class='row'>
+                                                                         <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                            ` + fitness_response[0][0]+ ` 
+                                                                        </div> 
+                                                                        <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
+                                                                            fitness_response[0][1] + ` 
+                                                                        </div> 
+                                                                    </div> 
+                                                                    <div class='row'>
+                                                                        <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                            ` + fitness_response[1][0]+ ` 
+                                                                        </div> 
+                                                                        <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
+                                                                            fitness_response[1][1] + ` 
+                                                                        </div> 
+                                                                    </div>
+                                                                    <div class='row'>
+                                                                        <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                            ` + fitness_response[2][0]+ ` 
+                                                                        </div> 
+                                                                        <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
+                                                                            fitness_response[2][1] + ` 
+                                                                        </div> 
+                                                                    </div>
+                                                                    <div class='row'>
+                                                                        <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                            ` + fitness_response[3][0]+ ` 
+                                                                        </div> 
+                                                                        <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
+                                                                            fitness_response[3][1] + ` 
+                                                                        </div> 
+                                                                    </div>
+                                                                    <div class='row'>
+                                                                        <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                            ` + fitness_response[4][0]+ ` 
+                                                                        </div> 
+                                                                        <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
+                                                                            fitness_response[4][1] + ` 
+                                                                        </div> 
+                                                                    </div> 
+                                                                </div> 
+                                                            </div> 
+                                                        </div> 
+                                                  </div> 
+                                              </div> 
+                                           </div> 
+                                        </div> 
+                                    </div>`;
+                            
+                            $('#results').append(str); 
+                
+                        }
+                    });
+                }
+                else
+                {
+                    $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: '/ga_evolve',
+                    data: form.serialize(),
+                    success: function(data) 
+                    {
+                        
+                        
+                        var fitness_response = data['Best-Fitnesses'];
+                        var str = `<div class='col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn' id='funcDeclWrapper'> 
                             <div class='container-fluid'> 
                                 <div class='row'> 
-                                    <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
-                                        <span class='monkeyPatchShiftToRight'> Chromosome </span> 
-                                    </div> 
-                                    <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
-                                        <span class='monkeyPatchShiftToRight'> Fitness </span> 
+                                    <div class='col-xl-12 col-lg-12 col-md-12 col-12' id='stepsRowInfo'> 
+                                        Generation ` + noOfGenerations + `
                                     </div> 
                                 </div> 
-                                <div class='row' id='targetFuncDeclDivRow'> 
-                                    <div class='col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn'> 
-                                        <div class='container-fluid repeatableTargetFuncDeclList'> 
-                                            <div class='row'>
-                                                <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
-                                                    ` + fitness_response[0][0]+ ` 
-                                                </div> 
-                                                <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
-                                                    fitness_response[0][1] + ` 
-                                                </div> 
-                                            </div> 
+                                <hr class='fancyHorLine1'> 
+                                <div class='row' id='targetFuncDeclWrapperRow'> 
+                                    <div class='col-xl-12 col-lg-12 col-md-12 col-12'> 
+                                        <div class='container-fluid'> 
                                             <div class='row'> 
                                                 <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
-                                                    [ 10, 20, 30, 50] 
+                                                    <span class='monkeyPatchShiftToRight'> Chromosome </span> 
                                                 </div> 
                                                 <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
-                                                    110 
+                                                    <span class='monkeyPatchShiftToRight'> Fitness </span> 
                                                 </div> 
                                             </div> 
-                                        </div> 
-                                    </div> 
-                                </div> 
-                          </div> 
-                    </div> 
-                </div> 
-            </div> 
-        </div>`;
-        console.log(str);
-        $('#results').append(str); 
+                                            <div class='row' id='targetFuncDeclDivRow'> 
+                                                <div class='col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn'> 
+                                                    <div class='container-fluid repeatableTargetFuncDeclList'> 
+                                                        <div class='row'>
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                ` + fitness_response[0][0]+ ` 
+                                                            </div> 
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
+                                                                fitness_response[0][1] + ` 
+                                                            </div> 
+                                                        </div> 
+                                                        <div class='row'>
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                ` + fitness_response[1][0]+ ` 
+                                                            </div> 
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
+                                                                fitness_response[1][1] + ` 
+                                                            </div> 
+                                                        </div>
+                                                        <div class='row'>
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                ` + fitness_response[2][0]+ ` 
+                                                            </div> 
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
+                                                                fitness_response[2][1] + ` 
+                                                            </div> 
+                                                        </div>
+                                                        <div class='row'>
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                ` + fitness_response[3][0]+ ` 
+                                                            </div> 
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
+                                                                fitness_response[3][1] + ` 
+                                                            </div> 
+                                                        </div>
+                                                        <div class='row'>
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> 
+                                                                ` + fitness_response[4][0]+ ` 
+                                                            </div> 
+                                                            <div class='col-xl-6 col-lg-6 col-md-6 col-6'> ` +  
+                                                                fitness_response[4][1] + ` 
+                                                            </div> 
+                                                        </div>    
+                                                    </div> 
+                                                </div> 
+                                            </div> 
+                                      </div> 
+                                  </div> 
+                               </div> 
+                            </div> 
+                        </div>`;
+               
+                $('#results').append(str); 
+                
+                }
+            });
+        }
+    }
 
-
-            }
-        });
         return false;
     });
 
