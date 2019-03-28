@@ -137,53 +137,6 @@ def ga_init():
 	import sys
 	sys.path.insert(0, '../pyGenetic')
 
-	# payload = request.form
-	# code = "import GAEngine\nimport Utils\nimport ChromosomeFactory\n"
-
-	# print("Payload Data: ", payload)
-
-	# if(payload["gene-generation"]=="1drange"):
-	# 	if(payload["1drange-duplicate"]=="yes"):
-	# 		duplicates=True
-	# 	elif(payload["1drange-duplicate"]=="no"):
-	# 		duplicates=False
-	# 	#factory = ChromosomeFactory.ChromosomeRangeFactory(payload["1drange-datatype"],int(payload["no-of-genes"]),int(payload["1drange-min"]),int(payload["1drange-max"]),str(duplicates))
-	# 	print(">>> str(duplicates) is ",str(duplicates))
-	# 	code += "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1drange-datatype"]+","+payload["no-of-genes"]+","+payload["1drange-min"]+","+payload["1drange-max"]+","+str(duplicates)+")\n"
-	# elif(payload["gene-generation"]=="1dregex"):
-	# 	#factory = ChromosomeFactory.ChromosomeRegexFactory(payload["1dregex-datatype"],int(payload["no-of-genes"]),payload["1dregex-regex"])
-	# 	code += "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1dregex-datatype"]+","+payload["no-of-genes"]+",'"+payload["1dregex-regex"]+"'"+")\n"
-
-	# if(payload["pySpark"]=="yes"):
-	# 	pyspark = True
-	# elif(payload["pySpark"]=="no"):
-	# 	pyspark = False
-
-	# if(payload["adaptive-mutation"]=="yes"):
-	# 	adaptive = True
-	# elif(payload["adaptive-mutation"]=="no"):
-	# 	adaptive = False
-
-	# if(payload["fitness-type"]=="min" or payload["fitness-type"]=="max"):
-	# 	fit_type = "'"+payload["fitness-type"]+"'"
-	# elif(payload["fitness-type"]=="equal"):
-	# 	fit_type = ('equal',float(payload["fitness-equal"]))
-	
-	# #ga = GAEngine.GAEngine(factory=factory,population_size=int(payload["population-size"]),cross_prob=float(payload["crossover-rate"]),mut_prob=float(payload["mutation-rate"]),fitness_type=fit_type,adaptive_mutation=adaptive)
-	# code += "ga = GAEngine.GAEngine(factory=factory,population_size="+payload["population-size"]+",cross_prob="+payload["crossover-rate"]+",mut_prob="+payload["mutation-rate"]+",fitness_type="+str(fit_type)+",adaptive_mutation="+str(adaptive)+",use_pyspark="+str(pyspark)+")\n"
-
-	# code += "ga.addCrossoverHandler(Utils.CrossoverHandlers."+payload["crossover-type"]+","+payload["crossover-weight"]+")\n"
-	# code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"]+","+payload["mutation-weight"]+")\n"
-	# code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+")\n"
-	# code += "ga.setFitnessHandler(Utils.Fitness."+payload["fitness"]+")\n"
-	# #code += "ga.evolve(1)\n"
-	
-	# Take care of pyspark flag
-	
-	# print(code,"\n*******")
-	# print()
-	# exec(code,globals())
-
 	payload = request.form
 	precode = "import GAEngine\nimport Utils\nimport ChromosomeFactory\n"
 	for i in payload:
