@@ -182,10 +182,37 @@ def ga_init():
 	
 	#ga = GAEngine.GAEngine(factory=factory,population_size=int(payload["population-size"]),cross_prob=float(payload["crossover-rate"]),mut_prob=float(payload["mutation-rate"]),fitness_type=fit_type,adaptive_mutation=adaptive)
 	code += "ga = GAEngine.GAEngine(factory=factory,population_size="+payload["population-size"]+",cross_prob="+payload["crossover-rate"]+",mut_prob="+payload["mutation-rate"]+",fitness_type="+str(fit_type)+",adaptive_mutation="+str(adaptive)+",use_pyspark="+str(pyspark)+")\n"
+	
+	if(payload["crossover-type"] != "custom"):
+		code += "ga.addCrossoverHandler(Utils.CrossoverHandlers."+payload["crossover-type"]+","+payload["crossover-weight"]+")\n"
+	else:
+		cleaned = unquote(payload["custom-crossover"])
+		custom_name = cleaned[cleaned.find("def ")+4:]
+		custom_name = custom_name[:custom_name.find("(")]
+		precode += cleaned + "\n"
+		code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"]+")\n"
+	
+	if(payload["mutation-type"] != "custom"):
+		code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"]+","+payload["mutation-weight"]+")\n"
+	else:
+		cleaned = unquote(payload["custom-mutation"])
+		custom_name = cleaned[cleaned.find("def ")+4:]
+		custom_name = custom_name[:custom_name.find("(")]
+		precode += cleaned + "\n"
+		code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"]+")\n"
 
-	code += "ga.addCrossoverHandler(Utils.CrossoverHandlers."+payload["crossover-type"]+","+payload["crossover-weight"]+")\n"
-	code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"]+","+payload["mutation-weight"]+")\n"
-	code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+")\n"
+	
+
+	if(payload["selection-type"] != "custom"):
+		code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+")\n"
+	else:
+		cleaned = unquote(payload["custom-selection"])
+		custom_name = cleaned[cleaned.find("def ")+4:]
+		custom_name = custom_name[:custom_name.find("(")]
+		precode += cleaned + "\n"
+		code += "ga.setSelectionHandler("+custom_name+")\n"
+
+	
 
 	if(payload["fitness"] != "custom"):
 		code += "ga.setFitnessHandler(Utils.Fitness."+payload["fitness"]+")\n"
@@ -198,7 +225,6 @@ def ga_init():
 			datas = unquote(payload["extra-data"]).split('\r\n')
 			if(datas[-1].strip() == ''):
 				datas = datas[:len(datas)-1]
-			print("datas ============ ",datas)
 			datas_string = ""
 			for x in datas:
 				precode += x +"\n"

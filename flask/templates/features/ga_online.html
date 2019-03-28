@@ -39,7 +39,49 @@
             document.getElementById('fitness-data').style.display = 'none';
         }
     }
-    
+
+    function placeCrossoverTextArea()
+    {
+        var option = document.getElementById('crossover-select').value;
+        if(option=="custom")
+        {
+            document.getElementById('crossover-code').style.display = '';
+            
+        }
+        else
+        {
+            document.getElementById('crossover-code').style.display = 'none';
+        }
+    }
+
+    function placeMutationTextArea()
+    {
+        var option = document.getElementById('mutation-select').value;
+        if(option=="custom")
+        {
+            document.getElementById('mutation-code').style.display = '';
+            
+        }
+        else
+        {
+            document.getElementById('mutation-code').style.display = 'none';
+        }
+    }
+
+    function placeSelectionTextArea()
+    {
+        var option = document.getElementById('selection-select').value;
+        if(option=="custom")
+        {
+            document.getElementById('selection-code').style.display = '';
+            
+        }
+        else
+        {
+            document.getElementById('selection-code').style.display = 'none';
+        }
+    }
+
     function placeAchieveTag()
     {
         var option = document.getElementById('fitness-achieve-select').value;
@@ -373,12 +415,13 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <select class="form-control crossover-type" name="crossover-type"> 
+                                                    <select class="form-control crossover-type" id="crossover-select" onchange="placeCrossoverTextArea()" name="crossover-type"> 
                                                         <option value="distinct"> distinct </option>
                                                         <option value="onePoint"> onePoint </option>
                                                         <option value="twoPoint"> twoPoint </option>
                                                         <option value="PMX"> PMX </option>
                                                         <option value="OX"> OX </option>
+                                                        <option value="custom"> Custom </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -390,6 +433,30 @@
                                                     <button class="btn btn-outline-secondary addStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another state">+</button>
                                                     <button class="btn btn-outline-secondary delStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this state" style="pointer-events: none;" disabled>-</button>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid" id="crossover-code" style="display:none;">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Crossover function code </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+                                            <div class="col-xl-8 col-lg-8 col-md-8 col-8">
+                                                <textarea class="form-control" cols="1000" rows="5" name="custom-crossover">#Enter crossover func here</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -434,9 +501,10 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <select class="form-control mutation-type" name="mutation-type"> 
+                                                    <select class="form-control mutation-type" id="mutation-select" onchange="placeMutationTextArea()" name="mutation-type"> 
                                                         <option value="swap"> swap </option>
                                                         <option value="bitFlip"> bitFlip </option>
+                                                        <option value="custom"> Custom </option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -448,6 +516,30 @@
                                                     <button class="btn btn-outline-secondary addStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another state">+</button>
                                                     <button class="btn btn-outline-secondary delStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this state" style="pointer-events: none;" disabled>-</button>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid" id="mutation-code" style="display:none;">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Mutation function code </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+                                            <div class="col-xl-8 col-lg-8 col-md-8 col-8">
+                                                <textarea class="form-control" cols="1000" rows="5" name="custom-mutation">#Enter mutation func here</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -489,7 +581,7 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <select class="form-control selection-type" name="selection-type"> 
+                                                    <select class="form-control selection-type" id="selection-select" onchange="placeSelectionTextArea()" name="selection-type"> 
                                                         <option value="basic"> basic </option>
                                                         <option value="random"> random </option>
                                                         <option value="worst"> worst </option>
@@ -498,8 +590,33 @@
                                                         <option value="roulette"> roulette </option>
                                                         <option value="rank"> rank </option>
                                                         <option value="SUS"> SUS </option>
+                                                        <option value="custom"> Custom </option>
                                                     </select>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid" id="selection-code" style="display:none;">
+                <div class="row" id="targetFuncDeclWrapperRow">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight"> Selection function code </span>
+                                </div>
+                            </div>
+                            <div class="row" id="targetFuncDeclDivRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                    <div class="container-fluid repeatableTargetFuncDeclList">
+                                        <div class="row">
+                                            <div class="col-xl-8 col-lg-8 col-md-8 col-8">
+                                                <textarea class="form-control" cols="1000" rows="5" name="custom-selection">#Enter selection func here</textarea>
                                             </div>
                                         </div>
                                     </div>
