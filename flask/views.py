@@ -241,10 +241,17 @@ def ga_init():
 		custom_name = cleaned[cleaned.find("def ")+4:]
 		custom_name = custom_name[:custom_name.find("(")]
 		precode += cleaned + "\n"
-		print("extra-data ===",payload["extra-data"].strip(),"***")
 		if(unquote(payload["extra-data"]).strip() != "#Enter data here" and payload["extra-data"] != ''):
-			precode += unquote(payload["extra-data"])+"\n"
-			code += "ga.setFitnessHandler("+custom_name+",extra)\n"
+			datas = unquote(payload["extra-data"]).split('\r\n')
+			if(datas[-1].strip() == ''):
+				datas = datas[:len(datas)-1]
+			print("datas ============ ",datas)
+			datas_string = ""
+			for x in datas:
+				precode += x +"\n"
+				datas_string += "," + x[:x.find("=")].strip()
+
+			code += "ga.setFitnessHandler("+custom_name + datas_string +")\n"
 		else:
 			code += "ga.setFitnessHandler("+custom_name+")\n"
 
