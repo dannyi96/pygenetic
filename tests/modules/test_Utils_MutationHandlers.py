@@ -22,6 +22,7 @@ def test_mock_swap(chromosome,random_index,expected_result):
 	with mock.patch('random.randint', lambda x,y:random_index):
 		assert Utils.MutationHandlers.swap(chromosome) == expected_result
 
+
 def test_bitFlip():
     pass
 
