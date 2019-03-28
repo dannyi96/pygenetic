@@ -1,0 +1,84 @@
+import sys
+sys.path.append('../../pyGenetic/')
+
+import ChromosomeFactory
+import pytest
+import re
+
+@pytest.mark.parametrize("noOfGenes, pattern, data_type", [
+( -1,'0|1|7',int),
+( 0, '0|1|7',float),
+( 4 , '0|1|7',list),
+(5,'0[',int),
+(10,'a.d|b.d|c.d',int)
+])
+def test_errors_ChromosomeRegexFactory(noOfGenes, pattern, data_type):
+    # Test case 1: Test for exception when no of genes less than or equal to 0
+    if noOfGenes<=0:
+        with pytest.raises(ValueError):
+            factory = ChromosomeFactory.ChromosomeRegexFactory(noOfGenes, pattern, data_type)
+        return
+
+    # Test case 2: Test for exception when invalid data type is given
+    if data_type not in [float,int,str]:
+        with pytest.raises(ValueError):
+            factory = ChromosomeFactory.ChromosomeRegexFactory(noOfGenes, pattern, data_type)
+            
+    # Test case 3: Test for exception when invalid regex is given
+    try:
+        re.compile(pattern)
+    except:
+        with pytest.raises(ValueError):
+            factory = ChromosomeFactory.ChromosomeRegexFactory(noOfGenes, pattern, data_type)
+        return
+
+    # Test case 4: Test errors for invalid regex type conversion
+    if data_type == int or data_type == float:
+        factory = ChromosomeFactory.ChromosomeRegexFactory(noOfGenes,pattern,data_type)
+        # Test only when conversion is not possible
+        try:
+            result = data_type(factory.createChromosome())
+        except:
+            with pytest.raises(Exception):
+                factory.createChromosome()
+
+@pytest.mark.parametrize("noOfGenes, pattern, data_type", [
+(3,'a|b|x',str),
+(10,'1|0|7',int)
+])
+def test_functionality_ChromosomeRegexFactory(noOfGenes, pattern, data_type):
+    
+    factory = ChromosomeFactory.ChromosomeRegexFactory(noOfGenes=noOfGenes,pattern=pattern,data_type=data_type)
+    chromosome = factory.createChromosome()
+    
+    # Test case 5: Check if correct no of genes are produced
+    assert len(chromosome) == noOfGenes
+
+    # Test case 6: Check if correct genes are produced from regex
+    for gene in chromosome:
+        pattern_regex = re.compile(pattern)
+        assert pattern_regex.match(str(gene))
+
+
+# @pytest.mark.parametrize("data_type, noOfGenes , minValue, maxValue", [
+#     (int, 4, 3 ,8),
+#     (int, -1, 8 ,3)
+# ])
+# def test_ChromosomeRangeFactory(data_type, noOfGenes,  minValue, maxValue):
+
+#     factory = ChromosomeFactory.ChromosomeRangeFactory(data_type, noOfGenes, minValue, maxValue)
+#     chromosome = factory.createChromosome()
+
+#     if factory.noOfGenes > 0:
+#         assert len(chromosome) == factory.noOfGenes
+#     assert factory.minValue <= factory.maxValue
+
+#     if  factory.minValue > factory.maxValue :
+#         assert ValueError
+#     if factory.noOfGenes < 0:
+#         assert ValueError
+'''
+if __name__ == '__main__':
+    test_ChromosomeRegexFactory()
+    test_ChromosomeRangeFactory()
+'''

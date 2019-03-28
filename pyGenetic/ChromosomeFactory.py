@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import rstr
 import random
+import re
 
 class ChromosomeFactory(ABC):
 	"""
@@ -18,9 +19,9 @@ class ChromosomeFactory(ABC):
 
 	"""
 
-	def __init__(self,data_type,noOfGenes):
-		self.data_type = data_type
+	def __init__(self,noOfGenes,data_type):
 		self.noOfGenes = noOfGenes
+		self.data_type = data_type
 
 	@abstractmethod
 	def createChromosome(self):
@@ -38,7 +39,7 @@ class ChromosomeRegexFactory(ChromosomeFactory):
 
 	"""
 
-	def __init__(self,data_type,noOfGenes,pattern):
+	def __init__(self,noOfGenes,pattern,data_type=str):
 		"""
 		Parameters :
 		------------
@@ -49,16 +50,18 @@ class ChromosomeRegexFactory(ChromosomeFactory):
 
 		"""
 
-		try : 
+		if noOfGenes <= 0:
+			raise ValueError('No of genes cannot be negative or zero')
+		if data_type not in [str,int,float]:
+			raise ValueError('Invalid datatype given to Chromosome Regex Factory')
+		try:
+			re.compile(pattern)
+		except re.error:
+			raise ValueError('Invalid regex given to Chromosome Regex Factory')
 
-			if noOfGenes < 0:
-				raise ValueError('No of genes cannot be negative')
-
-			ChromosomeFactory.__init__(self,data_type,noOfGenes)
-			self.pattern = pattern
+		ChromosomeFactory.__init__(self,noOfGenes,data_type)
+		self.pattern = pattern
 		
-		except ValueError as ve :
-			print(ve)
 
 	def createChromosome(self):
 		"""
@@ -69,12 +72,17 @@ class ChromosomeRegexFactory(ChromosomeFactory):
 		chromosome : List containing individual genes of chromosome
 
 		"""
-
-		if self.data_type==int:
-			chromosome = [int(rstr.xeger(self.pattern)) for i in range(self.noOfGenes)]
-		else:
-			chromosome = [rstr.xeger(self.pattern) for i in range(self.noOfGenes)]
-		return chromosome
+		try:
+			if self.data_type == int:
+				chromosome = [int(rstr.xeger(self.pattern)) for i in range(self.noOfGenes)]
+			elif self.data_type == float:
+				chromosome = [float(rstr.xeger(self.pattern)) for i in range(self.noOfGenes)]
+			else:
+				chromosome = [rstr.xeger(self.pattern) for i in range(self.noOfGenes)]
+			return chromosome
+		except:
+			raise Exception('Unable to convert all/some strings of given regex to type %s'%(type(self.data_type).__name__))
+		
 
 class ChromosomeRangeFactory(ChromosomeFactory):
 	"""
@@ -84,7 +92,7 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 
 	"""
 
-	def __init__(self,data_type,noOfGenes,minValue,maxValue,duplicates=False):
+	def __init__(self,noOfGenes,minValue,maxValue,duplicates=False,data_type=int):
 		"""
 		Parameters :
 		-----------
@@ -97,20 +105,19 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 
 		"""
 
-		try:
-			if noOfGenes < 0 :
-				raise ValueError('No of genes cannot be negative')
+		if noOfGenes <= 0 :
+			raise ValueError('No of genes cannot be negative')
 
-			if minValue > maxValue:
-				raise ValueError('minValue cannot be greater than maxValue')
+		if minValue > maxValue:
+			raise ValueError('minValue cannot be greater than maxValue')
+
+		if type(duplicates) != bool:
+			raise ValueError('Invalid duplicated value given')
 
 
-			ChromosomeFactory.__init__(self,data_type,noOfGenes)
-			self.minValue = minValue
-			self.maxValue = maxValue
-
-		except ValueError as ve:
-			print(ve)
+		ChromosomeFactory.__init__(self,data_type,noOfGenes)
+		self.minValue = minValue
+		self.maxValue = maxValue
 	
 	def createChromosome(self):
 		"""
@@ -121,14 +128,18 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 		chromosome : List of genes representing each chromosome
 
 		"""
-
-		chromosome = random.sample(range(self.minValue,self.maxValue), self.noOfGenes)
-		return chromosome
+		try:
+			chromosome = random.sample(range(self.minValue,self.maxValue), self.noOfGenes)
+			return chromosome
+		except:
+			raise Exception('Unable to generated sample from given max %s min %s noOfGenes %s'%(self.minValue,self.maxValue,self.noOfGenes))
 
 
 if __name__ == '__main__':
 	print("Entered main in chromosome factory")
-	factory1 = ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1|7')
-	print(factory1.createChromosome())
-	factory2 = ChromosomeRangeFactory(int,8,3,11)
-	print(factory2.createChromosome())
+	#factory1 = ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1|7')
+	#print(factory1.createChromosome())
+	#factory2 = ChromosomeRangeFactory(int,8,3,11)
+	#print(factory2.createChromosome())
+	factory = ChromosomeRegexFactory(noOfGenes=3,pattern='a|B|c',data_type=str)
+	print(factory.createChromosome())
