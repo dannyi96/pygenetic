@@ -2,6 +2,7 @@
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from werkzeug import secure_filename
+from urllib.parse import unquote
 import os
 import datetime
 import json
@@ -32,7 +33,7 @@ def commonCodeCreate():
 	# import Utils
 	# import ChromosomeFactory
 	payload = request.form
-	code = "import GAEngine\nimport Utils\nimport ChromosomeFactory\n"
+	precode = "import GAEngine\nimport Utils\nimport ChromosomeFactory\n"
 	for i in payload:
 		print(payload[i])
 
@@ -54,13 +55,10 @@ def commonCodeCreate():
 			duplicates=False
 		#factory = ChromosomeFactory.ChromosomeRangeFactory(payload["1drange-datatype"],int(payload["no-of-genes"]),int(payload["1drange-min"]),int(payload["1drange-max"]),str(duplicates))
 		print(">>> str(duplicates) is ",str(duplicates))
-		code += "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1drange-datatype"]+","+payload["no-of-genes"]+","+payload["1drange-min"]+","+payload["1drange-max"]+","+str(duplicates)+")\n"
+		code = "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1drange-datatype"]+","+payload["no-of-genes"]+","+payload["1drange-min"]+","+payload["1drange-max"]+","+str(duplicates)+")\n"
 	elif(payload["gene-generation"]=="1dregex"):
 		#factory = ChromosomeFactory.ChromosomeRegexFactory(payload["1dregex-datatype"],int(payload["no-of-genes"]),payload["1dregex-regex"])
-		code += "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1dregex-datatype"]+","+payload["no-of-genes"]+",'"+payload["1dregex-regex"]+"'"+")\n"
-
-	print()
-	print(code,"\n*******")
+		code = "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1dregex-datatype"]+","+payload["no-of-genes"]+",'"+payload["1dregex-regex"]+"'"+")\n"
 
 	if(payload["pySpark"]=="yes"):
 		pyspark = True
@@ -83,13 +81,26 @@ def commonCodeCreate():
 	code += "ga.addCrossoverHandler(Utils.CrossoverHandlers."+payload["crossover-type"]+","+payload["crossover-weight"]+")\n"
 	code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"]+","+payload["mutation-weight"]+")\n"
 	code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+")\n"
-	code += "ga.setFitnessHandler(Utils.Fitness."+payload["fitness"]+")\n"
+
+	if(payload["fitness"] != "custom"):
+		code += "ga.setFitnessHandler(Utils.Fitness."+payload["fitness"]+")\n"
+	else:
+		cleaned = unquote(payload["custom-fitness"])
+		custom_name = cleaned[cleaned.find("def ")+4:]
+		custom_name = custom_name[:custom_name.find("(")]
+		precode += cleaned + "\n"
+		if(unquote(payload["extra-data"]).strip() != "#Enter data here" or payload["extra-data"].strip() != ""):
+			precode += unquote(payload["extra-data"])+"\n"
+			code += "ga.setFitnessHandler("+custom_name+",extra)\n"
+		else:
+			code += "ga.setFitnessHandler("+custom_name+")\n"
+
 	code += "ga.evolve("+payload["no-of-evolutions"]+")\n"
 	# Take care of pyspark flag
 	print()
 	print(code,"\n*******")
 	print()
-	exec(code)
+	exec(code,globals())
 
 	
 
@@ -127,7 +138,18 @@ def ga_init():
 	sys.path.insert(0, '../pyGenetic')
 
 	payload = request.form
-	code = "import GAEngine\nimport Utils\nimport ChromosomeFactory\n"
+	precode = "import GAEngine\nimport Utils\nimport ChromosomeFactory\n"
+	for i in payload:
+		print(payload[i])
+
+	# for i in range(20):
+	# 	print(payload[i])
+	#session["fileType"] = ".tar.gz"
+
+	#if(len(payload["fileType"])<=8): # else, use what user chose
+	#	session["fileType"] = payload["fileType"]
+
+	#del payload["fileType"]
 
 	print("Payload Data: ", payload)
 
@@ -138,10 +160,10 @@ def ga_init():
 			duplicates=False
 		#factory = ChromosomeFactory.ChromosomeRangeFactory(payload["1drange-datatype"],int(payload["no-of-genes"]),int(payload["1drange-min"]),int(payload["1drange-max"]),str(duplicates))
 		print(">>> str(duplicates) is ",str(duplicates))
-		code += "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1drange-datatype"]+","+payload["no-of-genes"]+","+payload["1drange-min"]+","+payload["1drange-max"]+","+str(duplicates)+")\n"
+		code = "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1drange-datatype"]+","+payload["no-of-genes"]+","+payload["1drange-min"]+","+payload["1drange-max"]+","+str(duplicates)+")\n"
 	elif(payload["gene-generation"]=="1dregex"):
 		#factory = ChromosomeFactory.ChromosomeRegexFactory(payload["1dregex-datatype"],int(payload["no-of-genes"]),payload["1dregex-regex"])
-		code += "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1dregex-datatype"]+","+payload["no-of-genes"]+",'"+payload["1dregex-regex"]+"'"+")\n"
+		code = "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1dregex-datatype"]+","+payload["no-of-genes"]+",'"+payload["1dregex-regex"]+"'"+")\n"
 
 	if(payload["pySpark"]=="yes"):
 		pyspark = True
@@ -160,18 +182,68 @@ def ga_init():
 	
 	#ga = GAEngine.GAEngine(factory=factory,population_size=int(payload["population-size"]),cross_prob=float(payload["crossover-rate"]),mut_prob=float(payload["mutation-rate"]),fitness_type=fit_type,adaptive_mutation=adaptive)
 	code += "ga = GAEngine.GAEngine(factory=factory,population_size="+payload["population-size"]+",cross_prob="+payload["crossover-rate"]+",mut_prob="+payload["mutation-rate"]+",fitness_type="+str(fit_type)+",adaptive_mutation="+str(adaptive)+",use_pyspark="+str(pyspark)+")\n"
+	
+	if(payload["crossover-type"] != "custom"):
+		code += "ga.addCrossoverHandler(Utils.CrossoverHandlers."+payload["crossover-type"]+","+payload["crossover-weight"]+")\n"
+	else:
+		cleaned = unquote(payload["custom-crossover"])
+		custom_name = cleaned[cleaned.find("def ")+4:]
+		custom_name = custom_name[:custom_name.find("(")]
+		precode += cleaned + "\n"
+		code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"]+")\n"
+	
+	if(payload["mutation-type"] != "custom"):
+		code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"]+","+payload["mutation-weight"]+")\n"
+	else:
+		cleaned = unquote(payload["custom-mutation"])
+		custom_name = cleaned[cleaned.find("def ")+4:]
+		custom_name = custom_name[:custom_name.find("(")]
+		precode += cleaned + "\n"
+		code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"]+")\n"
 
-	code += "ga.addCrossoverHandler(Utils.CrossoverHandlers."+payload["crossover-type"]+","+payload["crossover-weight"]+")\n"
-	code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"]+","+payload["mutation-weight"]+")\n"
-	code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+")\n"
-	code += "ga.setFitnessHandler(Utils.Fitness."+payload["fitness"]+")\n"
-	#code += "ga.evolve(1)\n"
 	
+
+	if(payload["selection-type"] != "custom"):
+		code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+")\n"
+	else:
+		cleaned = unquote(payload["custom-selection"])
+		custom_name = cleaned[cleaned.find("def ")+4:]
+		custom_name = custom_name[:custom_name.find("(")]
+		precode += cleaned + "\n"
+		code += "ga.setSelectionHandler("+custom_name+")\n"
+
+	
+
+	if(payload["fitness"] != "custom"):
+		code += "ga.setFitnessHandler(Utils.Fitness."+payload["fitness"]+")\n"
+	else:
+		cleaned = unquote(payload["custom-fitness"])
+		custom_name = cleaned[cleaned.find("def ")+4:]
+		custom_name = custom_name[:custom_name.find("(")]
+		precode += cleaned + "\n"
+		if(unquote(payload["extra-data"]).strip() != "#Enter data here" and payload["extra-data"] != ''):
+			datas = unquote(payload["extra-data"]).split('\r\n')
+			if(datas[-1].strip() == ''):
+				datas = datas[:len(datas)-1]
+			datas_string = ""
+			for x in datas:
+				precode += x +"\n"
+				datas_string += "," + x[:x.find("=")].strip()
+
+			code += "ga.setFitnessHandler("+custom_name + datas_string +")\n"
+		else:
+			code += "ga.setFitnessHandler("+custom_name+")\n"
+
+	# code += "ga.evolve("+payload["no-of-evolutions"]+")\n"
 	# Take care of pyspark flag
-	
-	print(code,"\n*******")
+	print()
+	print("precode ---> \n",precode)
+	print("code ---> \n",code)
+	code = precode + code
+	print("complete code ---> \n",code,"\n*******")
 	print()
 	exec(code,globals())
+
 	print(ga)
 	print(ga.calculateFitness([1,2]))
 	ga.evolve(1)
