@@ -115,7 +115,7 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 			raise ValueError('Invalid duplicated value given')
 
 
-		ChromosomeFactory.__init__(self,data_type,noOfGenes)
+		ChromosomeFactory.__init__(self,noOfGenes,data_type)
 		self.minValue = minValue
 		self.maxValue = maxValue
 	
@@ -128,6 +128,7 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 		chromosome : List of genes representing each chromosome
 
 		"""
+		print(self.minValue,"++++",self.maxValue)
 		try:
 			chromosome = random.sample(range(self.minValue,self.maxValue), self.noOfGenes)
 			return chromosome

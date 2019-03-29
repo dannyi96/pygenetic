@@ -138,7 +138,7 @@ class MutationHandlers:
 	# only when genes are binary
 	@staticmethod
 	def bitFlip(chromosome):
-		index = random.randint(0,len(chromosome))
+		index = random.randint(0,len(chromosome)-1)
 		chromosome[index] = type(chromosome[index])(not chromosome[index])
 		return chromosome
 

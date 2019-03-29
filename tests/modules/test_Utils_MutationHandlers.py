@@ -23,14 +23,25 @@ def test_mock_swap(chromosome,random_index,expected_result):
 		assert Utils.MutationHandlers.swap(chromosome) == expected_result
 
 
-def test_bitFlip():
-    pass
+@pytest.mark.parametrize("chromosome,expected_results", [
+( [1], [[0]] ),
+( [0,1], [[1,1],[0,0]] ),
+( [0,0,0], [[1,0,0],[0,1,0],[0,0,1]]),
+( [1,1,1,1], [[0,1,1,1],[1,0,1,1],[1,1,0,1],[1,1,1,0]] )
+])
+def test_exhaustive_bitFlip(chromosome,expected_results):
+    assert Utils.MutationHandlers.bitFlip(chromosome) in expected_results
 
+@pytest.mark.parametrize("chromosome,random_index, expected_result", [
+( [0,1,1], 1, [0,0,1]),
+( [1,1,1,1], 3,  [1,1,1,0] ),
+( [0,0,0,0,0], 0,  [1,0,0,0,0] )
+])
+def test_mock_bitFlip(chromosome,random_index,expected_result):
+	with mock.patch('random.randint', lambda x,y:random_index):
+		assert Utils.MutationHandlers.bitFlip(chromosome) == expected_result
 
-
-
-
-
-if __name__ == '__main__':
-    test_swap()
-    test_bitFlip()
+# if __name__ == '__main__':
+#     test_exhaustive_swap()
+#     test_mock_swap()
+#     test_bitFlip()

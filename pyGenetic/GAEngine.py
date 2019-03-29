@@ -314,7 +314,7 @@ class GAEngine:
 			result = self.evolution.evolve(self)
 			self.statistics.add_statistic('best',self.fitness_dict[0][1])
 			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
-			print('Fitness Dict', self.fitness_dict)
+			#print('Fitness Dict', self.fitness_dict)
 			fitnesses = [x[1] for x in self.fitness_dict]
 			self.statistics.add_statistic('avg',sum(fitnesses)/len(fitnesses))
 			if self.adaptive_mutation:
@@ -331,7 +331,7 @@ class GAEngine:
 			result = self.evolution.evolve(self)
 			self.statistics.add_statistic('best',self.fitness_dict[0][1])
 			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
-			print('Fitness Dict', self.fitness_dict)
+			#print('Fitness Dict', self.fitness_dict)
 			fitnesses = [x[1] for x in self.fitness_dict]
 			self.statistics.add_statistic('avg',sum(fitnesses)/len(fitnesses))
 			if self.adaptive_mutation:
@@ -352,7 +352,7 @@ if __name__ == '__main__':
 	#print(ga.fitness_type)
 	#ga.calculateAllFitness()
 	import copy
-	factory = ChromosomeFactory.ChromosomeRangeFactory(int,8,0,8)
+	factory = ChromosomeFactory.ChromosomeRangeFactory(8,0,8,data_type = int)
 	'''def fitness(board):
 		fitness = 0
 		for i in range(len(board)):
