@@ -324,6 +324,7 @@ class GAEngine:
 				print('SOLVED')
 				break
 		print(self.fitness_dict[:10])
+		
 
 	def continue_evolve(self, noOfIterations=20):
 		self.normalizeWeights()
