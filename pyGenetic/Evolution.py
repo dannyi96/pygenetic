@@ -108,7 +108,7 @@ class StandardEvolution(BaseEvolution):
 		for i in range(0,len(crossover_chromosomes)-1,2):
 			father,mother = crossover_chromosomes[i], crossover_chromosomes[i+1]
 			crossoverHandler = ga.chooseCrossoverHandler()
-			child1, child2 = crossoverHandler(father,mother)
+			child1, child2 = ga.doCrossover(crossoverHandler,father,mother)
 			ga.population.new_members.extend([child1,child2])
 		print("adaptive_mutation value passed = ",self.adaptive_mutation)
 
@@ -127,7 +127,7 @@ class StandardEvolution(BaseEvolution):
 			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
 		for index in mutation_indexes:
 			mutationHandler = ga.chooseMutationHandler()
-			ga.population.new_members[index] = mutationHandler(ga.population.new_members[index])
+			ga.population.new_members[index] = ga.doMutation(mutationHandler,ga.population.new_members[index])
 		ga.population.members = ga.population.new_members
 		#print("New members = ",ga.population.members)
 		ga.population.new_members = []
