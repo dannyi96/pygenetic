@@ -118,6 +118,7 @@ class GAEngine:
 		self.selection_external_data = []
 		self.crossover_external_data = {}
 		self.mutation_external_data = {}
+		self.hall_of_fame = None
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1, *args):
 		"""
@@ -250,11 +251,29 @@ class GAEngine:
 		self.fitness_dict = [(member, self.calculateFitness(member)) for member in self.population.members]
 		if self.fitness_type == 'max':
 			self.fitness_dict.sort(key=lambda x:x[1],reverse=True)
+			self.best_fitness = self.fitness_dict[0]
+			if self.hall_of_fame:
+				if self.best_fitness[1] > self.hall_of_fame[1]:
+					self.hall_of_fame = self.best_fitness
+			else:
+				self.hall_of_fame = self.best_fitness
 		elif self.fitness_type == 'min':
 			self.fitness_dict.sort(key=lambda x:x[1])
+			self.best_fitness = self.fitness_dict[0]
+			if self.hall_of_fame:
+				if self.best_fitness[1] < self.hall_of_fame[1]:
+					self.hall_of_fame = self.best_fitness
+			else:
+				self.hall_of_fame = self.best_fitness
 		elif self.fitness_type[0] == 'equal':
 			self.fitness_dict.sort(key=lambda x:abs(x[1]-self.fitness_type[1]))
-		self.best_fitness = self.fitness_dict[0]
+			self.best_fitness = self.fitness_dict[0]
+			if self.hall_of_fame:
+				if abs(self.fitness_type[1] - self.best_fitness[1]) < abs(self.fitness_type[1] - self.hall_of_fame[1]):
+					self.hall_of_fame = self.best_fitness
+			else:
+				self.hall_of_fame = self.best_fitness
+			
 
 	def handle_selection(self):
 
@@ -352,6 +371,8 @@ class GAEngine:
 			if result:
 				print('SOLVED')
 				break
+		print("Best fitness in this generation = ", self.best_fitness)
+		print("Best among all generations = ", self.hall_of_fame)
 		print(self.fitness_dict[:10])
 		
 
