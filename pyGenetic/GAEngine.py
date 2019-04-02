@@ -359,6 +359,8 @@ class GAEngine:
 
 		self.normalizeWeights()
 		for i in range(noOfIterations):
+			if (i+1)%20 == 0:
+				self.population.members.append(self.hall_of_fame[0])
 			result = self.evolution.evolve(self)
 			self.statistics.add_statistic('best',self.fitness_dict[0][1])
 			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
@@ -379,6 +381,8 @@ class GAEngine:
 	def continue_evolve(self, noOfIterations=20):
 		self.normalizeWeights()
 		for i in range(noOfIterations):
+			if (i+1)%20 == 0:
+				self.population.members.append(self.hall_of_fame[0])
 			result = self.evolution.evolve(self)
 			self.statistics.add_statistic('best',self.fitness_dict[0][1])
 			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
@@ -482,4 +486,4 @@ if __name__ == '__main__':
 	ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
 	# ga.setSelectionHandler(Utils.SelectionHandlers.basic)
 	# Provide max iteration here ???
-	ga.evolve(20)
+	ga.evolve(50)
