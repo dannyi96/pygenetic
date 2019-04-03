@@ -12,11 +12,11 @@ def test_random():
     pass
 
 
-def test_worst():
+def test_smallest():
     pass
 
 
-def test_best():
+def test_largest():
     pass
 
 
@@ -39,8 +39,8 @@ def test_SUS():
 if __name__ == '__main__':
     test_basic()
     test_random()
-    test_worst()
-    test_best()
+    test_smallest()
+    test_largest()
     test_tournament()
     test_roulette()
     test_rank()

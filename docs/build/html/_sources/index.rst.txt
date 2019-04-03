@@ -277,8 +277,8 @@ Class SelectionHandlers
 	
 	* basic() : Performs selection operation based fitness scores of candidates
 	* random()
-	* worst()
-	* best()
+	* smallest()
+	* largest()
 	* tournament()
 	* roulette()
 

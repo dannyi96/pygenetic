@@ -45,12 +45,12 @@ class SelectionHandlers:
 		return [random.choice(pop) for i in range(ga.population.population_size)]
 
 	@staticmethod
-	def worst(pop, fitness_dict, ga):
+	def smallest(pop, fitness_dict, ga):
 		new = sorted(fitness_dict, key=operator.itemgetter(1))[:ga.population.population_size]
 		return [i[0] for i in new]
 		
 	@staticmethod
-	def best(pop, fitness_dict, ga):
+	def largest(pop, fitness_dict, ga):
 		new = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)[:ga.population.population_size]
 		return [i[0] for i in new]
 		
