@@ -480,15 +480,19 @@ if __name__ == '__main__':
 	ga = GAEngine(factory,1000,fitness_type='min',mut_prob = 0.4)
 	ga.addCrossoverHandler(PMX1, 9, [9,8,7], 'extra_lol')
 
-	#ga = GAEngine(fitness,8,factory,20)#,fitness_type='equal')
-	#ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 9)
-
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
 	ga.addCrossoverHandler(OX1, 3, (4,5,6,7))
 	ga.addMutationHandler(Utils.MutationHandlers.swap)
 
 	ga.setSelectionHandler(Utils.SelectionHandlers.smallest)
 	ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
-	# ga.setSelectionHandler(Utils.SelectionHandlers.basic)
-	# Provide max iteration here ???
-	ga.evolve(50)
+
+	# factory = ChromosomeFactory.ChromosomeRangeFactory(data_type=int,noOfGenes=8,minValue=0,maxValue=20,duplicates=True)
+	# ga = GAEngine(factory=factory,population_size=30,cross_prob=0.4,mut_prob=0.2,fitness_type='max',adaptive_mutation=False,use_pyspark=False)
+	# ga.addCrossoverHandler(Utils.CrossoverHandlers.twoPoint,1)
+	# ga.addMutationHandler(Utils.MutationHandlers.swap,1)
+	# ga.setSelectionHandler(Utils.SelectionHandlers.largest)
+	# ga.setFitnessHandler(Utils.Fitness.addition)
+
+
+	ga.evolve(30)

@@ -78,8 +78,8 @@ class StandardEvolution(BaseEvolution):
 
 		# get (1-r) * cross_prob new members
 		ga.population.new_members = ga.handle_selection()
-		#print("Best member = ",ga.best_fitness[0])
-		#print("Best fitness = ",ga.best_fitness[1])
+		print("Best member = ",ga.best_fitness[0])
+		print("Best fitness = ",ga.best_fitness[1])
 		if ga.fitness_type[0] == 'equal':
 			if ga.best_fitness[1] == ga.fitness_type[1]:
 				return 1

@@ -276,6 +276,7 @@ class Fitness:
 		----------
 		Fitness score 
 		"""
+		print("chromosome in addition = ",chromosome)
 		return sum(chromosome)
 		
 	@staticmethod
