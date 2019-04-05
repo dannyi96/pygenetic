@@ -45,14 +45,14 @@
         var option = calling_id.value;
         console.log("calling_id.id = "+calling_id.id)
         console.log("option = "+option)
-        var num = (calling_id.id).charAt((calling_id.id).length-1)
+        var num = (calling_id.id).slice(16,)
         var code_id = 'crossover-code'
         console.log("num = "+num)
         console.log("parseint of num = "+parseInt(num))
         console.log("is_number = "+!isNaN(parseInt(num)))
         if (!isNaN(parseInt(num)))
         {
-            console.log("condition passed (it was false)")
+            console.log("condition passed")
             code_id = 'crossover-code'+num.toString()
         }
         console.log("code_id = "+code_id)
@@ -428,7 +428,7 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <select class="form-control crossover-type" id="crossover-select" onchange="placeCrossoverTextArea(this)" name="crossover-type"> 
+                                                    <select class="form-control crossover-type" id="crossover-select" onchange="placeCrossoverTextArea(this)" name="crossover-type0"> 
                                                         <option value="distinct"> distinct </option>
                                                         <option value="onePoint"> onePoint </option>
                                                         <option value="twoPoint"> twoPoint </option>
@@ -439,7 +439,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="crossover-weight">
+                                                <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="crossover-weight0">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group-append">
@@ -461,7 +461,7 @@
                                                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                                                         <div class="row">
                                                                             <div class="col-xl-8 col-lg-8 col-md-8 col-8">
-                                                                                <textarea class="form-control" cols="1000" rows="5" name="custom-crossover">#Enter crossover func here</textarea>
+                                                                                <textarea class="form-control" cols="1000" rows="5" name="custom-crossover0">#Enter crossover func here</textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
