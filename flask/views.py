@@ -152,7 +152,6 @@ def ga_init():
 	#del payload["fileType"]
 
 	print("Payload Data: ", payload)
-	print("is ccc present? = ","ccc" in payload.keys()," and is crossover-type present? = ","crossover-type" in payload.keys())
 
 	if(payload["gene-generation"]=="1drange"):
 		if(payload["1drange-duplicate"]=="yes"):
@@ -185,15 +184,20 @@ def ga_init():
 	code += "ga = GAEngine.GAEngine(factory=factory,population_size="+payload["population-size"]+",cross_prob="+payload["crossover-rate"]+",mut_prob="+payload["mutation-rate"]+",fitness_type="+str(fit_type)+",adaptive_mutation="+str(adaptive)+",use_pyspark="+str(pyspark)+")\n"
 	
 	# $$$$$$$$$$$$$$$$$$$$$$$$$$$ To be modified to cater multiple crossovers (concat loop number and check if in payload like in line 155)
-
-	if(payload["crossover-type"] != "custom"):
-		code += "ga.addCrossoverHandler(Utils.CrossoverHandlers."+payload["crossover-type"]+","+payload["crossover-weight"]+")\n"
-	else:
-		cleaned = unquote(payload["custom-crossover"])
-		custom_name = cleaned[cleaned.find("def ")+4:]
-		custom_name = custom_name[:custom_name.find("(")]
-		precode += cleaned + "\n"
-		code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"]+")\n"
+	i = 0
+	while True:
+		if "crossover-type"+str(i) in payload.keys():
+			if(payload["crossover-type"+str(i)] != "custom"):
+				code += "ga.addCrossoverHandler(Utils.CrossoverHandlers."+payload["crossover-type"+str(i)]+","+payload["crossover-weight"+str(i)]+")\n"
+			else:
+				cleaned = unquote(payload["custom-crossover"+str(i)])
+				custom_name = cleaned[cleaned.find("def ")+4:]
+				custom_name = custom_name[:custom_name.find("(")]
+				precode += cleaned + "\n"
+				code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"+str(i)]+")\n"
+			i+=1
+		else:
+			break
 
 	# $$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	
