@@ -55,10 +55,10 @@ def commonCodeCreate():
 			duplicates=False
 		#factory = ChromosomeFactory.ChromosomeRangeFactory(payload["1drange-datatype"],int(payload["no-of-genes"]),int(payload["1drange-min"]),int(payload["1drange-max"]),str(duplicates))
 		print(">>> str(duplicates) is ",str(duplicates))
-		code = "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1drange-datatype"]+","+payload["no-of-genes"]+","+payload["1drange-min"]+","+payload["1drange-max"]+","+str(duplicates)+")\n"
+		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1drange-datatype"]+",noOfGenes="+payload["no-of-genes"]+",minValue="+payload["1drange-min"]+",maxValue="+payload["1drange-max"]+",duplicates="+str(duplicates)+")\n"
 	elif(payload["gene-generation"]=="1dregex"):
 		#factory = ChromosomeFactory.ChromosomeRegexFactory(payload["1dregex-datatype"],int(payload["no-of-genes"]),payload["1dregex-regex"])
-		code = "factory = ChromosomeFactory.ChromosomeRangeFactory("+payload["1dregex-datatype"]+","+payload["no-of-genes"]+",'"+payload["1dregex-regex"]+"'"+")\n"
+		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1dregex-datatype"]+",noOfGenes="+payload["no-of-genes"]+",pattern='"+payload["1dregex-regex"]+"'"+")\n"
 
 	if(payload["pySpark"]=="yes"):
 		pyspark = True
@@ -75,12 +75,49 @@ def commonCodeCreate():
 	elif(payload["fitness-type"]=="equal"):
 		fit_type = ('equal',float(payload["fitness-equal"]))
 	
-	#ga = GAEngine.GAEngine(factory=factory,population_size=int(payload["population-size"]),cross_prob=float(payload["crossover-rate"]),mut_prob=float(payload["mutation-rate"]),fitness_type=fit_type,adaptive_mutation=adaptive)
 	code += "ga = GAEngine.GAEngine(factory=factory,population_size="+payload["population-size"]+",cross_prob="+payload["crossover-rate"]+",mut_prob="+payload["mutation-rate"]+",fitness_type="+str(fit_type)+",adaptive_mutation="+str(adaptive)+",use_pyspark="+str(pyspark)+")\n"
+	
+	i = 0
+	while True:
+		if "crossover-type"+str(i) in payload.keys():
+			if(payload["crossover-type"+str(i)] != "custom"):
+				code += "ga.addCrossoverHandler(Utils.CrossoverHandlers."+payload["crossover-type"+str(i)]+","+payload["crossover-weight"+str(i)]+")\n"
+			else:
+				cleaned = unquote(payload["custom-crossover"+str(i)])
+				custom_name = cleaned[cleaned.find("def ")+4:]
+				custom_name = custom_name[:custom_name.find("(")]
+				precode += cleaned + "\n"
+				code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"+str(i)]+")\n"
+			i+=1
+		else:
+			break
 
-	code += "ga.addCrossoverHandler(Utils.CrossoverHandlers."+payload["crossover-type"]+","+payload["crossover-weight"]+")\n"
-	code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"]+","+payload["mutation-weight"]+")\n"
-	code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+")\n"
+	i = 0
+	while True:
+		if "mutation-type"+str(i) in payload.keys():
+			if(payload["mutation-type"+str(i)] != "custom"):
+				code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"+str(i)]+","+payload["mutation-weight"+str(i)]+")\n"
+			else:
+				cleaned = unquote(payload["custom-mutation"+str(i)])
+				custom_name = cleaned[cleaned.find("def ")+4:]
+				custom_name = custom_name[:custom_name.find("(")]
+				precode += cleaned + "\n"
+				code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"+str(i)]+")\n"
+			i+=1
+		else:
+			break
+	
+
+	if(payload["selection-type"] != "custom"):
+		code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+")\n"
+	else:
+		cleaned = unquote(payload["custom-selection"])
+		custom_name = cleaned[cleaned.find("def ")+4:]
+		custom_name = custom_name[:custom_name.find("(")]
+		precode += cleaned + "\n"
+		code += "ga.setSelectionHandler("+custom_name+")\n"
+
+	
 
 	if(payload["fitness"] != "custom"):
 		code += "ga.setFitnessHandler(Utils.Fitness."+payload["fitness"]+")\n"
@@ -89,16 +126,23 @@ def commonCodeCreate():
 		custom_name = cleaned[cleaned.find("def ")+4:]
 		custom_name = custom_name[:custom_name.find("(")]
 		precode += cleaned + "\n"
-		if(unquote(payload["extra-data"]).strip() != "#Enter data here" or payload["extra-data"].strip() != ""):
-			precode += unquote(payload["extra-data"])+"\n"
-			code += "ga.setFitnessHandler("+custom_name+",extra)\n"
+		if(unquote(payload["extra-data"]).strip() != "#Enter data here" and payload["extra-data"] != ''):
+			datas = unquote(payload["extra-data"]).split('\r\n')
+			if(datas[-1].strip() == ''):
+				datas = datas[:len(datas)-1]
+			datas_string = ""
+			for x in datas:
+				precode += x +"\n"
+				datas_string += "," + x[:x.find("=")].strip()
+
+			code += "ga.setFitnessHandler("+custom_name + datas_string +")\n"
 		else:
 			code += "ga.setFitnessHandler("+custom_name+")\n"
 
-	code += "ga.evolve("+payload["no-of-evolutions"]+")\n"
+	# code += "ga.evolve("+payload["no-of-evolutions"]+")\n"
 	# Take care of pyspark flag
 	print()
-	print(code,"\n*******")
+	print("complete code ---> \n",code,"\n*******")
 	print()
 	exec(code,globals())
 
@@ -180,10 +224,8 @@ def ga_init():
 	elif(payload["fitness-type"]=="equal"):
 		fit_type = ('equal',float(payload["fitness-equal"]))
 	
-	#ga = GAEngine.GAEngine(factory=factory,population_size=int(payload["population-size"]),cross_prob=float(payload["crossover-rate"]),mut_prob=float(payload["mutation-rate"]),fitness_type=fit_type,adaptive_mutation=adaptive)
 	code += "ga = GAEngine.GAEngine(factory=factory,population_size="+payload["population-size"]+",cross_prob="+payload["crossover-rate"]+",mut_prob="+payload["mutation-rate"]+",fitness_type="+str(fit_type)+",adaptive_mutation="+str(adaptive)+",use_pyspark="+str(pyspark)+")\n"
 	
-	# $$$$$$$$$$$$$$$$$$$$$$$$$$$ To be modified to cater multiple crossovers (concat loop number and check if in payload like in line 155)
 	i = 0
 	while True:
 		if "crossover-type"+str(i) in payload.keys():
@@ -198,17 +240,6 @@ def ga_init():
 			i+=1
 		else:
 			break
-
-	# $$$$$$$$$$$$$$$$$$$$$$$$$$$$
-	
-	# if(payload["mutation-type"] != "custom"):
-	# 	code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"]+","+payload["mutation-weight"]+")\n"
-	# else:
-	# 	cleaned = unquote(payload["custom-mutation"])
-	# 	custom_name = cleaned[cleaned.find("def ")+4:]
-	# 	custom_name = custom_name[:custom_name.find("(")]
-	# 	precode += cleaned + "\n"
-	# 	code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"]+")\n"
 
 	i = 0
 	while True:

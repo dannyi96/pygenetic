@@ -43,19 +43,12 @@
     function placeCrossoverTextArea(calling_id)
     {
         var option = calling_id.value;
-        console.log("calling_id.id = "+calling_id.id)
-        console.log("option = "+option)
         var num = (calling_id.id).slice(16,)
         var code_id = 'crossover-code'
-        console.log("num = "+num)
-        console.log("parseint of num = "+parseInt(num))
-        console.log("is_number = "+!isNaN(parseInt(num)))
         if (!isNaN(parseInt(num)))
         {
-            console.log("condition passed")
             code_id = 'crossover-code'+num.toString()
         }
-        console.log("code_id = "+code_id)
         if(option=="custom")
         {
             document.getElementById(code_id).style.display = '';
@@ -70,19 +63,12 @@
     function placeMutationTextArea(calling_id)
     {
         var option = calling_id.value;
-        console.log("calling_id.id = "+calling_id.id)
-        console.log("option = "+option)
         var num = (calling_id.id).slice(15,)
         var code_id = 'mutation-code'
-        console.log("num = "+num)
-        console.log("parseint of num = "+parseInt(num))
-        console.log("is_number = "+!isNaN(parseInt(num)))
         if (!isNaN(parseInt(num)))
         {
-            console.log("condition passed")
             code_id = 'mutation-code'+num.toString()
         }
-        console.log("code_id = "+code_id)
         if(option=="custom")
         {
             document.getElementById(code_id).style.display = '';
