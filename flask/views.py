@@ -201,15 +201,29 @@ def ga_init():
 
 	# $$$$$$$$$$$$$$$$$$$$$$$$$$$$
 	
-	if(payload["mutation-type"] != "custom"):
-		code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"]+","+payload["mutation-weight"]+")\n"
-	else:
-		cleaned = unquote(payload["custom-mutation"])
-		custom_name = cleaned[cleaned.find("def ")+4:]
-		custom_name = custom_name[:custom_name.find("(")]
-		precode += cleaned + "\n"
-		code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"]+")\n"
+	# if(payload["mutation-type"] != "custom"):
+	# 	code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"]+","+payload["mutation-weight"]+")\n"
+	# else:
+	# 	cleaned = unquote(payload["custom-mutation"])
+	# 	custom_name = cleaned[cleaned.find("def ")+4:]
+	# 	custom_name = custom_name[:custom_name.find("(")]
+	# 	precode += cleaned + "\n"
+	# 	code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"]+")\n"
 
+	i = 0
+	while True:
+		if "mutation-type"+str(i) in payload.keys():
+			if(payload["mutation-type"+str(i)] != "custom"):
+				code += "ga.addMutationHandler(Utils.MutationHandlers."+payload["mutation-type"+str(i)]+","+payload["mutation-weight"+str(i)]+")\n"
+			else:
+				cleaned = unquote(payload["custom-mutation"+str(i)])
+				custom_name = cleaned[cleaned.find("def ")+4:]
+				custom_name = custom_name[:custom_name.find("(")]
+				precode += cleaned + "\n"
+				code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"+str(i)]+")\n"
+			i+=1
+		else:
+			break
 	
 
 	if(payload["selection-type"] != "custom"):
