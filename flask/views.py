@@ -15,6 +15,7 @@ file_index = 0
 # Custom imports
 #from GOF_templates import render
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'static/uploads/' 
 #app.secret_key = 'secretkeyhereplease'
 
 @app.route("/")
@@ -149,7 +150,7 @@ def commonCodeCreate():
 	print()
 	filename = str(file_index)
 	file_index += 1
-	file = open("static/uploads/"+filename+".py", "w")
+	file = open(app.config['UPLOAD_FOLDER']+filename+".py", "w")
 	file.write(code)
 	file.close()
 	return jsonify({'Filename': filename})
@@ -356,7 +357,7 @@ def ga_evolve():
 
 @app.route('/get_file/<path:path>')
 def get_file(path):
-    return send_from_directory('static/uploads/', path, as_attachment=True)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], path, as_attachment=True)
 
 
 @app.route("/downloadCode",methods=["POST"])
