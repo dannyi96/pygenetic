@@ -15,7 +15,6 @@ file_index = 0
 # Custom imports
 #from GOF_templates import render
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = '/uploads/'
 #app.secret_key = 'secretkeyhereplease'
 
 @app.route("/")
