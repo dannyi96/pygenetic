@@ -4,19 +4,16 @@ $(document).ready(function() {
     var crossover_func_cnt = 0
     var mutation_func_cnt = 0
     var $form = $('#main_form')
-    $form.submit(function(e) 
+    function polling(event,form,generationNumber)
     {
-        e.preventDefault();
-        var form = $(this);
-        console.log(document.getElementById('results').childElementCount);
-        var noOfGenerations = document.getElementById('results').childElementCount;
         var MAX_ITER = parseInt(document.getElementById('no-of-evolutions').value)
-        while(noOfGenerations<MAX_ITER)
+        console.log(generationNumber);
+        if(generationNumber > MAX_ITER)
         {
-            noOfGenerations += 1;
-            console.log(noOfGenerations);
-            if(noOfGenerations == 1)
-            {
+            return;
+        }
+        else if(generationNumber == 1)
+        {
                 $.ajax(
                     {
                         type: "POST",
@@ -31,7 +28,7 @@ $(document).ready(function() {
                                         <div class='container-fluid'> 
                                             <div class='row'> 
                                                 <div class='col-xl-12 col-lg-12 col-md-12 col-12' id='stepsRowInfo'> 
-                                                    Generation ` + noOfGenerations + ` 
+                                                    Generation ` + generationNumber + ` 
                                                 </div> 
                                             </div> 
                                             <hr class='fancyHorLine1'> 
@@ -102,9 +99,9 @@ $(document).ready(function() {
                 
                         }
                     });
-                }
-                else
-                {
+        }
+        else
+        {
                     $.ajax({
                     type: "GET",
                     async: false,
@@ -119,7 +116,7 @@ $(document).ready(function() {
                             <div class='container-fluid'> 
                                 <div class='row'> 
                                     <div class='col-xl-12 col-lg-12 col-md-12 col-12' id='stepsRowInfo'> 
-                                        Generation ` + noOfGenerations + `
+                                        Generation ` + generationNumber + `
                                     </div> 
                                 </div> 
                                 <hr class='fancyHorLine1'> 
@@ -191,11 +188,19 @@ $(document).ready(function() {
                 }
             });
         }
+        //$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+        setTimeout(polling,0,event,form,generationNumber+1);
     }
 
+
+
+    $form.submit(function(e) 
+    {
+        e.preventDefault();
+        var form = $(this);
+        polling(e,form,1);
         return false;
     });
-
 
 	UploadState.receivedText = UploadState.receivedText.bind(UploadState)
 	UploadState.receivedText = function() {
