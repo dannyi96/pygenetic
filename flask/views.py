@@ -10,10 +10,12 @@ import sys
 import matplotlib.pyplot as plt
 
 ga = None
+file_index = 0
+
 # Custom imports
 #from GOF_templates import render
 app = Flask(__name__)
-
+app.config['UPLOAD_FOLDER'] = '/uploads/'
 #app.secret_key = 'secretkeyhereplease'
 
 @app.route("/")
@@ -27,6 +29,7 @@ def ga_online():
 
 @app.route("/commonCodeCreate",methods=["POST"])
 def commonCodeCreate():
+	global file_index
 	import sys
 	sys.path.insert(0, '../pyGenetic')
 	# import GAEngine
@@ -139,12 +142,19 @@ def commonCodeCreate():
 		else:
 			code += "ga.setFitnessHandler("+custom_name+")\n"
 
-	# code += "ga.evolve("+payload["no-of-evolutions"]+")\n"
+	code += "ga.evolve("+payload["no-of-evolutions"]+")\n"
 	# Take care of pyspark flag
+	code = precode + code
 	print()
 	print("complete code ---> \n",code,"\n*******")
 	print()
-	exec(code,globals())
+	filename = str(file_index)
+	file_index += 1
+	file = open("static/uploads/"+filename+".py", "w")
+	file.write(code)
+	file.close()
+	return jsonify({'Filename': filename})
+	#exec(code,globals())
 
 	
 
@@ -172,9 +182,9 @@ def commonCodeCreate():
 
 	#print("Session Data: ", session)
 
-	return jsonify({
-			"success":True
-		})
+	#return jsonify({
+	#		"success":True
+	#	})
 
 @app.route('/ga_init',methods=['POST'])
 def ga_init():
@@ -345,9 +355,9 @@ def ga_evolve():
 
 	return jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
 
-@app.route('/get_file')
-def send_js():
-    return send_from_directory('static/js/State', 'state.js', as_attachment=True)
+@app.route('/get_file/<path:path>')
+def get_file(path):
+    return send_from_directory('static/uploads/', path, as_attachment=True)
 
 
 @app.route("/downloadCode",methods=["POST"])

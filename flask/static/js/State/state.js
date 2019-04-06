@@ -211,8 +211,16 @@ $(document).ready(function() {
         }
         else
         {
-            //window.location.href = 
-            document.getElementById('hidden_iframe').src = '/get_file';
+            $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: '/commonCodeCreate',
+                    data: form.serialize(),
+                    success: function(data){
+                        filename = data['Filename'];
+                        document.getElementById('hidden_iframe').src = '/get_file/'+filename+'.py';
+                    }
+            });
         }
         return false;
     });
