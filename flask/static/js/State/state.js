@@ -192,13 +192,28 @@ $(document).ready(function() {
         setTimeout(polling,0,event,form,generationNumber+1);
     }
 
+    $('#download_code').click(function() {
+        button_pressed = 'download_code';
+    });
 
+    $('#run').click(function() {
+        button_pressed = 'run';
+    });
 
     $form.submit(function(e) 
     {
         e.preventDefault();
         var form = $(this);
-        polling(e,form,1);
+        console.log(button_pressed);
+        if(button_pressed=='run')
+        {
+            polling(e,form,1);
+        }
+        else
+        {
+            //window.location.href = 
+            document.getElementById('hidden_iframe').src = '/get_file';
+        }
         return false;
     });
 

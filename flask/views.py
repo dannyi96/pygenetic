@@ -1,6 +1,6 @@
 #from server.flaskr import app
 
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
 from werkzeug import secure_filename
 from urllib.parse import unquote
 import os
@@ -344,6 +344,10 @@ def ga_evolve():
 	ga.continue_evolve(1)
 
 	return jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
+
+@app.route('/get_file')
+def send_js():
+    return send_from_directory('static/js/State', 'state.js', as_attachment=True)
 
 
 @app.route("/downloadCode",methods=["POST"])
