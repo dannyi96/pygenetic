@@ -24,6 +24,125 @@
         }
     }
     
+    function validateNoOfGenes(){
+
+        var noOfGenes = document.getElementById('no-of-genes').value;
+        if(isNaN(noOfGenes)){
+            document.getElementById('no-of-genes').style.color = 'red';
+        }
+
+        else{
+            if(noOfGenes <= 0){
+                 document.getElementById('no-of-genes').style.color = 'red';
+            }
+            else{
+                document.getElementById('no-of-genes').style.color = 'green';
+            }
+        }
+
+    }
+
+    function validatePopulationSize(){
+        var popsize = document.getElementById('population-size').value;
+
+        if(isNaN(popsize)){
+            document.getElementById('population-size').style.color = 'red';
+        }
+        else{
+            if(popsize <= 0){
+                 document.getElementById('population-size').style.color = 'red';
+            }
+            else{
+                document.getElementById('population-size').style.color = 'green';
+            }
+        }
+    }
+
+    function validateCrossoverRate(){
+        var crossoverRate = document.getElementById('crossover-rate').value;
+
+        if(isNaN(crossoverRate)){
+            document.getElementById('crossover-rate').style.color = 'red';
+        }
+        else{
+            if(crossoverRate < 0 ){
+                document.getElementById('crossover-rate').style.color = 'red';
+            }
+            else{
+                document.getElementById('crossover-rate').style.color = 'green';
+            }
+        }
+
+    }
+
+    function validateMutationRate(){
+        var mutationRate = document.getElementById('mutation-rate').value;
+
+        if(isNaN(mutationRate)){
+            document.getElementById('mutation-rate').style.color = 'red';
+        }
+        else{
+            if(mutationRate < 0 ){
+                document.getElementById('mutation-rate').style.color = 'red';
+            }
+            else{
+                document.getElementById('mutation-rate').style.color = 'green';
+            }
+        }
+
+    }
+
+    function validateCrossoverWeight(){
+        var crossoverWeight = document.getElementById('crossover-weight').value;
+
+        if(isNaN(crossoverWeight)){
+            document.getElementById('crossover-weight').style.color = 'red';
+        }
+        else{
+            if(crossoverWeight <=0 ){
+                document.getElementById('crossover-weight').style.color = 'red';
+            }
+            else{
+                document.getElementById('crossover-weight').style.color = 'green';
+            }
+        }
+
+    }
+
+    function validateMutationWeight(){
+        var mutationWeight = document.getElementById('mutation-weight').value;
+
+        if(isNaN(mutationWeight)){
+            document.getElementById('mutation-weight').style.color = 'red';
+        }
+        else{
+            if(mutationWeight <=0 ){
+                document.getElementById('mutation-weight').style.color = 'red';
+            }
+            else{
+                document.getElementById('mutation-weight').style.color = 'green';
+            }
+        }
+
+    }
+
+
+    function validateNoOfEvolutions(){
+        var noOfEvolutions = document.getElementById('no-of-evolutions').value;
+
+        if(isNaN(noOfEvolutions)){
+            document.getElementById('no-of-evolutions').style.color = 'red';
+        }
+        else{
+            if(noOfEvolutions <=0 ){
+                document.getElementById('no-of-evolutions').style.color = 'red';
+            }
+            else{
+                document.getElementById('no-of-evolutions').style.color = 'green';
+            }
+        }
+}
+
     function placeFitnessTextArea()
     {
         var option = document.getElementById('fitness-select').value;
@@ -161,7 +280,7 @@
                                             </div>
 
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="No of genes" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="no-of-genes">
+                                                <input type="text" class="form-control validName funcName" placeholder="No of genes" id = "no-of-genes" onfocusout = "validateNoOfGenes()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="no-of-genes">
                                             </div>
                                         </div>
                                     </div>
@@ -376,13 +495,13 @@
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Population size" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="population-size">
+                                                <input type="text" class="form-control validName funcName" placeholder="Population size" id = "population-size" onfocusout="validatePopulationSize()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="population-size">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Crossover Rate" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="crossover-rate">
+                                                <input type="text" class="form-control validName funcName" placeholder="Crossover Rate" id = "crossover-rate" onfocusout = "validateCrossoverRate()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="crossover-rate">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Mutation Rate" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="mutation-rate">
+                                                <input type="text" class="form-control validName funcName" placeholder="Mutation Rate" id = "mutation-rate" onfocusout = "validateMutationRate()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="mutation-rate">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <select class="form-control" id="fitness-achieve-select" onchange="placeAchieveTag()" name="fitness-type">
@@ -448,7 +567,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="crossover-weight0">
+                                                <input type="text" class="form-control validName funcName" placeholder="Weight" id = "crossover-weight" onfocusout = "validateCrossoverWeight()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="crossover-weight0">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group-append">
@@ -555,7 +674,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="mutation-weight0">
+                                                <input type="text" class="form-control validName funcName" placeholder="Weight" id = "mutation-weight" onfocusout = "validateMutationWeight()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="mutation-weight0">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group-append">
@@ -758,7 +877,7 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <input type="text" class="form-control validName funcName" placeholder="Number of evolutions" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="no-of-evolutions" id="no-of-evolutions">
+                                                    <input type="text" class="form-control validName funcName" onfocusout = "validateNoOfEvolutions()" placeholder="Number of evolutions" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="no-of-evolutions" id="no-of-evolutions">
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
