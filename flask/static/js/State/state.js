@@ -260,9 +260,10 @@ $(document).ready(function() {
 	
     // START: Add a state functionality.
     $("#crossoverListColDiv").on("click", ".addStateBtn", function(event) {
+        $("#delCrossover"+crossover_func_cnt.toString()).attr("disabled", true);
         crossover_func_cnt += 1
         console.log("add clicked",$(this));
-        $("#crossoverListColDiv").append('  <div class="row">\
+        $("#crossoverListColDiv").append('  <div class="row" id="crossover'+crossover_func_cnt.toString()+'">\
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
             <div class="input-group repeatableStateListGroup">\
                 <select class="form-control crossover-type" id="crossover-select'+crossover_func_cnt.toString()+'" onchange="placeCrossoverTextArea(this)" name="crossover-type'+crossover_func_cnt.toString()+'"> \
@@ -281,7 +282,7 @@ $(document).ready(function() {
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
             <div class="input-group-append">\
                 <button class="btn btn-outline-secondary addStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another state">+</button>\
-                <button class="btn btn-outline-secondary delStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this state" style="pointer-events: none;" disabled>-</button>\
+                <button class="btn btn-outline-secondary delStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this state" id="delCrossover'+crossover_func_cnt.toString()+'">-</button>\
             </div>\
         </div>\
         <div class="container-fluid" id="crossover-code'+crossover_func_cnt.toString()+'" style="display:none;">\
@@ -337,6 +338,7 @@ $(document).ready(function() {
     });
     
     $("#mutationListColDiv").on("click", ".addStateBtn", function(event) {
+        $("#delMutation"+mutation_func_cnt.toString()).attr("disabled", true);
         mutation_func_cnt += 1
         console.log("add clicked",$(this));
         $("#mutationListColDiv").append('  <div class="row">\
@@ -355,7 +357,7 @@ $(document).ready(function() {
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
             <div class="input-group-append">\
                 <button class="btn btn-outline-secondary addStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another state">+</button>\
-                <button class="btn btn-outline-secondary delStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this state" style="pointer-events: none;" disabled>-</button>\
+                <button class="btn btn-outline-secondary delStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this state" id="delMutation'+mutation_func_cnt.toString()+'">-</button>\
             </div>\
         </div>\
         <div class="container-fluid" id="mutation-code'+mutation_func_cnt.toString()+'" style="display:none;">\
@@ -414,11 +416,23 @@ $(document).ready(function() {
     // END: Add a state functionality.
 
     // START: Delete a state functionality.
-    $("#stateListColDiv").on("click", ".delStateBtn", function(event) {
+    $("#crossoverListColDiv").on("click", ".delStateBtn", function(event) {
         console.log("del clicked",$(this));
-        var eleToBeDeleted = $(this).parents(".repeatableStateListGroup");
-        console.log(eleToBeDeleted);
+        var eleToBeDeleted = $(this).closest(".row");
+        console.log("parents = ",$(this).parents)
+        console.log("elem to be deleted = ",eleToBeDeleted);
         eleToBeDeleted.remove();
+        crossover_func_cnt-=1
+        $("#delCrossover"+crossover_func_cnt.toString()).attr("disabled", false);
+    });
+    $("#mutationListColDiv").on("click", ".delStateBtn", function(event) {
+        console.log("del clicked",$(this));
+        var eleToBeDeleted = $(this).closest(".row");
+        console.log("parents = ",$(this).parents)
+        console.log("elem to be deleted = ",eleToBeDeleted);
+        eleToBeDeleted.remove();
+        mutation_func_cnt-=1
+        $("#delMutation"+mutation_func_cnt.toString()).attr("disabled", false);
     });
     // END: Delete a state functionality.
 
