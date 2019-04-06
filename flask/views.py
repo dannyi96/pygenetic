@@ -236,7 +236,18 @@ def ga_init():
 				custom_name = cleaned[cleaned.find("def ")+4:]
 				custom_name = custom_name[:custom_name.find("(")]
 				precode += cleaned + "\n"
-				code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"+str(i)]+")\n"
+				if(unquote(payload["crossover-extra-data"+str(i)]).strip() != "#Enter data here" and payload["crossover-extra-data"+str(i)] != ''):
+					datas = unquote(payload["crossover-extra-data"+str(i)]).split('\r\n')
+					while(datas[-1].strip() == ''):
+						datas = datas[:len(datas)-1]
+					datas_string = ""
+					for x in datas:
+						precode += x +"\n"
+						datas_string += "," + x[:x.find("=")].strip()
+
+					code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"+str(i)]+datas_string+")\n"
+				else:
+					code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"+str(i)]+")\n"
 			i+=1
 		else:
 			break
@@ -251,7 +262,18 @@ def ga_init():
 				custom_name = cleaned[cleaned.find("def ")+4:]
 				custom_name = custom_name[:custom_name.find("(")]
 				precode += cleaned + "\n"
-				code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"+str(i)]+")\n"
+				if(unquote(payload["mutation-extra-data"+str(i)]).strip() != "#Enter data here" and payload["mutation-extra-data"+str(i)] != ''):
+					datas = unquote(payload["mutation-extra-data"+str(i)]).split('\r\n')
+					while(datas[-1].strip() == ''):
+						datas = datas[:len(datas)-1]
+					datas_string = ""
+					for x in datas:
+						precode += x +"\n"
+						datas_string += "," + x[:x.find("=")].strip()
+
+					code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"+str(i)]+datas_string+")\n"
+				else:
+					code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"+str(i)]+")\n"
 			i+=1
 		else:
 			break
@@ -264,7 +286,18 @@ def ga_init():
 		custom_name = cleaned[cleaned.find("def ")+4:]
 		custom_name = custom_name[:custom_name.find("(")]
 		precode += cleaned + "\n"
-		code += "ga.setSelectionHandler("+custom_name+")\n"
+		if(unquote(payload["selection-extra-data"]).strip() != "#Enter data here" and payload["selection-extra-data"] != ''):
+			datas = unquote(payload["selection-extra-data"]).split('\r\n')
+			while(datas[-1].strip() == ''):
+				datas = datas[:len(datas)-1]
+			datas_string = ""
+			for x in datas:
+				precode += x +"\n"
+				datas_string += "," + x[:x.find("=")].strip()
+
+			code += "ga.setSelectionHandler("+custom_name + datas_string +")\n"
+		else:
+			code += "ga.setSelectionHandler("+custom_name+")\n"
 
 	
 
@@ -277,7 +310,7 @@ def ga_init():
 		precode += cleaned + "\n"
 		if(unquote(payload["extra-data"]).strip() != "#Enter data here" and payload["extra-data"] != ''):
 			datas = unquote(payload["extra-data"]).split('\r\n')
-			if(datas[-1].strip() == ''):
+			while(datas[-1].strip() == ''):
 				datas = datas[:len(datas)-1]
 			datas_string = ""
 			for x in datas:
