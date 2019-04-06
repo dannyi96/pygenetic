@@ -288,6 +288,30 @@ $(document).ready(function() {
                 </div>\
             </div>\
         </div>\
+        <div class="container-fluid" id="crossover-data'+crossover_func_cnt.toString()+'" style="display:none;">\
+        <div class="row" id="targetFuncDeclWrapperRow">\
+            <div class="col-xl-12 col-lg-12 col-md-12 col-12">\
+                <div class="container-fluid">\
+                    <div class="row">\
+                        <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
+                            <span class="monkeyPatchShiftToRight"> Extra data to be passed as arguments to crossover function [Note: Please add one variable per line. No comments allowed.]</span>\
+                        </div>\
+                    </div>\
+                    <div class="row" id="targetFuncDeclDivRow">\
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">\
+                            <div class="container-fluid repeatableTargetFuncDeclList">\
+                                <div class="row">\
+                                    <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
+                                        <textarea class="form-control" cols="1000" rows="5" name="crossover-extra-data'+crossover_func_cnt.toString()+'"></textarea>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>\
+    </div>\
     </div>\
         ');
     });
@@ -338,6 +362,30 @@ $(document).ready(function() {
                 </div>\
             </div>\
         </div>\
+        <div class="container-fluid" id="mutation-data'+mutation_func_cnt.toString()+'" style="display:none;">\
+        <div class="row" id="targetFuncDeclWrapperRow">\
+            <div class="col-xl-12 col-lg-12 col-md-12 col-12">\
+                <div class="container-fluid">\
+                    <div class="row">\
+                        <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
+                            <span class="monkeyPatchShiftToRight"> Extra data to be passed as arguments to mutation function [Note: Please add one variable per line. No comments allowed.]</span>\
+                        </div>\
+                    </div>\
+                    <div class="row" id="targetFuncDeclDivRow">\
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">\
+                            <div class="container-fluid repeatableTargetFuncDeclList">\
+                                <div class="row">\
+                                    <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
+                                        <textarea class="form-control" cols="1000" rows="5" name="mutation-extra-data'+mutation_func_cnt.toString()+'"></textarea>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>\
+    </div>\
     </div>\
         ');
     });
