@@ -102,6 +102,7 @@ $(document).ready(function() {
         }
         else
         {
+                    console.log('here11');
                     $.ajax({
                     type: "GET",
                     async: false,
@@ -205,16 +206,31 @@ $(document).ready(function() {
         e.preventDefault();
         var form = $(this);
         console.log(button_pressed);
+        console.log('here1');
         if(button_pressed=='run')
         {
+            console.log('here2');
             polling(e,form,1);
+            return false;
         }
         else
         {
-            //window.location.href = 
-            document.getElementById('hidden_iframe').src = '/get_file';
+            console.log('here3');
+            $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: '/commonCodeCreate',
+                    data: form.serialize(),
+                    success: function(data){
+                        filename = data['Filename'];
+                        document.getElementById('hidden_iframe').src = '/get_file/'+filename+'.py';
+                    }
+            });
+            console.log('here4');
+            return false;
         }
-        return false;
+        console.log('here5');
+        
     });
 
 	UploadState.receivedText = UploadState.receivedText.bind(UploadState)
