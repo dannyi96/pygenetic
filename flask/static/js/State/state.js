@@ -298,7 +298,7 @@ $(document).ready(function() {
         $("#mutationListColDiv").append('  <div class="row">\
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
             <div class="input-group repeatableStateListGroup">\
-                <select class="form-control mutation-type" id="mutation-select'+mutation_func_cnt.toString()+'" onchange="placeMutationTextArea()" name="mutation-type'+mutation_func_cnt.toString()+'"> \
+                <select class="form-control mutation-type" id="mutation-select'+mutation_func_cnt.toString()+'" onchange="placeMutationTextArea(this)" name="mutation-type'+mutation_func_cnt.toString()+'"> \
                     <option value="swap"> swap </option>\
                     <option value="bitFlip"> bitFlip </option>\
                     <option value="custom"> Custom </option>\
