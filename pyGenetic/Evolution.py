@@ -83,6 +83,13 @@ class StandardEvolution(BaseEvolution):
 		if ga.fitness_type[0] == 'equal':
 			if ga.best_fitness[1] == ga.fitness_type[1]:
 				return 1
+		if len(ga.last_20_fitnesses)==20:
+			ga.last_20_fitnesses.popleft()
+			ga.last_20_fitnesses.append(ga.best_fitness[1])
+			if all(x == ga.last_20_fitnesses[0] for x in ga.last_20_fitnesses):
+				return -1
+		else:
+			ga.last_20_fitnesses.append(ga.best_fitness[1])
 
 		fitnesses = []
 		total = 0 #This is not being used
@@ -108,29 +115,30 @@ class StandardEvolution(BaseEvolution):
 		for i in range(0,len(crossover_chromosomes)-1,2):
 			father,mother = crossover_chromosomes[i], crossover_chromosomes[i+1]
 			crossoverHandler = ga.chooseCrossoverHandler()
-			child1, child2 = crossoverHandler(father,mother)
+			child1, child2 = ga.doCrossover(crossoverHandler,father,mother)
 			ga.population.new_members.extend([child1,child2])
-		print("adaptive_mutation value passed = ",self.adaptive_mutation)
+		#print("adaptive_mutation value passed = ",self.adaptive_mutation)
 
 		if self.adaptive_mutation == True:
 			mean_fitness = sum(fitnesses)/len(fitnesses)
 			average_square_deviation = math.sqrt(sum((fitness - mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
 			ga.diversity = average_square_deviation
 			ga.dynamic_mutation = ga.mut_prob * ( 1 + ((ga.best_fitness[1]-average_square_deviation) / (ga.best_fitness[1]+average_square_deviation) ) )
-			print(mean_fitness)
-			print(average_square_deviation)
-			print(ga.diversity)
-			print(ga.best_fitness)
+			#print(mean_fitness)
+			#print(average_square_deviation)
+			print("Diversity = ",ga.diversity)
+			#print(ga.best_fitness)
 			print('Adaptive mutation value = ',ga.dynamic_mutation)
 			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.dynamic_mutation*len(p)), replace=False)
 		else:
 			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
 		for index in mutation_indexes:
 			mutationHandler = ga.chooseMutationHandler()
-			ga.population.new_members[index] = mutationHandler(ga.population.new_members[index])
+			ga.population.new_members[index] = ga.doMutation(mutationHandler,ga.population.new_members[index])
 		ga.population.members = ga.population.new_members
 		#print("New members = ",ga.population.members)
 		ga.population.new_members = []
+		return 0
 
 	def __evolve_pyspark(self,ga):
 		from pyspark import SparkContext
@@ -226,8 +234,7 @@ class StandardEvolution(BaseEvolution):
 		"""
 		#print(self.max_iterations)
 		if self.pyspark == False:
-			if self.__evolve_normal(ga):
-				return 1
+			return self.__evolve_normal(ga)
 		else:
 			if self.__evolve_pyspark(ga):
 				return 1

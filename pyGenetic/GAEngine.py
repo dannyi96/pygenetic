@@ -115,8 +115,13 @@ class GAEngine:
 		self.statistics = Statistics.Statistics()
 		self.evolution = Evolution.StandardEvolution(adaptive_mutation=adaptive_mutation,pyspark=use_pyspark)
 		self.fitness_external_data = []
+		self.selection_external_data = []
+		self.crossover_external_data = {}
+		self.mutation_external_data = {}
+		self.hall_of_fame = None
+		self.last_20_fitnesses = collections.deque([])
 
-	def addCrossoverHandler(self,crossover_handler, weight = 1):
+	def addCrossoverHandler(self,crossover_handler, weight = 1, *args):
 		"""
 		Adds crossover handler staticmethod defined in Utils.py and
 		appends the weightage to be given to the handler
@@ -136,13 +141,17 @@ class GAEngine:
 
 		self.crossover_handlers.append(crossover_handler)
 		self.crossover_handlers_weights.append(weight)
+		xtra_args = []
+		for arg in args:
+			xtra_args.append(arg)
+		self.crossover_external_data.update({crossover_handler:tuple(xtra_args)})
 		
 		#except NotImplementedError as ni:
 		#	print(ni)
 
 			
 
-	def addMutationHandler(self,mutation_handler, weight = 1):
+	def addMutationHandler(self,mutation_handler, weight = 1, *args):
 		"""
 		Adds mutation handler staticmethod defined in Utils.py and
 		appends the weightage to be given to the handler
@@ -156,6 +165,11 @@ class GAEngine:
 
 		self.mutation_handlers.append(mutation_handler)
 		self.mutation_handlers_weights.append(weight)
+		xtra_args = []
+		for arg in args:
+			xtra_args.append(arg)
+		self.mutation_external_data.update({mutation_handler:tuple(xtra_args)})
+
 
 	def setCrossoverProbability(self,cross_prob):
 		"""
@@ -180,7 +194,19 @@ class GAEngine:
 		"""
 		self.mut_prob = mut_prob
 
-	def setSelectionHandler(self,selection_handler):
+	def doCrossover(self, cross_func, member1, member2):
+		if cross_func in self.crossover_external_data:
+			return cross_func(member1, member2, *(self.crossover_external_data[cross_func]))
+		else:
+			return cross_func(member1, member2)
+
+	def doMutation(self, mut_func, member):
+		if mut_func in self.mutation_external_data:
+			return mut_func(member, *(self.mutation_external_data[mut_func]))
+		else:
+			return mut_func(member)
+
+	def setSelectionHandler(self,selection_handler, *args):
 		"""
 		Sets function to be used for selection_handler
 
@@ -190,6 +216,8 @@ class GAEngine:
 
 		"""
 		self.selection_handler = selection_handler
+		for arg in args:
+			self.selection_external_data.append(arg)
 
 	def setFitnessHandler(self, fit_function, *args):
 		self.fitness_func = fit_function
@@ -224,11 +252,29 @@ class GAEngine:
 		self.fitness_dict = [(member, self.calculateFitness(member)) for member in self.population.members]
 		if self.fitness_type == 'max':
 			self.fitness_dict.sort(key=lambda x:x[1],reverse=True)
+			self.best_fitness = self.fitness_dict[0]
+			if self.hall_of_fame:
+				if self.best_fitness[1] > self.hall_of_fame[1]:
+					self.hall_of_fame = self.best_fitness
+			else:
+				self.hall_of_fame = self.best_fitness
 		elif self.fitness_type == 'min':
 			self.fitness_dict.sort(key=lambda x:x[1])
+			self.best_fitness = self.fitness_dict[0]
+			if self.hall_of_fame:
+				if self.best_fitness[1] < self.hall_of_fame[1]:
+					self.hall_of_fame = self.best_fitness
+			else:
+				self.hall_of_fame = self.best_fitness
 		elif self.fitness_type[0] == 'equal':
 			self.fitness_dict.sort(key=lambda x:abs(x[1]-self.fitness_type[1]))
-		self.best_fitness = self.fitness_dict[0]
+			self.best_fitness = self.fitness_dict[0]
+			if self.hall_of_fame:
+				if abs(self.fitness_type[1] - self.best_fitness[1]) < abs(self.fitness_type[1] - self.hall_of_fame[1]):
+					self.hall_of_fame = self.best_fitness
+			else:
+				self.hall_of_fame = self.best_fitness
+			
 
 	def handle_selection(self):
 
@@ -242,7 +288,10 @@ class GAEngine:
 
 		"""
 		self.generateFitnessDict()
-		return self.selection_handler(self.population.members,self.fitness_dict,self)
+		if self.selection_external_data:
+			return self.selection_handler(self.population.members,self.fitness_dict,self, *(self.selection_external_data))
+		else:
+			return self.selection_handler(self.population.members,self.fitness_dict,self)
 
 	def normalizeWeights(self):
 		"""
@@ -311,6 +360,8 @@ class GAEngine:
 
 		self.normalizeWeights()
 		for i in range(noOfIterations):
+			if (i+1)%20 == 0:
+				self.population.members.append(self.hall_of_fame[0])
 			result = self.evolution.evolve(self)
 			self.statistics.add_statistic('best',self.fitness_dict[0][1])
 			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
@@ -320,15 +371,22 @@ class GAEngine:
 			if self.adaptive_mutation:
 				self.statistics.add_statistic('mutation_rate',self.dynamic_mutation)
 				self.statistics.add_statistic('diversity',self.diversity)
-			if result:
+			if result == 1:
 				print('SOLVED')
 				break
+			elif result == -1:
+				print('SATURATED')
+				break
+		print("Best fitness in this generation = ", self.best_fitness)
+		print("Best among all generations = ", self.hall_of_fame)
 		print(self.fitness_dict[:10])
 		
 
 	def continue_evolve(self, noOfIterations=20):
 		self.normalizeWeights()
 		for i in range(noOfIterations):
+			if (i+1)%20 == 0:
+				self.population.members.append(self.hall_of_fame[0])
 			result = self.evolution.evolve(self)
 			self.statistics.add_statistic('best',self.fitness_dict[0][1])
 			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
@@ -343,46 +401,98 @@ class GAEngine:
 				break
 		#self.statistics.plot_statistics(['max','min','avg'])
 		#if self.adaptive_mutation:
-		#	self.statistics.plot_statistics(['diversity','mutation_rate'])
+		#	self.statistics.plot_statistics(['diversity'])
+		#	self.statistics.plot_statistics(['mutation_rate'])
 
 
 if __name__ == '__main__':
-	#factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
-	#ga = GAEngine(lambda x:sum(x),'MAX',factory,20)
-	#print(ga.fitness_func)
-	#print(ga.fitness_type)
-	#ga.calculateAllFitness()
-	import copy
-	factory = ChromosomeFactory.ChromosomeRangeFactory(8,0,8,data_type = int)
-	'''def fitness(board):
-		fitness = 0
-		for i in range(len(board)):
-			isSafe = True
-			for j in range(len(board)):
-				if i!=j:
-					if (board[i] == board[j]) or (abs(board[i] - board[j]) == abs(i-j)):
-						isSafe = False
-						break
-			if(isSafe==True):
-				fitness += 1
-		return fitness'''
+	# #factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
+	# #ga = GAEngine(lambda x:sum(x),'MAX',factory,20)
+	# #print(ga.fitness_func)
+	# #print(ga.fitness_type)
+	# #ga.calculateAllFitness()
+	# import copy
+	# factory = ChromosomeFactory.ChromosomeRangeFactory(8,0,8,data_type = int)
+	# '''def fitness(board):
+	# 	fitness = 0
+	# 	for i in range(len(board)):
+	# 		isSafe = True
+	# 		for j in range(len(board)):
+	# 			if i!=j:
+	# 				if (board[i] == board[j]) or (abs(board[i] - board[j]) == abs(i-j)):
+	# 					isSafe = False
+	# 					break
+	# 		if(isSafe==True):
+	# 			fitness += 1
+	# 	return fitness'''
 
-	matrix = [[0,172,145,607,329,72,312,120],[172,0,192,494,209,158,216,92],[145,192,0,490,237,75,205,100],[607,494,490,0,286,545,296,489],[329,209,237,286,0,421,49,208],[72,158,75,545,421,0,249,75],[312,216,205,296,49,249,9,194],[120,92,100,489,208,75,194,0]]
-	# best sequence i found: 0 5 2 7 1 6 4 3
+	# def PMX1(chromosome1, chromosome2, lol, abc): # Partially Matched Crossover
+	# 	size = min(len(chromosome1), len(chromosome2))
+	# 	a = random.randint(1, size - 2)
+	# 	b = random.randint(1, size - 1)
+	# 	if b==a:
+	# 		b+=1
+	# 	elif b<a:
+	# 		a,b=b,a
+	# 	new_chromosome1 = chromosome1[:a]+chromosome2[a:b]+chromosome1[b:]
+	# 	new_chromosome2 = chromosome2[:a]+chromosome1[a:b]+chromosome2[b:]
+	# 	mapping1=chromosome2[a:b]
+	# 	mapping2=chromosome1[a:b]
+	# 	i = b
+	# 	while(i!=a):
+	# 		while new_chromosome1[i] in mapping1:
+	# 			new_chromosome1[i] = mapping2[mapping1.index(new_chromosome1[i])]
+	# 		while new_chromosome2[i] in mapping2:
+	# 			new_chromosome2[i] = mapping1[mapping2.index(new_chromosome2[i])]
+	# 		i = (i+1)%size
+	# 	#print("lol = ",lol)
+	# 	#print("abc = ",abc)
+	# 	return new_chromosome1, new_chromosome2
+
+	# def OX1(chromosome1, chromosome2, lol_ox): # Ordered Crossover
+	# 	size = min(len(chromosome1), len(chromosome2))
+	# 	a = random.randint(1, size - 2)
+	# 	b = random.randint(1, size - 1)
+	# 	if b==a:
+	# 		b+=1
+	# 	elif b<a:
+	# 		a,b=b,a
+	# 	new_chromosome1 = [None]*(a)+chromosome1[a:b]+[None]*(size-b)
+	# 	new_chromosome2 = [None]*(a)+chromosome2[a:b]+[None]*(size-b)
+	# 	i,j,k = b,b,b
+	# 	while True:
+	# 		if chromosome2[i] not in new_chromosome1:
+	# 			new_chromosome1[j] = chromosome2[i]
+	# 			j = (j+1)%size
+	# 		if chromosome1[i] not in new_chromosome2:
+	# 			new_chromosome2[k] = chromosome1[i]
+	# 			k = (k+1)%size
+	# 		i = (i+1)%size
+	# 		if i==b or (j==a and k==a):
+	# 			break
+	# 	#print("lol_ox = ",lol_ox)
+	# 	return new_chromosome1, new_chromosome2
+
+	# matrix = [[0,172,145,607,329,72,312,120],[172,0,192,494,209,158,216,92],[145,192,0,490,237,75,205,100],[607,494,490,0,286,545,296,489],[329,209,237,286,0,421,49,208],[72,158,75,545,421,0,249,75],[312,216,205,296,49,249,9,194],[120,92,100,489,208,75,194,0]]
+	# # best sequence i found: 0 5 2 7 1 6 4 3
 
 
-	ga = GAEngine(factory,100,fitness_type='min',mut_prob = 0.3)
-	ga.addCrossoverHandler(Utils.CrossoverHandlers.PMX, 9)
+	# ga = GAEngine(factory,1000,fitness_type='min',mut_prob = 0.4)
+	# ga.addCrossoverHandler(PMX1, 9, [9,8,7], 'extra_lol')
 
-	#ga = GAEngine(fitness,8,factory,20)#,fitness_type='equal')
-	#ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 9)
+	# ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
+	# ga.addCrossoverHandler(OX1, 3, (4,5,6,7))
+	# ga.addMutationHandler(Utils.MutationHandlers.swap)
 
-	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
-	ga.addCrossoverHandler(Utils.CrossoverHandlers.OX, 3)
-	ga.addMutationHandler(Utils.MutationHandlers.swap)
+	# ga.setSelectionHandler(Utils.SelectionHandlers.smallest)
+	# ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
 
-	ga.setSelectionHandler(Utils.SelectionHandlers.SUS)
-	ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
-	# ga.setSelectionHandler(Utils.SelectionHandlers.basic)
-	# Provide max iteration here ???
-	ga.evolve(20)
+	factory = ChromosomeFactory.ChromosomeRangeFactory(data_type=int,noOfGenes=8,minValue=0,maxValue=20,duplicates=True)
+	ga = GAEngine(factory=factory,population_size=30,cross_prob=0.4,mut_prob=0.2,fitness_type='max',adaptive_mutation=False,use_pyspark=False)
+	ga.addCrossoverHandler(Utils.CrossoverHandlers.twoPoint,1)
+	ga.addMutationHandler(Utils.MutationHandlers.swap,1)
+	ga.setSelectionHandler(Utils.SelectionHandlers.largest)
+	ga.setFitnessHandler(Utils.Fitness.addition)
+
+
+	ga.evolve(30)

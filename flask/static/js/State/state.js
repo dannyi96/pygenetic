@@ -1,6 +1,8 @@
 $(document).ready(function() {
 	// console.log(UploadState.handleFileSelect);
-	// Button events initialize
+    // Button events initialize
+    var crossover_func_cnt = 0
+    var mutation_func_cnt = 0
     var $form = $('#main_form')
     $form.submit(function(e) 
     {
@@ -238,56 +240,106 @@ $(document).ready(function() {
 	
     // START: Add a state functionality.
     $("#crossoverListColDiv").on("click", ".addStateBtn", function(event) {
-        
+        crossover_func_cnt += 1
         console.log("add clicked",$(this));
-        $("#crossoverListColDiv").append("  <div class='row'> \
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <div class='input-group repeatableStateListGroup'>\
-                                                    <select class='form-control crossover-type'> \
-                                                        <option> distinct </option>\
-                                                        <option> onePoint </option>\
-                                                        <option> twoPoint </option>\
-                                                        <option> PMX </option>\
-                                                        <option> OX </option>\
-                                                    </select>\
-                                                </div>\
-                                            </div>\
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <input type='text' class='form-control validName funcName' placeholder='Weight' aria-label='Function Name' aria-describedby='basic-addon4' tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id='fitness-achive-value'>\
-                                            </div>\
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <div class='input-group-append'>\
-                                                    <button class='btn btn-outline-secondary addStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Add another state'>+</button> \
-                                                    <button class='btn btn-outline-secondary delStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Delete this state' style='pointer-events: none;' disabled>-</button> \
-                                                </div> \
-                                            </div> \
-                                        </div> \
-        ");
+        $("#crossoverListColDiv").append('  <div class="row">\
+        <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
+            <div class="input-group repeatableStateListGroup">\
+                <select class="form-control crossover-type" id="crossover-select'+crossover_func_cnt.toString()+'" onchange="placeCrossoverTextArea(this)" name="crossover-type'+crossover_func_cnt.toString()+'"> \
+                    <option value="distinct"> distinct </option>\
+                    <option value="onePoint"> onePoint </option>\
+                    <option value="twoPoint"> twoPoint </option>\
+                    <option value="PMX"> PMX </option>\
+                    <option value="OX"> OX </option>\
+                    <option value="custom"> Custom </option>\
+                </select>\
+            </div>\
+        </div>\
+        <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
+            <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="top" data-content="Invalid Name" id="fitness-achive-value" name="crossover-weight'+crossover_func_cnt.toString()+'">\
+        </div>\
+        <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
+            <div class="input-group-append">\
+                <button class="btn btn-outline-secondary addStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another state">+</button>\
+                <button class="btn btn-outline-secondary delStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this state" style="pointer-events: none;" disabled>-</button>\
+            </div>\
+        </div>\
+        <div class="container-fluid" id="crossover-code'+crossover_func_cnt.toString()+'" style="display:none;">\
+            <div class="row" id="targetFuncDeclWrapperRow">\
+                <div class="col-xl-12 col-lg-12 col-md-12 col-12">\
+                    <div class="container-fluid">\
+                        <div class="row">\
+                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
+                                <span class="monkeyPatchShiftToRight"> Crossover function code </span>\
+                            </div>\
+                        </div>\
+                        <div class="row" id="targetFuncDeclDivRow">\
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">\
+                                <div class="container-fluid repeatableTargetFuncDeclList">\
+                                    <div class="row">\
+                                        <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
+                                            <textarea class="form-control" cols="1000" rows="5" name="custom-crossover'+crossover_func_cnt.toString()+'">#Enter crossover func here</textarea>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>\
+    </div>\
+        ');
     });
     
     $("#mutationListColDiv").on("click", ".addStateBtn", function(event) {
-        
+        mutation_func_cnt += 1
         console.log("add clicked",$(this));
-        $("#mutationListColDiv").append("  <div class='row'> \
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <div class='input-group repeatableStateListGroup'>\
-                                                    <select class='form-control crossover-type'> \
-                                                        <option> swap </option>\
-                                                        <option> bitFlip </option>\
-                                                    </select>\
-                                                </div>\
-                                            </div>\
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <input type='text' class='form-control validName funcName' placeholder='Weight' aria-label='Function Name' aria-describedby='basic-addon4' tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id='fitness-achive-value'>\
-                                            </div>\
-                                            <div class='col-xl-2 col-lg-2 col-md-2 col-2'>\
-                                                <div class='input-group-append'>\
-                                                    <button class='btn btn-outline-secondary addStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Add another state'>+</button> \
-                                                    <button class='btn btn-outline-secondary delStateBtn' type='button' data-toggle='tooltip' data-placement='top' title='Delete this state' style='pointer-events: none;' disabled>-</button> \
-                                                </div> \
-                                            </div> \
-                                        </div> \
-        ");
+        $("#mutationListColDiv").append('  <div class="row">\
+        <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
+            <div class="input-group repeatableStateListGroup">\
+                <select class="form-control mutation-type" id="mutation-select'+mutation_func_cnt.toString()+'" onchange="placeMutationTextArea()" name="mutation-type'+mutation_func_cnt.toString()+'"> \
+                    <option value="swap"> swap </option>\
+                    <option value="bitFlip"> bitFlip </option>\
+                    <option value="custom"> Custom </option>\
+                </select>\
+            </div>\
+        </div>\
+        <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
+            <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="top" data-content="Invalid Name" id="fitness-achive-value" name="mutation-weight'+mutation_func_cnt.toString()+'">\
+        </div>\
+        <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
+            <div class="input-group-append">\
+                <button class="btn btn-outline-secondary addStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Add another state">+</button>\
+                <button class="btn btn-outline-secondary delStateBtn" type="button" data-toggle="tooltip" data-placement="top" title="Delete this state" style="pointer-events: none;" disabled>-</button>\
+            </div>\
+        </div>\
+        <div class="container-fluid" id="mutation-code'+mutation_func_cnt.toString()+'" style="display:none;">\
+            <div class="row" id="targetFuncDeclWrapperRow">\
+                <div class="col-xl-12 col-lg-12 col-md-12 col-12">\
+                    <div class="container-fluid">\
+                        <div class="row">\
+                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
+                                <span class="monkeyPatchShiftToRight"> Mutation function code </span>\
+                            </div>\
+                        </div>\
+                        <div class="row" id="targetFuncDeclDivRow">\
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">\
+                                <div class="container-fluid repeatableTargetFuncDeclList">\
+                                    <div class="row">\
+                                        <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
+                                            <textarea class="form-control" cols="1000" rows="5" name="custom-mutation'+mutation_func_cnt.toString()+'">#Enter mutation func here</textarea>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>\
+    </div>\
+        ');
     });
     
     
