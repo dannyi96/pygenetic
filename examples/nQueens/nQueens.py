@@ -17,7 +17,7 @@ def fitness(board):
 				fitness += 1
 		return fitness
 
-factory = ChromosomeFactory.ChromosomeRangeFactory(int,14,1,15)
+factory = ChromosomeFactory.ChromosomeRangeFactory(data_type=int,noOfGenes=14,minValue=1,maxValue=15)
 ga = GAEngine.GAEngine(factory,100,fitness_type=('equal',14),mut_prob = 0.3)
 #ga.addCrossoverHandler(Utils.CrossoverHandlers.PMX, 9)
 
@@ -25,7 +25,7 @@ ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
 #ga.addCrossoverHandler(Utils.CrossoverHandlers.OX, 3)
 ga.addMutationHandler(Utils.MutationHandlers.swap)
 
-ga.setSelectionHandler(Utils.SelectionHandlers.best)
+ga.setSelectionHandler(Utils.SelectionHandlers.largest)
 ga.setFitnessHandler(fitness)
 
 ga.evolve(100)

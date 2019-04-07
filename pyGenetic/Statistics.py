@@ -45,7 +45,7 @@ class Statistics:
 		for statistic in self.statistic_dict:
 			print(statistic,self.statistic_dict[statistic])
 			ax.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
-		fig.legend(loc='upper left',handles = statistic , labels = statistic)
+		fig.legend(loc='upper left')
 		return fig
 
 	def plot_statistics(self,statistics):
@@ -53,11 +53,11 @@ class Statistics:
 		for statistic in statistics:
 			print(statistic,self.statistic_dict[statistic])
 			ax.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
-		fig.legend(loc='upper left', handles = statistic , labels = statistic)
+		fig.legend(loc='upper left')
 		return fig
 
 	def plot_statistic(self,statistic):
 		fig,ax = plt.subplots()
 		ax.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
-		fig.legend(loc='upper left',handles = statistic , labels = statistic)
+		fig.legend(loc='upper left')
 		return fig
