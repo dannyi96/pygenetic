@@ -8,10 +8,12 @@ import datetime
 import json
 import sys
 import matplotlib.pyplot as plt
+import gc
+import pickle
 
-ga = None
+#ga = None
 file_index = 0
-
+#ga_list = []
 # Custom imports
 #from GOF_templates import render
 app = Flask(__name__)
@@ -339,18 +341,33 @@ def ga_init():
 	code = precode + code
 	print("complete code ---> \n",code,"\n*******")
 	print()
+	code += "ga.evolve(1)"
+	print(globals())
+	print(globals().values())
 	exec(code,globals())
-
 	print(ga)
 	print(ga.calculateFitness([1,2]))
-	ga.evolve(1)
 	print('swah')
-	return jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
+	#ga_list.append(ga)
+	response = jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
+	print(id(ga))
+	print(type(id(ga)))
+	print(str(id(ga)))
+	response.set_cookie('ga_object',str(id(ga)))
+	print(str(id(ga)))
+	#print(request.cookies.get('ga_object'))
+	#a =object_by_id(request.cookies.get('ga_object'))
+	#print(a)
+	return response
 	#return render_template("features/generations.html", fitness_dict=ga.fitness_dict[:10])
 
 @app.route('/ga_evolve')
 def ga_evolve():
 	#print('HERE',data)
+	print()
+	print('b',request.cookies.get('ga_object'))
+	ga = object_by_id(int(request.cookies.get('ga_object')))
+	print(ga)
 	ga.continue_evolve(1)
 
 	return jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
@@ -367,6 +384,10 @@ def downloadCode():
 						patternType=session.get("pattern"),
 						fileType=session.get("fileType")))
 
-
+def object_by_id(id_):
+    for obj in globals().values():
+        if id(obj) == id_:
+            return obj
+    raise Exception("No found")
 
 app.run()
