@@ -14,6 +14,7 @@ $(document).ready(function() {
         }
         else if(generationNumber == 1)
         {
+                $('#results').empty();
                 $.ajax(
                     {
                         type: "POST",
