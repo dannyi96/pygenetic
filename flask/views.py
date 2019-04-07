@@ -18,6 +18,7 @@ file_index = 0
 #from GOF_templates import render
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads/' 
+persistent_store = {}
 #app.secret_key = 'secretkeyhereplease'
 
 @app.route("/")
@@ -345,6 +346,7 @@ def ga_init():
 	print(globals())
 	print(globals().values())
 	exec(code,globals())
+	print(globals().values())
 	print(ga)
 	print(ga.calculateFitness([1,2]))
 	print('swah')
@@ -354,7 +356,10 @@ def ga_init():
 	print(type(id(ga)))
 	print(str(id(ga)))
 	response.set_cookie('ga_object',str(id(ga)))
+	persistent_store[str(id(ga))] = ga
 	print(str(id(ga)))
+	print(persistent_store)
+
 	#print(request.cookies.get('ga_object'))
 	#a =object_by_id(request.cookies.get('ga_object'))
 	#print(a)
@@ -366,10 +371,12 @@ def ga_evolve():
 	#print('HERE',data)
 	print()
 	print('b',request.cookies.get('ga_object'))
-	ga = object_by_id(int(request.cookies.get('ga_object')))
+	ga = persistent_store[(request.cookies.get('ga_object'))]
+	print(persistent_store)
 	print(ga)
 	ga.continue_evolve(1)
-
+	for key in persistent_store:
+		print( key , persistent_store[ key ])
 	return jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
 
 @app.route('/get_file/<path:path>')
