@@ -126,6 +126,23 @@
 
     }
 
+    function validateRangeFactoryInput(){
+        var minval = document.getElementById('range-factory-min-value').value;
+        var maxval = document.getElementById('range-factory-max-value').value;
+
+        if(isNaN(minval) || isNaN(maxval) || minval > maxval){
+                
+            document.getElementById('range-factory-min-value').style.color = 'red';
+            document.getElementById('range-factory-max-value').style.color = 'red';
+        }
+        else {
+            document.getElementById('range-factory-min-value').style.color = 'green';
+            document.getElementById('range-factory-max-value').style.color = 'green';
+            
+        }
+
+
+    }
 
     function validateNoOfEvolutions(){
         var noOfEvolutions = document.getElementById('no-of-evolutions').value;
@@ -314,11 +331,11 @@
                                             </div>
 
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Min Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1drange-min">
+                                                <input type="text" class="form-control validName funcName" id = "range-factory-min-value" onfocusout="validateRangeFactoryInput()" placeholder="Min Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1drange-min">
                                             </div>
                                             
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Max Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1drange-max">
+                                                <input type="text" class="form-control validName funcName" id = "range-factory-max-value"   onfocusout="validateRangeFactoryInput()" placeholder="Max Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1drange-max">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <select class="form-control" name="1drange-duplicate">
