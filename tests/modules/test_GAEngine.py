@@ -1,6 +1,9 @@
 import sys
 import pytest
+sys.path.append('../../pyGenetic/')
 sys.path.append('../pyGenetic/')
+sys.path.append('./pyGenetic/')
+sys.path.append('.')
 
 import GAEngine,Utils
 

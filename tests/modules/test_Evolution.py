@@ -1,5 +1,8 @@
 import sys
+sys.path.append('../../pyGenetic/')
 sys.path.append('../pyGenetic/')
+sys.path.append('./pyGenetic/')
+sys.path.append('.')
 
 import Evolution
 

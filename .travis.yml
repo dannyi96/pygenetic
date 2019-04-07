@@ -1,0 +1,18 @@
+language: python
+
+python:
+  - "3.6"
+
+matrix:
+  include:
+    - os: linux
+      sudo: required
+      python: 3.6
+    
+sudo: required
+
+install: 
+  - pip3 install -r requirements.txt
+
+script: 
+  - pytest tests/modules
