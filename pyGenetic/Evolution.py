@@ -148,7 +148,14 @@ class StandardEvolution(BaseEvolution):
 		# Fitness Value Mapping and making selection
 		mapped_chromosomes_rdd = chromosomes_rdd.map(lambda x: (x,ga.calculateFitness(x)))
 		#print(mapped_chromosomes_rdd.collect())
-		selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
+		if type(ga.fitness_type) == str:
+			if ga.fitness_type == 'max':
+				selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
+			elif self.fitness_type == 'min':
+				selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
+		elif type(self.fitness_type) == tuple or type(self.fitness_type) == list:
+			if self.fitness_type[0] == 'equal':
+				selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: abs(x[1]-self.fitness_type[1]))
 		#selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
 		#print(selected_chromosomes)
 		ga.best_fitness = selected_chromosomes[0]
@@ -211,19 +218,6 @@ class StandardEvolution(BaseEvolution):
 
 		ga.population.members = ga.population.new_members 
 		ga.population.new_members = []
-
-
-		# Crossover Mapping
-		#crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
-		#print("crossover_indices = ",crossover_indexes)
-		#crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
-
-
-
-
-
-
-
 
 	def evolve(self,ga):
 		"""
