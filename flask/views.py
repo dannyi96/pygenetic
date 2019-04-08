@@ -1,6 +1,6 @@
 #from server.flaskr import app
 
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, make_response
 from werkzeug import secure_filename
 from urllib.parse import unquote
 import os
@@ -8,8 +8,10 @@ import datetime
 import json
 import sys
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import gc
 import pickle
+from io import BytesIO
 
 #ga = None
 file_index = 0
@@ -378,6 +380,19 @@ def ga_evolve():
 	for key in persistent_store:
 		print( key , persistent_store[ key ])
 	return jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
+
+@app.route('/plot_fitness_graph')
+def plot_fitness_graph():
+	ga = persistent_store[(request.cookies.get('ga_object'))]
+	print(ga)
+	print(ga.statistics.statistic_dict['best'])
+	graph = ga.statistics.plot_statistics(['best','worst','avg'])
+	canvas = FigureCanvas(graph)
+	output = BytesIO()
+	canvas.print_png(output)
+	response = make_response(output.getvalue())
+	response.mimetype = 'image/png'
+	return response
 
 @app.route('/get_file/<path:path>')
 def get_file(path):
