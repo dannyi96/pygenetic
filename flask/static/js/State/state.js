@@ -726,11 +726,27 @@ $(document).ready(function() {
 
     // END : Code Download Functionality (includes form submission without forms per se)
     
-    // START : State name validation
+    // START : State input validation
+    /*
     function matchExact(r, str) {
        var match = str.match(r);
        return match != null && str == match[0];
     }
+    */
+
+    function isPositiveNumber(inputValue){
+        if(!(isNaN(inputValue))){
+            alert("is a number");
+            return (inputValue > 0)
+        }
+        
+        else{
+               return false;
+            }
+
+    }
+    
+
     $(".entireStateWrapper").on("focus",".validName", function(event) {
         $(this).popover("hide");
     });
@@ -739,11 +755,15 @@ $(document).ready(function() {
         // data-toggle="tooltip" data-placement="left" title="Tooltip on top"
         var res;
         
-        res = matchExact(/[A-Za-z_]+[A-Za-z0-9_]*/g,$(this).val()); //basically it's a valid variable in a language like C++
+        //res = matchExact(/[A-Za-z_]+[A-Za-z0-9_]*/g,$(this).val()); //basically it's a valid variable in a language like C++
         
-        if($(this).hasClass("retTypeName") || $(this).hasClass("paramType"))
+        if($(this).hasClass("noOfGenes") || $(this).hasClass("rangeFactoryInput") || $(this).hasClass("populationSize") || $(this).hasClass("crossoverRate")
+            || $(this).hasClass("mutationRate") || $(this).hasClass(fitnessValue) || $(this).hasClass("crossoverWeight") || $(this).hasClass("mutationWeight") || $(this).hasClass("noOfEvolutions"))
         {
-            res = matchExact(/([A-Za-z_]+[A-Za-z0-9_]*)[\&\*]*/g,$(this).val()); //basically it's a valid variable in a language like C++
+            
+            res = isPositiveNumber($(this).val());
+           
+            //res = matchExact(/([A-Za-z_]+[A-Za-z0-9_]*)[\&\*]*/g,$(this).val()); //basically it's a valid variable in a language like C++
         }
 
         if(res==false){
