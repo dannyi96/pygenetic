@@ -10,6 +10,10 @@ $(document).ready(function() {
         console.log(generationNumber);
         if(generationNumber > MAX_ITER)
         {
+            console.log('HERE');
+            var date = new Date();
+            var timestamp = date.getTime();
+            document.getElementById('fitness_graph_image').src = '/plot_fitness_graph?lastmod='+ timestamp;
             return;
         }
         else if(generationNumber == 1)
