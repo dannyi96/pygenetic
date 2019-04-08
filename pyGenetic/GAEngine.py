@@ -88,7 +88,7 @@ class GAEngine:
   	"""
 
 
-	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True, use_pyspark=False):
+	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True, population_control=True,use_pyspark=False):
 		self.fitness_func = None
 		self.factory = factory
 		self.population = Population.Population(factory,population_size)
@@ -114,6 +114,7 @@ class GAEngine:
 			self.diversity = None
 		self.statistics = Statistics.Statistics()
 		self.evolution = Evolution.StandardEvolution(adaptive_mutation=adaptive_mutation,pyspark=use_pyspark)
+		self.population_control = population_control
 		self.fitness_external_data = []
 		self.selection_external_data = []
 		self.crossover_external_data = {}
@@ -363,6 +364,15 @@ class GAEngine:
 			if (i+1)%20 == 0:
 				self.population.members.append(self.hall_of_fame[0])
 			result = self.evolution.evolve(self)
+			if self.population_control:
+				if len(self.population.members) > self.population.population_size:
+					self.population.members = self.population.members[:self.population.population_size]
+				elif len(self.population.members) < self.population.population_size:
+					self.population.members = self.population.members * int(len(self.population.population_size)/len(self.population.members)) + self.population.members[:len(self.population.population_size)%len(self.population.members)]
+				print(self.population.population_size)
+				print('hi',len(self.population.members))
+			#print(self.population.population_size)
+			#print('hi',len(self.population.members))
 			self.statistics.add_statistic('best',self.fitness_dict[0][1])
 			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
 			#print('Fitness Dict', self.fitness_dict)
@@ -388,6 +398,12 @@ class GAEngine:
 			if (i+1)%20 == 0:
 				self.population.members.append(self.hall_of_fame[0])
 			result = self.evolution.evolve(self)
+			if self.population_control:
+				if len(self.population.members) > self.population.population_size:
+					self.population.members = self.population.members[:self.population.population_size]
+				elif len(self.population.members) < self.population.population_size:
+					self.population.members = self.population.members * int(len(self.population.population_size)/len(self.population.members)) + self.population.members[:len(self.population.population_size)%len(self.population.members)]
+
 			self.statistics.add_statistic('best',self.fitness_dict[0][1])
 			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
 			#print('Fitness Dict', self.fitness_dict)
