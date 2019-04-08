@@ -101,7 +101,7 @@ $(document).ready(function() {
                                     </div>`;
                             
                             $('#results').append(str); 
-                
+                            $('html, body').animate({scrollTop:$(document).height()}, 'fast');
                         }
                     });
         }
@@ -190,6 +190,7 @@ $(document).ready(function() {
                         </div>`;
                
                 $('#results').append(str); 
+                $('html, body').animate({scrollTop:$(document).height()}, 'fast');
                 
                 }
             });
