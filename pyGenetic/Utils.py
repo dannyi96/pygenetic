@@ -42,23 +42,23 @@ class SelectionHandlers:
 
 	@staticmethod
 	def random(pop, fitness_dict, ga):
-		return [random.choice(pop) for i in range(ga.population.population_size)]
+		return [random.choice(pop) for i in range(len(pop)-math.ceil(ga.cross_prob * len(pop)))]
 
 	@staticmethod
 	def smallest(pop, fitness_dict, ga):
-		new = sorted(fitness_dict, key=operator.itemgetter(1))[:ga.population.population_size]
+		new = sorted(fitness_dict, key=operator.itemgetter(1))[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
 		return [i[0] for i in new]
 		
 	@staticmethod
 	def largest(pop, fitness_dict, ga):
-		new = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)[:ga.population.population_size]
+		new = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
 		return [i[0] for i in new]
 		
 	@staticmethod
 	def tournament(pop, fitness_dict, ga):
 		# tournsize is by default defined as 3
 		chosen = []
-		for i in range(ga.population.population_size):
+		for i in range(len(pop)-math.ceil(ga.cross_prob * len(pop))):
 			aspirants = random.sample(fitness_dict,ga.tournsize)
 			chosen.append(max(aspirants, key=operator.itemgetter(1)))
 		return [i[0] for i in chosen]
@@ -70,7 +70,7 @@ class SelectionHandlers:
 		relative_fitness = [f/total_fit for f in fitness]
 		probabilities = [sum(relative_fitness[:i+1]) for i in range(len(relative_fitness))]
 		chosen = []
-		for n in range(ga.population.population_size):
+		for n in range(len(pop)-math.ceil(ga.cross_prob * len(pop))):
 			r = random.random()
 			for (i, individual) in enumerate(pop):
 				if r <= probabilities[i]:
@@ -90,7 +90,7 @@ class SelectionHandlers:
 		s_inds = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)
 		distance = sum([i[1] for i in fitness_dict]) / float(ga.population.population_size)
 		start = random.uniform(0, distance)
-		points = [start + i*distance for i in range(ga.population.population_size)]
+		points = [start + i*distance for i in range(len(pop)-math.ceil(ga.cross_prob * len(pop)))]
 		chosen = []
 		for p in points:
 			i = 0
