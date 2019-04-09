@@ -88,7 +88,7 @@ class GAEngine:
   	"""
 
 
-	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True, population_control=True,use_pyspark=False):
+	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True, population_control=False,use_pyspark=False):
 		self.fitness_func = None
 		self.factory = factory
 		self.population = Population.Population(factory,population_size)
@@ -371,8 +371,8 @@ class GAEngine:
 					self.population.members = self.population.members * int(len(self.population.population_size)/len(self.population.members)) + self.population.members[:len(self.population.population_size)%len(self.population.members)]
 				print(self.population.population_size)
 				print('hi',len(self.population.members))
-			#print(self.population.population_size)
-			#print('hi',len(self.population.members))
+			print(self.population.population_size)
+			print('hi',len(self.population.members))
 			self.statistics.add_statistic('best',self.fitness_dict[0][1])
 			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
 			#print('Fitness Dict', self.fitness_dict)
@@ -507,7 +507,7 @@ if __name__ == '__main__':
 	ga = GAEngine(factory=factory,population_size=30,cross_prob=0.4,mut_prob=0.2,fitness_type='max',adaptive_mutation=False,use_pyspark=False)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.twoPoint,1)
 	ga.addMutationHandler(Utils.MutationHandlers.swap,1)
-	ga.setSelectionHandler(Utils.SelectionHandlers.largest)
+	ga.setSelectionHandler(Utils.SelectionHandlers.SUS)
 	ga.setFitnessHandler(Utils.Fitness.addition)
 
 
