@@ -384,8 +384,12 @@ def ga_evolve():
 @app.route('/plot_fitness_graph')
 def plot_fitness_graph():
 	ga = persistent_store[(request.cookies.get('ga_object'))]
+	print(persistent_store)
 	print(ga)
 	print(ga.statistics.statistic_dict['best'])
+	print(persistent_store)
+	del persistent_store[request.cookies.get('ga_object')]
+	print(persistent_store)
 	graph = ga.statistics.plot_statistics(['best','worst','avg'])
 	canvas = FigureCanvas(graph)
 	output = BytesIO()
