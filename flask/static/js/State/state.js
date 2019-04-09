@@ -4,6 +4,8 @@ $(document).ready(function() {
     var crossover_func_cnt = 0
     var mutation_func_cnt = 0
     var $form = $('#main_form')
+    $("#run").attr("disabled", true);
+    $("#download_code").attr("disabled", true);
     function polling(event,form,generationNumber)
     {
         var MAX_ITER = parseInt(document.getElementById('no-of-evolutions').value)
@@ -744,7 +746,7 @@ $(document).ready(function() {
             return (inputValue > 0);
         }
         
-        else{ return false; }
+        else{return false;}
     }
     
 
@@ -805,10 +807,14 @@ $(document).ready(function() {
             console.log("here");
             $(this).attr("isValidInput",false);
             $(this).css('color', 'red');
+            $("#run").attr("disabled", true);
+            $("#download_code").attr("disabled", true);
         }
         else{
             $(this).attr("isValidInput",true);
             $(this).css('color', 'green');
+            $("#run").attr("disabled", false);
+            $("#download_code").attr("disabled", false);
         }
     });
 
@@ -825,6 +831,8 @@ $(document).ready(function() {
     $(".entireStateWrapper").on("blur",".validName", function(event) {
         if($(this).attr("isValidInput") == "true"){
             $(this).css('color', 'black');
+            $("#run").attr("disabled", false);
+            $("#download_code").attr("disabled", false);
         }
     });
     // END : State name validation
