@@ -368,6 +368,16 @@ class GAEngine:
 				self.population.members.append(self.hall_of_fame[0])
 				print('hi2',len(self.population.members))
 			result = self.evolution.evolve(self)
+
+			if self.efficient_iteration_halt:
+				if len(self.last_20_fitnesses)==20:
+					self.last_20_fitnesses.popleft()
+					self.last_20_fitnesses.append(self.best_fitness[1])
+					if all(x == self.last_20_fitnesses[0] for x in self.last_20_fitnesses):
+						result = -1
+				else:
+					self.last_20_fitnesses.append(self.best_fitness[1])
+
 			if self.population_control:
 				if len(self.population.members) > self.population.population_size:
 					self.population.members = self.population.members[:self.population.population_size]
@@ -511,11 +521,11 @@ if __name__ == '__main__':
 	# ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
 
 	factory = ChromosomeFactory.ChromosomeRangeFactory(data_type=int,noOfGenes=8,minValue=0,maxValue=20,duplicates=True)
-	ga = GAEngine(factory=factory,population_size=30,cross_prob=0.4,mut_prob=0.2,fitness_type='max',adaptive_mutation=False,use_pyspark=False)
+	ga = GAEngine(factory=factory,population_size=60,cross_prob=0.4,efficient_iteration_halt = True,mut_prob=0.2,fitness_type='max',adaptive_mutation=False,use_pyspark=False)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.twoPoint,1)
 	ga.addMutationHandler(Utils.MutationHandlers.swap,1)
-	ga.setSelectionHandler(Utils.SelectionHandlers.basic)
+	ga.setSelectionHandler(Utils.SelectionHandlers.largest)
 	ga.setFitnessHandler(Utils.Fitness.addition)
 
 
-	ga.evolve(30)
+	ga.evolve(100)

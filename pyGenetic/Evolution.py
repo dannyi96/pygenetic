@@ -83,13 +83,6 @@ class StandardEvolution(BaseEvolution):
 		if ga.fitness_type[0] == 'equal':
 			if ga.best_fitness[1] == ga.fitness_type[1]:
 				return 1
-		if len(ga.last_20_fitnesses)==20:
-			ga.last_20_fitnesses.popleft()
-			ga.last_20_fitnesses.append(ga.best_fitness[1])
-			if all(x == ga.last_20_fitnesses[0] for x in ga.last_20_fitnesses):
-				return -1
-		else:
-			ga.last_20_fitnesses.append(ga.best_fitness[1])
 
 		fitnesses = []
 		total = 0 #This is not being used
