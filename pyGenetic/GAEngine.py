@@ -88,7 +88,7 @@ class GAEngine:
   	"""
 
 
-	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True, population_control=False,use_pyspark=False):
+	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True, population_control=False,hall_of_fame_injection=True,efficient_iteration_halt=True,use_pyspark=False):
 		self.fitness_func = None
 		self.factory = factory
 		self.population = Population.Population(factory,population_size)
@@ -115,6 +115,8 @@ class GAEngine:
 		self.statistics = Statistics.Statistics()
 		self.evolution = Evolution.StandardEvolution(adaptive_mutation=adaptive_mutation,pyspark=use_pyspark)
 		self.population_control = population_control
+		self.hall_of_fame_injection = hall_of_fame_injection
+		self.efficient_iteration_halt = efficient_iteration_halt
 		self.fitness_external_data = []
 		self.selection_external_data = []
 		self.crossover_external_data = {}
@@ -361,8 +363,10 @@ class GAEngine:
 
 		self.normalizeWeights()
 		for i in range(noOfIterations):
-			if (i+1)%20 == 0:
+			if self.hall_of_fame_injection and (i+1)%20 == 0:
+				print('hi1',len(self.population.members))
 				self.population.members.append(self.hall_of_fame[0])
+				print('hi2',len(self.population.members))
 			result = self.evolution.evolve(self)
 			if self.population_control:
 				if len(self.population.members) > self.population.population_size:
@@ -384,7 +388,7 @@ class GAEngine:
 			if result == 1:
 				print('SOLVED')
 				break
-			elif result == -1:
+			elif self.efficient_iteration_halt and result == -1:
 				print('SATURATED')
 				break
 		print("Best fitness in this generation = ", self.best_fitness)
@@ -395,7 +399,7 @@ class GAEngine:
 	def continue_evolve(self, noOfIterations=20):
 		self.normalizeWeights()
 		for i in range(noOfIterations):
-			if (i+1)%20 == 0:
+			if self.hall_of_fame_injection and (i+1)%20 == 0:
 				self.population.members.append(self.hall_of_fame[0])
 			result = self.evolution.evolve(self)
 			if self.population_control:
@@ -412,8 +416,11 @@ class GAEngine:
 			if self.adaptive_mutation:
 				self.statistics.add_statistic('mutation_rate',self.dynamic_mutation)
 				self.statistics.add_statistic('diversity',self.diversity)
-			if result:
+			if result == 1:
 				print('SOLVED')
+				break
+			elif self.efficient_iteration_halt and result == -1:
+				print('SATURATED')
 				break
 		#self.statistics.plot_statistics(['max','min','avg'])
 		#if self.adaptive_mutation:
@@ -507,7 +514,7 @@ if __name__ == '__main__':
 	ga = GAEngine(factory=factory,population_size=30,cross_prob=0.4,mut_prob=0.2,fitness_type='max',adaptive_mutation=False,use_pyspark=False)
 	ga.addCrossoverHandler(Utils.CrossoverHandlers.twoPoint,1)
 	ga.addMutationHandler(Utils.MutationHandlers.swap,1)
-	ga.setSelectionHandler(Utils.SelectionHandlers.SUS)
+	ga.setSelectionHandler(Utils.SelectionHandlers.basic)
 	ga.setFitnessHandler(Utils.Fitness.addition)
 
 
