@@ -86,14 +86,14 @@ class StandardEvolution(BaseEvolution):
 
 		fitnesses = []
 		total = 0 #This is not being used
-		for chromosome in ga.population.members:
-			fitness = ga.calculateFitness(chromosome)
+		for chromosome in ga.fitness_dict:
+			fitness = chromosome[1]
 			if fitness == 0:
 				fitness = random.uniform(0.01, 0.02)
 			total += fitness
 			fitnesses.append(fitness)
 
-		p = [ elem/sum(fitnesses) for elem in fitnesses]
+		p = [ elem/total for elem in fitnesses]
 		#print("p = ",p)
 		n = math.ceil(ga.cross_prob * len(p))
 		if n %2 == 1:
@@ -112,16 +112,7 @@ class StandardEvolution(BaseEvolution):
 			ga.population.new_members.extend([child1,child2])
 		#print("adaptive_mutation value passed = ",self.adaptive_mutation)
 
-		if self.adaptive_mutation == True:
-			mean_fitness = sum(fitnesses)/len(fitnesses)
-			average_square_deviation = math.sqrt(sum((fitness - mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
-			ga.diversity = average_square_deviation
-			ga.dynamic_mutation = ga.mut_prob * ( 1 + ((ga.best_fitness[1]-average_square_deviation) / (ga.best_fitness[1]+average_square_deviation) ) )
-			#print(mean_fitness)
-			#print(average_square_deviation)
-			print("Diversity = ",ga.diversity)
-			#print(ga.best_fitness)
-			print('Adaptive mutation value = ',ga.dynamic_mutation)
+		if self.adaptive_mutation == True and ga.dynamic_mutation:
 			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.dynamic_mutation*len(p)), replace=False)
 		else:
 			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
