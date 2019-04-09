@@ -741,13 +741,10 @@ $(document).ready(function() {
 
     function isPositiveNumber(inputValue){
         if(!(isNaN(inputValue))){
-            return (inputValue > 0)
+            return (inputValue > 0);
         }
         
-        else{ 
-            return false;
-        }
-
+        else{ return false; }
     }
     
 
@@ -756,21 +753,45 @@ $(document).ready(function() {
     });
 
     $(".entireStateWrapper").on("input",".validName", function(event) {
-        // data-toggle="tooltip" data-placement="left" title="Tooltip on top"
         var res;
         
-        //res = matchExact(/[A-Za-z_]+[A-Za-z0-9_]*/g,$(this).val()); //basically it's a valid variable in a language like C++
-        
-        if($(this).hasClass("noOfGenes") || $(this).hasClass("rangeFactoryInput") || $(this).hasClass("populationSize") ||
+        if($(this).hasClass("noOfGenes") || $(this).hasClass("rangeFactoryInput") || 
             $(this).hasClass("fitnessValue") || $(this).hasClass("crossoverWeight") || $(this).hasClass("mutationWeight") ||
-             $(this).hasClass("noOfEvolutions"))
-        {
-            
-            res = isPositiveNumber($(this).val());
-           
-            //res = matchExact(/([A-Za-z_]+[A-Za-z0-9_]*)[\&\*]*/g,$(this).val()); //basically it's a valid variable in a language like C++
+            $(this).hasClass("noOfEvolutions"))
+            {
+             res = isPositiveNumber($(this).val());
         }
 
+        
+        if($(this).hasClass("rangeFactoryMinInput") || $(this).hasClass("rangeFactoryMaxInput")){
+            if(!(isNaN($(this).val()))){
+                res = true;
+            }
+            else{
+                res = false;
+            }
+        }
+
+        /*
+        if($(this).hasClass("regexInput")){
+
+            var regex = new RegExp([0-9]);
+            var charRegex = new  RegExp([a-zA-Z])
+            if(($(this).val()).test(regex) || ($(this).val()).test(charRegex)){
+                res = true;
+            }
+            else{res = false;}
+        }
+        */
+
+        if($(this).hasClass("populationSize")){
+            if(!(isNaN($(this).val())) && $(this).val() >= 5){
+                res = true;
+            }
+            else{res = false;}
+
+        }
+        
         if($(this).hasClass("crossoverRate") || $(this).hasClass("mutationRate")){
             if(!(isNaN($(this).val())) && !(isNaN($(this).val())) && $(this).val() > 0 && $(this).val() < 1){
                 res = true;
