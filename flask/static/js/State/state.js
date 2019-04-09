@@ -299,7 +299,7 @@ $(document).ready(function() {
             </div>\
         </div>\
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
-            <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="top" data-content="Invalid Name" id="fitness-achive-value" name="crossover-weight'+crossover_func_cnt.toString()+'">\
+            <input type="text" class="form-control validName funcName crossoverWeight" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="top" data-content="Invalid Name" id="fitness-achive-value" name="crossover-weight'+crossover_func_cnt.toString()+'">\
         </div>\
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
             <div class="input-group-append">\
@@ -374,7 +374,7 @@ $(document).ready(function() {
             </div>\
         </div>\
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
-            <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="top" data-content="Invalid Name" id="fitness-achive-value" name="mutation-weight'+mutation_func_cnt.toString()+'">\
+            <input type="text" class="form-control validName funcName mutationWeight" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="top" data-content="Invalid Name" id="fitness-achive-value" name="mutation-weight'+mutation_func_cnt.toString()+'">\
         </div>\
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
             <div class="input-group-append">\
