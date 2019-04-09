@@ -10,6 +10,7 @@ $(document).ready(function() {
     {
         var MAX_ITER = parseInt(document.getElementById('no-of-evolutions').value)
         console.log(generationNumber);
+        var best_fitness;
         if(generationNumber > MAX_ITER)
         {
             console.log('HERE');
@@ -25,12 +26,13 @@ $(document).ready(function() {
                     {
                         type: "POST",
                         url: '/ga_init',
-                        data: form.serialize(),
                         async: false,
+                        data: form.serialize(),
                         success: function(data) 
                         {
                             
                             var fitness_response = data['Best-Fitnesses'];
+                            best_fitness = fitness_response[0][1];
                             var str = `<div class='col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn' id='funcDeclWrapper'> 
                                         <div class='container-fluid'> 
                                             <div class='row'> 
@@ -104,8 +106,8 @@ $(document).ready(function() {
                             
                             $('#results').append(str); 
                             $('html, body').animate({scrollTop:$(document).height()}, 'fast');
-                        }
-                    });
+                    }
+                });
         }
         else
         {
@@ -114,12 +116,12 @@ $(document).ready(function() {
                     type: "GET",
                     async: false,
                     url: '/ga_evolve',
-                    data: form.serialize(),
                     success: function(data) 
                     {
                         
                         
                         var fitness_response = data['Best-Fitnesses'];
+                        best_fitness = fitness_response[0][1];
                         var str = `<div class='col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn' id='funcDeclWrapper'> 
                             <div class='container-fluid'> 
                                 <div class='row'> 
@@ -193,9 +195,19 @@ $(document).ready(function() {
                
                 $('#results').append(str); 
                 $('html, body').animate({scrollTop:$(document).height()}, 'fast');
-                
-                }
+            }
             });
+        }
+        if(document.getElementById('fitness-achieve-select').value == 'equal')
+        {
+            if(best_fitness == parseInt(document.getElementById('fitness-achive-value').value))
+            {
+                var date = new Date();
+                var timestamp = date.getTime();
+                document.getElementById('fitness_graph_image').src = '/plot_fitness_graph?lastmod='+ timestamp;
+                console.log('pewdiepie');
+                return;
+            }
         }
         //$("html, body").animate({ scrollTop: $(document).height() }, "slow");
         setTimeout(polling,0,event,form,generationNumber+1);
