@@ -376,7 +376,7 @@ class GAEngine:
 					self.last_20_fitnesses.popleft()
 					self.last_20_fitnesses.append(self.best_fitness[1])
 					if all(x == self.last_20_fitnesses[0] for x in self.last_20_fitnesses):
-						result = -1
+						break
 				else:
 					self.last_20_fitnesses.append(self.best_fitness[1])
 
@@ -385,13 +385,13 @@ class GAEngine:
 			if self.adaptive_mutation == True:
 				mean_fitness = sum(fitnesses)/len(fitnesses)
 				average_square_deviation = math.sqrt(sum((fitness - mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
-				ga.diversity = average_square_deviation
-				ga.dynamic_mutation = ga.mut_prob * ( 1 + ((ga.best_fitness[1]-average_square_deviation) / (ga.best_fitness[1]+average_square_deviation) ) )
+				self.diversity = average_square_deviation
+				self.dynamic_mutation = self.mut_prob * ( 1 + ((self.best_fitness[1]-average_square_deviation) / (self.best_fitness[1]+average_square_deviation) ) )
 				#print(mean_fitness)
 				#print(average_square_deviation)
-				print("Diversity = ",ga.diversity)
+				print("Diversity = ",self.diversity)
 				#print(ga.best_fitness)
-				print('Adaptive mutation value = ',ga.dynamic_mutation)
+				print('Adaptive mutation value = ',self.dynamic_mutation)
 
 			if self.population_control:
 				if len(self.population.members) > self.population.population_size:
@@ -411,9 +411,6 @@ class GAEngine:
 				self.statistics.add_statistic('diversity',self.diversity)
 			if result == 1:
 				print('SOLVED')
-				break
-			elif self.efficient_iteration_halt and result == -1:
-				print('SATURATED')
 				break
 		print("Best fitness in this generation = ", self.best_fitness)
 		print("Best among all generations = ", self.hall_of_fame)
