@@ -741,7 +741,6 @@ $(document).ready(function() {
 
     function isPositiveNumber(inputValue){
         if(!(isNaN(inputValue))){
-            alert("is a number");
             return (inputValue > 0)
         }
         
