@@ -744,9 +744,9 @@ $(document).ready(function() {
             return (inputValue > 0)
         }
         
-        else{
-               return false;
-            }
+        else{ 
+            return false;
+        }
 
     }
     
@@ -761,14 +761,24 @@ $(document).ready(function() {
         
         //res = matchExact(/[A-Za-z_]+[A-Za-z0-9_]*/g,$(this).val()); //basically it's a valid variable in a language like C++
         
-        if($(this).hasClass("noOfGenes") || $(this).hasClass("rangeFactoryInput") || $(this).hasClass("populationSize") || $(this).hasClass("crossoverRate")
-            || $(this).hasClass("mutationRate") || $(this).hasClass(fitnessValue) || $(this).hasClass("crossoverWeight") || $(this).hasClass("mutationWeight") || $(this).hasClass("noOfEvolutions"))
+        if($(this).hasClass("noOfGenes") || $(this).hasClass("rangeFactoryInput") || $(this).hasClass("populationSize") ||
+            $(this).hasClass("fitnessValue") || $(this).hasClass("crossoverWeight") || $(this).hasClass("mutationWeight") ||
+             $(this).hasClass("noOfEvolutions"))
         {
             
             res = isPositiveNumber($(this).val());
            
             //res = matchExact(/([A-Za-z_]+[A-Za-z0-9_]*)[\&\*]*/g,$(this).val()); //basically it's a valid variable in a language like C++
         }
+
+        if($(this).hasClass("crossoverRate") || $(this).hasClass("mutationRate")){
+            if(!(isNaN($(this).val())) && !(isNaN($(this).val())) && $(this).val() > 0 && $(this).val() < 1){
+                res = true;
+            }
+            else{res = false;}
+        }
+
+
 
         if(res==false){
             console.log("here");
