@@ -6,6 +6,7 @@ $(document).ready(function() {
     var $form = $('#main_form')
     $("#run").attr("disabled", true);
     $("#download_code").attr("disabled", true);
+
     function polling(event,form,generationNumber)
     {
         var MAX_ITER = parseInt(document.getElementById('no-of-evolutions').value)
@@ -807,14 +808,12 @@ $(document).ready(function() {
             console.log("here");
             $(this).attr("isValidInput",false);
             $(this).css('color', 'red');
-            $("#run").attr("disabled", true);
-            $("#download_code").attr("disabled", true);
+            
         }
         else{
             $(this).attr("isValidInput",true);
             $(this).css('color', 'green');
-            $("#run").attr("disabled", false);
-            $("#download_code").attr("disabled", false);
+          
         }
     });
 
@@ -831,9 +830,25 @@ $(document).ready(function() {
     $(".entireStateWrapper").on("blur",".validName", function(event) {
         if($(this).attr("isValidInput") == "true"){
             $(this).css('color', 'black');
-            $("#run").attr("disabled", false);
+        }
+    });
+
+    // Disabling / enabling submit
+    $(".validName").change(function(){
+
+        allValid = true;
+        var inputs = $(".validName");
+        for(var i = 0; i < inputs.length ; i++){
+            if($(inputs[i]).attr("isValidInput") == false){
+                allValid  = false;
+            }
+        }
+
+        if(allValid){
+            $("#run").attr("disabled",false);
             $("#download_code").attr("disabled", false);
         }
+
     });
     // END : State name validation
 
