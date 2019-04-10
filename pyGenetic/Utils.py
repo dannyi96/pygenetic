@@ -53,19 +53,46 @@ class SelectionHandlers:
 	def largest(pop, fitness_dict, ga):
 		new = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
 		return [i[0] for i in new]
+
+	@staticmethod
+	def best(pop, fitness_dict, ga):
+		if ga.fitness_type == 'max':
+			new = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
+		elif ga.fitness_type == 'min':
+			new = sorted(fitness_dict, key=operator.itemgetter(1))[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
+		elif ga.fitness_type[0] == 'equal':
+			new_dict = [(x[0],abs(x[1]-ga.fitness_type[1])) for x in fitness_dict]
+			new = sorted(new_dict, key=operator.itemgetter(1))[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
+		return [i[0] for i in new]
 		
 	@staticmethod
-	def tournament(pop, fitness_dict, ga):
-		# tournsize is by default defined as 3
+	def tournament(pop, fitness_dict, ga, tournsize):
 		chosen = []
 		for i in range(len(pop)-math.ceil(ga.cross_prob * len(pop))):
-			aspirants = random.sample(fitness_dict,ga.tournsize)
-			chosen.append(max(aspirants, key=operator.itemgetter(1)))
+			aspirants = random.sample(fitness_dict, tournsize)
+			if ga.fitness_type == 'max':
+				chosen.append(max(aspirants, key=operator.itemgetter(1)))
+			elif ga.fitness_type == 'min':
+				chosen.append(min(aspirants, key=operator.itemgetter(1)))
+			elif ga.fitness_type[0] == 'equal':
+				for x in range(tournsize):
+					aspirants[x] = (aspirants[x][0],abs(aspirants[x][1] - ga.fitness_type[1]))
+				chosen.append(min(aspirants, key=operator.itemgetter(1)))
 		return [i[0] for i in chosen]
 		
 	@staticmethod
 	def roulette(pop, fitness_dict, ga):
 		fitness = [i[1] for i in fitness_dict]
+		if ga.selection_handler == SelectionHandlers.roulette:
+			if ga.fitness_type == 'max':
+				pass
+			elif ga.fitness_type == 'min':
+				maxim = max(fitness)
+				fitness = [maxim-x for x in fitness]
+			elif ga.fitness_type[0] == 'equal':
+				fitness = [abs(x-ga.fitness_type[1]) for x in fitness]
+				maxim = max(fitness)
+				fitness = [maxim-x for x in fitness]
 		total_fit = float(sum(fitness))
 		relative_fitness = [f/total_fit for f in fitness]
 		probabilities = [sum(relative_fitness[:i+1]) for i in range(len(relative_fitness))]
@@ -80,14 +107,36 @@ class SelectionHandlers:
 
 	@staticmethod
 	def rank(pop, fitness_dict, ga):
-		new = [i[0] for i in sorted(fitness_dict, key=operator.itemgetter(1))]
+		if ga.fitness_type == 'max':
+			new = [i[0] for i in sorted(fitness_dict, key=operator.itemgetter(1))]
+		elif ga.fitness_type == 'min':
+			new = [i[0] for i in sorted(fitness_dict, key=operator.itemgetter(1), reverse = True)]
+		elif ga.fitness_type[0] == 'equal':
+			new_dict = [(x[0],abs(x[1]-ga.fitness_type[1])) for x in fitness_dict]
+			new = [i[0] for i in sorted(new_dict, key=operator.itemgetter(1), reverse = True)]
 		for i in range(len(new)):
 			new[i]=(new[i],i+1)
 		return SelectionHandlers.roulette(pop, new, ga)
 
 	@staticmethod
 	def SUS(pop, fitness_dict, ga):
-		s_inds = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)
+
+		if ga.fitness_type == 'max':
+			s_inds = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)
+		elif ga.fitness_type == 'min':
+			s_inds = fitness_dict
+			maxim = (max(s_inds, key = operator.itemgetter(1)))[1]
+			for x in range(len(s_inds)):
+				s_inds[x] = (s_inds[x][0],maxim - s_inds[x][1])
+			s_inds = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)
+		elif ga.fitness_type[0] == 'equal':
+			s_inds = fitness_dict
+			for x in range(len(s_inds)):
+				s_inds[x] = (s_inds[x][0],abs(s_inds[x][1] - ga.fitness_type[1]))
+			maxim = (max(s_inds, key = operator.itemgetter(1)))[1]
+			for x in range(len(s_inds)):
+				s_inds[x] = (s_inds[x][0],maxim - s_inds[x][1])
+			s_inds = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)
 		distance = sum([i[1] for i in fitness_dict]) / float(ga.population.population_size)
 		start = random.uniform(0, distance)
 		points = [start + i*distance for i in range(len(pop)-math.ceil(ga.cross_prob * len(pop)))]
