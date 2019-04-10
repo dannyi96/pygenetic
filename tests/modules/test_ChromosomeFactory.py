@@ -85,3 +85,53 @@ if __name__ == '__main__':
     test_ChromosomeRegexFactory()
     test_ChromosomeRangeFactory()
 '''
+
+@pytest.mark.parametrize("noOfGenes, minVal, maxVal, duplicates, data_type", [
+( 1, 2 , 100 ,False,int),
+(-1 ,3 ,100,False, int),
+(2, 0, -9 ,False, int),
+(2, 0, 9 , int , int),
+(3, 0 , 9, True, list)
+])
+def test_errors_ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type):
+    # Test case 7: Test for exception when no of genes less than or equal to 0
+    if noOfGenes<=0:
+        with pytest.raises(ValueError):
+            factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type)
+        return
+
+    # Test case 8: Test for exception when invalid data type is given
+    if data_type != int:
+        with pytest.raises(ValueError):
+            factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type)
+            
+    # Test case 9: Test for exception when invalid range is given
+    if minVal > maxVal:    
+        with pytest.raises(ValueError):
+            factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type)
+        return
+
+    # Test case 10: Test errors for invalid duplicates type
+    if type(duplicates) != bool:
+        with pytest.raises(ValueError):
+            factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type)
+        return
+
+
+@pytest.mark.parametrize("noOfGenes, minVal, maxVal, duplicates, data_type", [
+( 3, 2 , 10 ,False,int),
+(3 ,-2, -7 ,False,int)
+
+])
+def test_functionality_ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type):
+    
+    factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type)
+    chromosome = factory.createChromosome()
+    
+    # Test case 11: Check if correct no of genes are produced
+    assert len(chromosome) == noOfGenes
+
+    # Test case 12: Check if correct genes are produced from regex
+    for gene in chromosome:
+        assert gene >= minVal and gene <= maxVal
+

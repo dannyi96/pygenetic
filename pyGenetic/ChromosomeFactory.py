@@ -108,6 +108,9 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 		if noOfGenes <= 0 :
 			raise ValueError('No of genes cannot be negative')
 
+		if data_type != int:
+			raise ValueError('Invalid data type for range factory genes')
+
 		if minValue > maxValue:
 			raise ValueError('minValue cannot be greater than maxValue')
 
