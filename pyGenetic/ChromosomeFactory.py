@@ -135,9 +135,9 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 		#print(self.minValue,"++++",self.maxValue)
 		try:
 			if self.duplicates:
-				chromosome = random.choices(range(self.minValue,self.maxValue), k = self.noOfGenes)
+				chromosome = random.choices(range(self.minValue,self.maxValue+1), k = self.noOfGenes)
 			else:
-				chromosome = random.sample(range(self.minValue,self.maxValue), self.noOfGenes)
+				chromosome = random.sample(range(self.minValue,self.maxValue+1), self.noOfGenes)
 			return chromosome
 		except:
 			raise Exception('Unable to generated sample from given max %s min %s noOfGenes %s'%(self.minValue,self.maxValue,self.noOfGenes))

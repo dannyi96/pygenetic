@@ -386,7 +386,10 @@ class GAEngine:
 				mean_fitness = sum(fitnesses)/len(fitnesses)
 				average_square_deviation = math.sqrt(sum((fitness - mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
 				self.diversity = average_square_deviation
-				self.dynamic_mutation = self.mut_prob * ( 1 + ((self.best_fitness[1]-average_square_deviation) / (self.best_fitness[1]+average_square_deviation) ) )
+				print("AVG SQ DEV = ", average_square_deviation)
+				if average_square_deviation == 0:
+					average_square_deviation = random.uniform(0.01, 0.02)
+				self.dynamic_mutation = self.mut_prob * ( 1 + ((self.best_fitness[1]-average_square_deviation) / (average_square_deviation+self.best_fitness[1]) ) )
 				#print(mean_fitness)
 				#print(average_square_deviation)
 				print("Diversity = ",self.diversity)
@@ -450,93 +453,93 @@ class GAEngine:
 
 
 if __name__ == '__main__':
-	#factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
-	#ga = GAEngine(lambda x:sum(x),'MAX',factory,20)
-	#print(ga.fitness_func)
-	#print(ga.fitness_type)
-	#ga.calculateAllFitness()
-	import copy
-	factory = ChromosomeFactory.ChromosomeRangeFactory(8,0,8,data_type = int)
-	'''def fitness(board):
-		fitness = 0
-		for i in range(len(board)):
-			isSafe = True
-			for j in range(len(board)):
-				if i!=j:
-					if (board[i] == board[j]) or (abs(board[i] - board[j]) == abs(i-j)):
-						isSafe = False
-						break
-			if(isSafe==True):
-				fitness += 1
-		return fitness'''
+	# #factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
+	# #ga = GAEngine(lambda x:sum(x),'MAX',factory,20)
+	# #print(ga.fitness_func)
+	# #print(ga.fitness_type)
+	# #ga.calculateAllFitness()
+	# import copy
+	# factory = ChromosomeFactory.ChromosomeRangeFactory(8,0,8,data_type = int)
+	# '''def fitness(board):
+	# 	fitness = 0
+	# 	for i in range(len(board)):
+	# 		isSafe = True
+	# 		for j in range(len(board)):
+	# 			if i!=j:
+	# 				if (board[i] == board[j]) or (abs(board[i] - board[j]) == abs(i-j)):
+	# 					isSafe = False
+	# 					break
+	# 		if(isSafe==True):
+	# 			fitness += 1
+	# 	return fitness'''
 
-	def PMX1(chromosome1, chromosome2, lol, abc): # Partially Matched Crossover
-		size = min(len(chromosome1), len(chromosome2))
-		a = random.randint(1, size - 2)
-		b = random.randint(1, size - 1)
-		if b==a:
-			b+=1
-		elif b<a:
-			a,b=b,a
-		new_chromosome1 = chromosome1[:a]+chromosome2[a:b]+chromosome1[b:]
-		new_chromosome2 = chromosome2[:a]+chromosome1[a:b]+chromosome2[b:]
-		mapping1=chromosome2[a:b]
-		mapping2=chromosome1[a:b]
-		i = b
-		while(i!=a):
-			while new_chromosome1[i] in mapping1:
-				new_chromosome1[i] = mapping2[mapping1.index(new_chromosome1[i])]
-			while new_chromosome2[i] in mapping2:
-				new_chromosome2[i] = mapping1[mapping2.index(new_chromosome2[i])]
-			i = (i+1)%size
-		#print("lol = ",lol)
-		#print("abc = ",abc)
-		return new_chromosome1, new_chromosome2
+	# def PMX1(chromosome1, chromosome2, lol, abc): # Partially Matched Crossover
+	# 	size = min(len(chromosome1), len(chromosome2))
+	# 	a = random.randint(1, size - 2)
+	# 	b = random.randint(1, size - 1)
+	# 	if b==a:
+	# 		b+=1
+	# 	elif b<a:
+	# 		a,b=b,a
+	# 	new_chromosome1 = chromosome1[:a]+chromosome2[a:b]+chromosome1[b:]
+	# 	new_chromosome2 = chromosome2[:a]+chromosome1[a:b]+chromosome2[b:]
+	# 	mapping1=chromosome2[a:b]
+	# 	mapping2=chromosome1[a:b]
+	# 	i = b
+	# 	while(i!=a):
+	# 		while new_chromosome1[i] in mapping1:
+	# 			new_chromosome1[i] = mapping2[mapping1.index(new_chromosome1[i])]
+	# 		while new_chromosome2[i] in mapping2:
+	# 			new_chromosome2[i] = mapping1[mapping2.index(new_chromosome2[i])]
+	# 		i = (i+1)%size
+	# 	#print("lol = ",lol)
+	# 	#print("abc = ",abc)
+	# 	return new_chromosome1, new_chromosome2
 
-	def OX1(chromosome1, chromosome2, lol_ox): # Ordered Crossover
-		size = min(len(chromosome1), len(chromosome2))
-		a = random.randint(1, size - 2)
-		b = random.randint(1, size - 1)
-		if b==a:
-			b+=1
-		elif b<a:
-			a,b=b,a
-		new_chromosome1 = [None]*(a)+chromosome1[a:b]+[None]*(size-b)
-		new_chromosome2 = [None]*(a)+chromosome2[a:b]+[None]*(size-b)
-		i,j,k = b,b,b
-		while True:
-			if chromosome2[i] not in new_chromosome1:
-				new_chromosome1[j] = chromosome2[i]
-				j = (j+1)%size
-			if chromosome1[i] not in new_chromosome2:
-				new_chromosome2[k] = chromosome1[i]
-				k = (k+1)%size
-			i = (i+1)%size
-			if i==b or (j==a and k==a):
-				break
-		#print("lol_ox = ",lol_ox)
-		return new_chromosome1, new_chromosome2
+	# def OX1(chromosome1, chromosome2, lol_ox): # Ordered Crossover
+	# 	size = min(len(chromosome1), len(chromosome2))
+	# 	a = random.randint(1, size - 2)
+	# 	b = random.randint(1, size - 1)
+	# 	if b==a:
+	# 		b+=1
+	# 	elif b<a:
+	# 		a,b=b,a
+	# 	new_chromosome1 = [None]*(a)+chromosome1[a:b]+[None]*(size-b)
+	# 	new_chromosome2 = [None]*(a)+chromosome2[a:b]+[None]*(size-b)
+	# 	i,j,k = b,b,b
+	# 	while True:
+	# 		if chromosome2[i] not in new_chromosome1:
+	# 			new_chromosome1[j] = chromosome2[i]
+	# 			j = (j+1)%size
+	# 		if chromosome1[i] not in new_chromosome2:
+	# 			new_chromosome2[k] = chromosome1[i]
+	# 			k = (k+1)%size
+	# 		i = (i+1)%size
+	# 		if i==b or (j==a and k==a):
+	# 			break
+	# 	#print("lol_ox = ",lol_ox)
+	# 	return new_chromosome1, new_chromosome2
 
-	matrix = [[0,172,145,607,329,72,312,120],[172,0,192,494,209,158,216,92],[145,192,0,490,237,75,205,100],[607,494,490,0,286,545,296,489],[329,209,237,286,0,421,49,208],[72,158,75,545,421,0,249,75],[312,216,205,296,49,249,9,194],[120,92,100,489,208,75,194,0]]
-	# best sequence i found: 0 5 2 7 1 6 4 3
+	# matrix = [[0,172,145,607,329,72,312,120],[172,0,192,494,209,158,216,92],[145,192,0,490,237,75,205,100],[607,494,490,0,286,545,296,489],[329,209,237,286,0,421,49,208],[72,158,75,545,421,0,249,75],[312,216,205,296,49,249,9,194],[120,92,100,489,208,75,194,0]]
+	# # best sequence i found: 0 5 2 7 1 6 4 3
 
 
-	ga = GAEngine(factory,100,fitness_type='min',mut_prob = 0.4)
-	ga.addCrossoverHandler(PMX1, 9, [9,8,7], 'extra_lol')
+	# ga = GAEngine(factory,100,fitness_type='min',mut_prob = 0.4)
+	# ga.addCrossoverHandler(PMX1, 9, [9,8,7], 'extra_lol')
 
-	ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
-	ga.addCrossoverHandler(OX1, 3, (4,5,6,7))
-	ga.addMutationHandler(Utils.MutationHandlers.swap)
+	# ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
+	# ga.addCrossoverHandler(OX1, 3, (4,5,6,7))
+	# ga.addMutationHandler(Utils.MutationHandlers.swap)
 
-	ga.setSelectionHandler(Utils.SelectionHandlers.smallest)
-	ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
+	# ga.setSelectionHandler(Utils.SelectionHandlers.tournament, 3)
+	# ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
 
-	# factory = ChromosomeFactory.ChromosomeRangeFactory(data_type=int,noOfGenes=8,minValue=0,maxValue=20,duplicates=True)
-	# ga = GAEngine(factory=factory,population_size=40,cross_prob=0.4,efficient_iteration_halt = True,mut_prob=0.2,fitness_type='max',adaptive_mutation=True,use_pyspark=False)
-	# ga.addCrossoverHandler(Utils.CrossoverHandlers.twoPoint,1)
-	# ga.addMutationHandler(Utils.MutationHandlers.swap,1)
-	# ga.setSelectionHandler(Utils.SelectionHandlers.largest)
-	# ga.setFitnessHandler(Utils.Fitness.addition)
+	factory = ChromosomeFactory.ChromosomeRangeFactory(data_type=int,noOfGenes=8,minValue=0,maxValue=20,duplicates=True)
+	ga = GAEngine(factory=factory,population_size=40,cross_prob=0.4,efficient_iteration_halt = True,mut_prob=0.2,fitness_type='min',adaptive_mutation=True,use_pyspark=False)
+	ga.addCrossoverHandler(Utils.CrossoverHandlers.twoPoint,1)
+	ga.addMutationHandler(Utils.MutationHandlers.swap,1)
+	ga.setSelectionHandler(Utils.SelectionHandlers.SUS)
+	ga.setFitnessHandler(Utils.Fitness.addition)
 
 
 	ga.evolve(50)

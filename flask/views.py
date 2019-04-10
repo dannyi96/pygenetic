@@ -251,18 +251,7 @@ def ga_init():
 				custom_name = cleaned[cleaned.find("def ")+4:]
 				custom_name = custom_name[:custom_name.find("(")]
 				precode += cleaned + "\n"
-				if(unquote(payload["crossover-extra-data"+str(i)]).strip() != "#Enter data here" and payload["crossover-extra-data"+str(i)] != ''):
-					datas = unquote(payload["crossover-extra-data"+str(i)]).split('\r\n')
-					while(datas[-1].strip() == ''):
-						datas = datas[:len(datas)-1]
-					datas_string = ""
-					for x in datas:
-						precode += x +"\n"
-						datas_string += "," + x[:x.find("=")].strip()
-
-					code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"+str(i)]+datas_string+")\n"
-				else:
-					code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"+str(i)]+")\n"
+				code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"+str(i)]+")\n"
 			i+=1
 		else:
 			break
@@ -277,18 +266,7 @@ def ga_init():
 				custom_name = cleaned[cleaned.find("def ")+4:]
 				custom_name = custom_name[:custom_name.find("(")]
 				precode += cleaned + "\n"
-				if(unquote(payload["mutation-extra-data"+str(i)]).strip() != "#Enter data here" and payload["mutation-extra-data"+str(i)] != ''):
-					datas = unquote(payload["mutation-extra-data"+str(i)]).split('\r\n')
-					while(datas[-1].strip() == ''):
-						datas = datas[:len(datas)-1]
-					datas_string = ""
-					for x in datas:
-						precode += x +"\n"
-						datas_string += "," + x[:x.find("=")].strip()
-
-					code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"+str(i)]+datas_string+")\n"
-				else:
-					code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"+str(i)]+")\n"
+				code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"+str(i)]+")\n"
 			i+=1
 		else:
 			break

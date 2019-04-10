@@ -11,6 +11,7 @@ $(document).ready(function() {
     {
         var MAX_ITER = parseInt(document.getElementById('no-of-evolutions').value)
         console.log(generationNumber);
+        var best_fitness;
         if(generationNumber > MAX_ITER)
         {
             console.log('HERE');
@@ -26,12 +27,13 @@ $(document).ready(function() {
                     {
                         type: "POST",
                         url: '/ga_init',
-                        data: form.serialize(),
                         async: false,
+                        data: form.serialize(),
                         success: function(data) 
                         {
                             
                             var fitness_response = data['Best-Fitnesses'];
+                            best_fitness = fitness_response[0][1];
                             var str = `<div class='col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn' id='funcDeclWrapper'> 
                                         <div class='container-fluid'> 
                                             <div class='row'> 
@@ -105,8 +107,8 @@ $(document).ready(function() {
                             
                             $('#results').append(str); 
                             $('html, body').animate({scrollTop:$(document).height()}, 'fast');
-                        }
-                    });
+                    }
+                });
         }
         else
         {
@@ -115,12 +117,12 @@ $(document).ready(function() {
                     type: "GET",
                     async: false,
                     url: '/ga_evolve',
-                    data: form.serialize(),
                     success: function(data) 
                     {
                         
                         
                         var fitness_response = data['Best-Fitnesses'];
+                        best_fitness = fitness_response[0][1];
                         var str = `<div class='col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn' id='funcDeclWrapper'> 
                             <div class='container-fluid'> 
                                 <div class='row'> 
@@ -194,9 +196,19 @@ $(document).ready(function() {
                
                 $('#results').append(str); 
                 $('html, body').animate({scrollTop:$(document).height()}, 'fast');
-                
-                }
+            }
             });
+        }
+        if(document.getElementById('fitness-achieve-select').value == 'equal')
+        {
+            if(best_fitness == parseInt(document.getElementById('fitness-achive-value').value))
+            {
+                var date = new Date();
+                var timestamp = date.getTime();
+                document.getElementById('fitness_graph_image').src = '/plot_fitness_graph?lastmod='+ timestamp;
+                console.log('pewdiepie');
+                return;
+            }
         }
         //$("html, body").animate({ scrollTop: $(document).height() }, "slow");
         setTimeout(polling,0,event,form,generationNumber+1);
@@ -334,30 +346,6 @@ $(document).ready(function() {
                 </div>\
             </div>\
         </div>\
-        <div class="container-fluid" id="crossover-data'+crossover_func_cnt.toString()+'" style="display:none;">\
-        <div class="row" id="targetFuncDeclWrapperRow">\
-            <div class="col-xl-12 col-lg-12 col-md-12 col-12">\
-                <div class="container-fluid">\
-                    <div class="row">\
-                        <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
-                            <span class="monkeyPatchShiftToRight"> Extra data to be passed as arguments to crossover function [Note: Please add one variable per line. No comments allowed.]</span>\
-                        </div>\
-                    </div>\
-                    <div class="row" id="targetFuncDeclDivRow">\
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">\
-                            <div class="container-fluid repeatableTargetFuncDeclList">\
-                                <div class="row">\
-                                    <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
-                                        <textarea class="form-control" cols="1000" rows="5" name="crossover-extra-data'+crossover_func_cnt.toString()+'"></textarea>\
-                                    </div>\
-                                </div>\
-                            </div>\
-                        </div>\
-                    </div>\
-                </div>\
-            </div>\
-        </div>\
-    </div>\
     </div>\
         ');
     });
@@ -409,30 +397,6 @@ $(document).ready(function() {
                 </div>\
             </div>\
         </div>\
-        <div class="container-fluid" id="mutation-data'+mutation_func_cnt.toString()+'" style="display:none;">\
-        <div class="row" id="targetFuncDeclWrapperRow">\
-            <div class="col-xl-12 col-lg-12 col-md-12 col-12">\
-                <div class="container-fluid">\
-                    <div class="row">\
-                        <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
-                            <span class="monkeyPatchShiftToRight"> Extra data to be passed as arguments to mutation function [Note: Please add one variable per line. No comments allowed.]</span>\
-                        </div>\
-                    </div>\
-                    <div class="row" id="targetFuncDeclDivRow">\
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">\
-                            <div class="container-fluid repeatableTargetFuncDeclList">\
-                                <div class="row">\
-                                    <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
-                                        <textarea class="form-control" cols="1000" rows="5" name="mutation-extra-data'+mutation_func_cnt.toString()+'"></textarea>\
-                                    </div>\
-                                </div>\
-                            </div>\
-                        </div>\
-                    </div>\
-                </div>\
-            </div>\
-        </div>\
-    </div>\
     </div>\
         ');
     });
