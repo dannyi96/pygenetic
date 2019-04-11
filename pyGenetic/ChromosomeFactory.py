@@ -19,9 +19,8 @@ class ChromosomeFactory(ABC):
 
 	"""
 
-	def __init__(self,noOfGenes,data_type):
+	def __init__(self,noOfGenes):
 		self.noOfGenes = noOfGenes
-		self.data_type = data_type
 
 	@abstractmethod
 	def createChromosome(self):
@@ -59,7 +58,8 @@ class ChromosomeRegexFactory(ChromosomeFactory):
 		except re.error:
 			raise ValueError('Invalid regex given to Chromosome Regex Factory')
 
-		ChromosomeFactory.__init__(self,noOfGenes,data_type)
+		ChromosomeFactory.__init__(self,noOfGenes)
+		self.data_type = data_type
 		self.pattern = pattern
 		
 
@@ -117,7 +117,8 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 		if type(duplicates) != bool:
 			raise ValueError('Invalid duplicated value given')
 		
-		ChromosomeFactory.__init__(self,noOfGenes,data_type)
+		ChromosomeFactory.__init__(self,noOfGenes)
+		self.data_type = data_type
 		self.minValue = minValue
 		self.maxValue = maxValue
 		self.duplicates = duplicates
