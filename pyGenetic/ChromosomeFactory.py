@@ -19,8 +19,9 @@ class ChromosomeFactory(ABC):
 
 	"""
 
-	def __init__(self,noOfGenes):
+	def __init__(self,noOfGenes,data_type):
 		self.noOfGenes = noOfGenes
+		self.data_type = data_type
 
 	@abstractmethod
 	def createChromosome(self):
@@ -115,8 +116,7 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 
 		if type(duplicates) != bool:
 			raise ValueError('Invalid duplicated value given')
-
-
+		
 		ChromosomeFactory.__init__(self,noOfGenes,data_type)
 		self.minValue = minValue
 		self.maxValue = maxValue
