@@ -254,7 +254,9 @@ class GAEngine:
 		"""
 
 		self.fitness_dict = [(member, self.calculateFitness(member)) for member in self.population.members]
-			
+		if type(self.fitness_dict) is not dict:
+			raise ValueError("Fitness dictionary not created correctly")
+
 
 	def handle_selection(self):
 

@@ -5,21 +5,14 @@ sys.path.append('../pyGenetic/')
 sys.path.append('./pyGenetic/')
 sys.path.append('.')
 
-import GAEngine,Utils
+import GAEngine,Utils,ChromosomeFactory
 
 
-#@pytest.mark.parametrize([Utils.CrossoverHandlers.distinct, NOSUCHHANDLER])
+#Getters and Setters need not be tested
+#https://stackoverflow.com/questions/6197370/should-unit-tests-be-written-for-getter-and-setters
+'''
 def test_addCrossoverHandler():
-    #ga = GAEngine()
-    #ga.addCrossoverHandler(crossover_handler_param, 9)
-
-    #assert ga.crossover_handlers[0] in dir(Utils.CrossoverHandlers)
-
-    #if crossover_handler_param not in dir(Utils.CrossoverHandlers):
-    #    assert NotImplementedError
     pass
-
-
 
 def test_addMutationHandler():
     pass
@@ -35,16 +28,48 @@ def test_setSelectionHandler():
 
 def test_setFitnessHandler():
     pass
+'''
 
-def test_calculateFitness():
+@pytest.mark.parametrize("chromosome,expected_results", [
+([14,13,12,10,9,8,7,6,5,4,3,2,1],14),
+])
+def test_calculateFitness(chromosome,expected_results):
+    '''
+    factory = ChromosomeFactory.ChromosomeRangeFactory(data_type=int,noOfGenes=14,minValue=1,maxValue=15)
+    ga = GAEngine.GAEngine(factory,100,fitness_type=('equal',14),mut_prob = 0.3)
+
+    assert ga.calculateFitness(chromosome) in expected_results
+    '''
     pass
+    
+def fitness(board):
+		fitness = 0
+		for i in range(len(board)):
+			isSafe = True
+			for j in range(len(board)):
+				if i!=j:
+					if (board[i] == board[j]) or (abs(board[i] - board[j]) == abs(i-j)):
+						isSafe = False
+						break
+			if(isSafe==True):
+				fitness += 1
+		return fitness
+
+
 
 def test_generateFitnessDict():
-    pass
+    factory = ChromosomeFactory.ChromosomeRangeFactory(data_type=int,noOfGenes=14,minValue=1,maxValue=15)
+    ga = GAEngine.GAEngine(factory,100,fitness_type=('equal',14),mut_prob = 0.3)
+    ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
+    ga.addMutationHandler(Utils.MutationHandlers.swap)
+    ga.setSelectionHandler(Utils.SelectionHandlers.largest)
+    ga.setFitnessHandler(fitness)
 
-def test_handle_selection():
-    pass
 
+    with pytest.raises(ValueError):
+        ga.generateFitnessDict()
+
+    
 def test_normalizeWeights():
     pass
 
@@ -54,25 +79,5 @@ def test_chooseCrossoverHandler():
 def test_chooseMutationHandler():
     pass
 
-def test_setEvolution():
-    pass
-
 def test_evolve():
     pass
-
-
-if __name__ == '__main__':
-    test_addCrossoverHandler()
-    test_addMutationHandler()
-    test_setCrossoverProbability()
-    test_setMutationProbability()
-    test_setSelectionHandler()
-    test_setFitnessHandler()
-    test_calculateFitness()
-    test_generateFitnessDict()
-    test_handle_selection()
-    test_normalizeWeights()
-    test_chooseCrossoverHandler()
-    test_chooseMutationHandler()
-    test_setEvolution()
-    test_evolve()

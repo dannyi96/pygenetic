@@ -32,7 +32,7 @@ class Population:
 
 		for i in range(self.population_size):
 			self.members.append(factory.createChromosome())
-		print("First men = ",self.members)
+		#print("First men = ",self.members)
 
 if __name__ == '__main__':
 	print("Entered main in population")

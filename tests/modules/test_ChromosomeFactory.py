@@ -119,8 +119,7 @@ def test_errors_ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, da
 
 
 @pytest.mark.parametrize("noOfGenes, minVal, maxVal, duplicates, data_type", [
-( 3, 2 , 10 ,False,int),
-(3 ,-2, -7 ,False,int)
+( 3, 2 , 10 ,False,int)
 
 ])
 def test_functionality_ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type):

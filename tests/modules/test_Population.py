@@ -8,8 +8,7 @@ import Population
 
 
 def test_createMembers():
-    pass
+   pass
 
 
-if __name__ == '__main__':
-    test_createMembers()
+    
