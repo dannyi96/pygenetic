@@ -7,6 +7,24 @@ $(document).ready(function() {
     $("#run").attr("disabled", true);
     $("#download_code").attr("disabled", true);
 
+    function preventFormSubmition()
+    {
+        allValid = true;
+        var inputs = $(".validName");
+        for(var i = 0; i < inputs.length ; i++){
+            console.log($(inputs[i]).css("color"));
+            if( $(inputs[i]).val()=='' || $(inputs[i]).css("color") == 'red'){
+                allValid  = false;
+            }
+        }
+        console.log(allValid);
+        if(allValid){
+            $("#run").attr("disabled",false);
+            $("#download_code").attr("disabled", false);
+        }
+    }
+
+    
     function polling(event,form,generationNumber)
     {
         var MAX_ITER = parseInt(document.getElementById('no-of-evolutions').value)
@@ -796,21 +814,50 @@ $(document).ready(function() {
             $(this).css('color', 'black');
         }
     });
-
+    var wto;
     // Disabling / enabling submit
-    $(".validName").change(function(){
-
+    $("input, select").change(function(){
         allValid = true;
         var inputs = $(".validName");
+        var factory = $("#gene-generation").val();
+        console.log(factory);
+        if(factory == '1drange')
+        {
+            if($('#range-factory-min-value').val()=='' || $('#range-factory-min-value').css("color") == 'rgb(255, 0, 0)')
+                allValid = false
+            if($('#range-factory-max-value').val()=='' || $('#range-factory-max-value').css("color") == 'rgb(255, 0, 0)')
+                allValid = false
+        }
+        else if(factory == '1dregex')
+        {
+            console.log($('#regexInput').val());
+            if($('#regexInput').val()=='' || $('#regexInput').css("color") == 'rgb(255, 0, 0)')
+                allValid = false
+        }
+        var fitness_type = $('#fitness-achieve-select');
+        if( fitness_type.val() == 'equal')
+        {
+            if($('#fitness-achive-value').val()=='' || $('#regexInput').css("color") == 'rgb(255, 0, 0)')
+                allValid = false
+        }
+        console.log(allValid);
+
         for(var i = 0; i < inputs.length ; i++){
-            if($(inputs[i]).attr("isValidInput") == false){
+            console.log($(inputs[i]).css("color"));
+            if( $(inputs[i]).val()=='' || $(inputs[i]).css("color") == 'rgb(255, 0, 0)'){
                 allValid  = false;
+                console.log(inputs[i]);
             }
         }
-
+        console.log(allValid);
         if(allValid){
             $("#run").attr("disabled",false);
             $("#download_code").attr("disabled", false);
+        }
+        else
+        {
+            $("#run").attr("disabled",true);
+            $("#download_code").attr("disabled", true);
         }
 
     });
