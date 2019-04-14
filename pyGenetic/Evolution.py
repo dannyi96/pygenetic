@@ -137,19 +137,21 @@ class StandardEvolution(BaseEvolution):
 		# Fitness Value Mapping and making selection
 		mapped_chromosomes_rdd = chromosomes_rdd.map(lambda x: (x,ga.calculateFitness(x)))
 		#print(mapped_chromosomes_rdd.collect())
+
 		if type(ga.fitness_type) == str:
 			if ga.fitness_type == 'max':
 				selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
-			elif self.fitness_type == 'min':
+			elif ga.fitness_type == 'min':
 				selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
-		elif type(self.fitness_type) == tuple or type(self.fitness_type) == list:
-			if self.fitness_type[0] == 'equal':
-				selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: abs(x[1]-self.fitness_type[1]))
+		elif type(ga.fitness_type) == tuple or type(ga.fitness_type) == list:
+			if ga.fitness_type[0] == 'equal':
+				selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: abs(x[1]-ga.fitness_type[1]))
 		#selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
 		#print(selected_chromosomes)
 		ga.best_fitness = selected_chromosomes[0]
 		print('BEST', ga.best_fitness[1])
 		ga.population.new_members = [x[0] for x in selected_chromosomes]
+
 		#print(ga.population.new_members)
 		#exit()
 		n = math.ceil(ga.cross_prob * len(ga.population.members))
@@ -161,6 +163,8 @@ class StandardEvolution(BaseEvolution):
 		#print(total_fitness)
 		#print(type(total_fitness))
 		p = mapped_chromosomes_rdd.map(lambda x: (x[0],x[1]/total_fitness)).values().collect()
+		p = [random.uniform(0.01, 0.02) if prob<=0 else prob for prob in p]
+		p = [  prob/sum(p)   for prob in p] 
 		#print(p)
 		#print(type(p))
 		#print(sum(p))
@@ -204,9 +208,9 @@ class StandardEvolution(BaseEvolution):
 
 		#print('AFTER')
 		#print(ga.population.new_members)
-
 		ga.population.members = ga.population.new_members 
 		ga.population.new_members = []
+		ga.generateFitnessDict()
 
 	def evolve(self,ga):
 		"""
