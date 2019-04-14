@@ -8,6 +8,7 @@ import Evolution
 import Statistics
 import bisect
 import math
+import numpy
 
 class GAEngine:
 	"""This Class is the main driver program which contains and invokes the operators used in Genetic algorithm
@@ -387,11 +388,10 @@ class GAEngine:
 				average_square_deviation = math.sqrt(sum((fitness - mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
 				self.diversity = average_square_deviation
 				print("AVG SQ DEV = ", average_square_deviation)
-				if average_square_deviation == 0:
-					average_square_deviation = random.uniform(0.01, 0.02)
 				self.dynamic_mutation = self.mut_prob * ( 1 + ((self.best_fitness[1]-average_square_deviation) / (average_square_deviation+self.best_fitness[1]) ) )
 				#print(mean_fitness)
 				#print(average_square_deviation)
+				self.dynamic_mutation = np.clip(self.dynamic_mutation,0.001,0.8)
 				print("Diversity = ",self.diversity)
 				#print(ga.best_fitness)
 				print('Adaptive mutation value = ',self.dynamic_mutation)
