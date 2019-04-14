@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import random
 import math
 import numpy as np
+import Utils
 #import pyspark
 
 class BaseEvolution(ABC):
@@ -137,20 +138,24 @@ class StandardEvolution(BaseEvolution):
 		# Fitness Value Mapping and making selection
 		mapped_chromosomes_rdd = chromosomes_rdd.map(lambda x: (x,ga.calculateFitness(x)))
 		#print(mapped_chromosomes_rdd.collect())
-
-		if type(ga.fitness_type) == str:
-			if ga.fitness_type == 'max':
-				selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
-			elif ga.fitness_type == 'min':
-				selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
-		elif type(ga.fitness_type) == tuple or type(ga.fitness_type) == list:
-			if ga.fitness_type[0] == 'equal':
-				selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: abs(x[1]-ga.fitness_type[1]))
+		if ga.selection_handler == Utils.SelectionHandlers.best:
+			if type(ga.fitness_type) == str:
+				if ga.fitness_type == 'max':
+					selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
+				elif ga.fitness_type == 'min':
+					selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
+			elif type(ga.fitness_type) == tuple or type(ga.fitness_type) == list:
+				if ga.fitness_type[0] == 'equal':
+					selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: abs(x[1]-ga.fitness_type[1]))
+		else:
+			print('HERE MATE')
+			selected_chromosomes = ga.handle_selection()
 		#selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
-		#print(selected_chromosomes)
+		print('SELECTED CHROMOSOMES')
+		print(selected_chromosomes)
 		ga.best_fitness = selected_chromosomes[0]
 		print('BEST', ga.best_fitness[1])
-		ga.population.new_members = [x[0] for x in selected_chromosomes]
+		ga.population.new_members = selected_chromosomes
 
 		#print(ga.population.new_members)
 		#exit()
@@ -172,7 +177,7 @@ class StandardEvolution(BaseEvolution):
 		# Crossover Mapping
 		crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
 		#print("crossover_indices = ",crossover_indexes)
-		#crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
+		crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
 
 		crossover_pair_indexes = [(crossover_indexes[i],crossover_indexes[i+1]) for i in range(0,len(crossover_indexes),2)]
 		#print(crossover_indexes)
@@ -184,21 +189,22 @@ class StandardEvolution(BaseEvolution):
 		crossover_results = crossover_before.map(lambda x:(x,ga.chooseCrossoverHandler()(x[0],x[1])))#.flatmap
 		#print(crossover_results.collect())
 		result_test = crossover_results.flatMap(lambda x:x[1]).collect()
-		#print(result_test)
+		print('population after crossover',result_test)
 		#print(type(result_test))
 
 		ga.population.new_members.extend(result_test)
 
 		#print(len(ga.population.members))
 		#print(len(ga.population.new_members))
-		#print(ga.population.new_members)
+		print('now',ga.population.new_members)
 
 		# Mutation Handling
 		mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
-		#print(mutation_indexes)
+		print(mutation_indexes)
 		mutation_indexes_rdd = sc.parallelize(mutation_indexes)
+		print(ga.population.new_members)
 		mutation_results = mutation_indexes_rdd.map(lambda x:(x,ga.population.new_members[x]))
-		#print(mutation_results.collect())
+		print(mutation_results.collect())
 		mutation_results = mutation_results.map(lambda x:(x[0],x[1],ga.chooseMutationHandler()(list(x[1])))).collect()
 		#print(mutation_results)
 		#print('BEFORE')
