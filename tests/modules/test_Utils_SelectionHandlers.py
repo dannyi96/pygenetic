@@ -7,7 +7,7 @@ sys.path.append('.')
 import pytest
 import unittest.mock as mock
 import Utils , GAEngine , ChromosomeFactory
-
+from types import SimpleNamespace
 
 @pytest.mark.parametrize("pop, fitness_dict, expected_results", [
 ( [[1, 3, 4, 2], [3, 4, 1, 2]] , [([1, 3, 4, 2], 2), ([3, 4, 1, 2], 0)] ,  [1, 3, 4, 2])
