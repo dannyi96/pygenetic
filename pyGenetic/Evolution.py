@@ -165,12 +165,16 @@ class StandardEvolution(BaseEvolution):
 			ga.population.members.append(ga.population.members[0])
 
 		total_fitness = mapped_chromosomes_rdd.map(lambda x: (x[0],x[1]) if x[1] > 0 else (x[0],random.uniform(0.01, 0.02))).values().sum()
-		#print(total_fitness)
+		print(total_fitness)
+
 		#print(type(total_fitness))
 		p = mapped_chromosomes_rdd.map(lambda x: (x[0],x[1]/total_fitness)).values().collect()
 		#p = [random.uniform(0.01, 0.02) if prob<=0 else prob for prob in p]
 		#p = [  prob/sum(p)   for prob in p] 
-		#print(p)
+		print(sum(p))
+		p[random.randint(0,len(p)-1)] += (1-sum(p))
+		print(p)
+		print(sum(p))
 		#print(type(p))
 		#print(sum(p))
 
