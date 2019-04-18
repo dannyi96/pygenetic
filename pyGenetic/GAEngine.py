@@ -114,7 +114,6 @@ class GAEngine:
 		if adaptive_mutation == True:
 			self.dynamic_mutation = None
 			self.diversity = None
-		self.statistics = Statistics.Statistics()
 		self.evolution = Evolution.StandardEvolution(adaptive_mutation=adaptive_mutation,pyspark=use_pyspark)
 		self.population_control = population_control
 		self.hall_of_fame_injection = hall_of_fame_injection
@@ -363,7 +362,7 @@ class GAEngine:
 						default value : 50
 
 		"""
-
+		self.statistics = Statistics.Statistics()
 		self.normalizeWeights()
 		for i in range(noOfIterations):
 			if self.hall_of_fame_injection and (i+1)%20 == 0:
