@@ -25,8 +25,8 @@ fig = ga.statistics.plot_statistics(['best','worst','avg'])
 plt.show()
 fig = ga.statistics.plot_statistics(['diversity','mutation_rate'])
 plt.show()
-fig = ga.statistics.plot_statistics(['mutation_rate'])
-plt.show()
+#fig = ga.statistics.plot_statistics(['mutation_rate'])
+#plt.show()
 
 ga.continue_evolve(20)
 
