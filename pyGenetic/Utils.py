@@ -14,62 +14,36 @@ class SelectionHandlers:
 
 	"""
 
-
-
+	@staticmethod
+	def random(fitness_mappings, ga):
+		pop = [x[0] for x in fitness_mappings]
+		return [random.choice(pop) for i in range(len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings)))]
 
 	@staticmethod
-	def basic(pop,fitness_dict,ga):
-		"""
-		Performs selection operation by selecting the most fittest candidates 
-		The number of candidates selected depends on value of cross_prob(crossover probability)
-
-		Parameters :
-		-----------
-		pop : list
-				List containing population of candidates 
-
-		fitness_dict : dictionary
-				Contains dictionary of (chromosome : fitness value)
-
-		Returns :
-		---------
-		List of fittest individuals
-
-		"""
-
-		pop = sorted(pop,key=lambda x:fitness_dict[1])
-		return pop[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
-
-	@staticmethod
-	def random(pop, fitness_dict, ga):
-		return [random.choice(pop) for i in range(len(pop)-math.ceil(ga.cross_prob * len(pop)))]
-
-	@staticmethod
-	def smallest(pop, fitness_dict, ga):
-		new = sorted(fitness_dict, key=operator.itemgetter(1))[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
+	def smallest(fitness_mappings, ga):
+		new = sorted(fitness_mappings, key=operator.itemgetter(1))[:len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))]
 		return [i[0] for i in new]
 		
 	@staticmethod
-	def largest(pop, fitness_dict, ga):
-		new = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
+	def largest(fitness_mappings, ga):
+		new = sorted(fitness_mappings, key=operator.itemgetter(1), reverse=True)[:len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))]
 		return [i[0] for i in new]
 
 	@staticmethod
-	def best(pop, fitness_dict, ga):
+	def best(fitness_mappings, ga):
 		if ga.fitness_type == 'max':
-			new = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
+			new = sorted(fitness_mappings, key=operator.itemgetter(1), reverse=True)[:len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))]
 		elif ga.fitness_type == 'min':
-			new = sorted(fitness_dict, key=operator.itemgetter(1))[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
+			new = sorted(fitness_mappings, key=operator.itemgetter(1))[:len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))]
 		elif ga.fitness_type[0] == 'equal':
-			new_dict = [(x[0],abs(x[1]-ga.fitness_type[1])) for x in fitness_dict]
-			new = sorted(new_dict, key=operator.itemgetter(1))[:len(pop)-math.ceil(ga.cross_prob * len(pop))]
+			new = sorted(fitness_mappings, key=lambda x:abs(x[1]-ga.fitness_type[1]))[:len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))]
 		return [i[0] for i in new]
 		
 	@staticmethod
-	def tournament(pop, fitness_dict, ga, tournsize):
+	def tournament(fitness_mappings, ga, tournsize):
 		chosen = []
-		for i in range(len(pop)-math.ceil(ga.cross_prob * len(pop))):
-			aspirants = random.sample(fitness_dict, tournsize)
+		for i in range(len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))):
+			aspirants = random.sample(fitness_mappings, tournsize)
 			if ga.fitness_type == 'max':
 				chosen.append(max(aspirants, key=operator.itemgetter(1)))
 			elif ga.fitness_type == 'min':
@@ -81,8 +55,8 @@ class SelectionHandlers:
 		return [i[0] for i in chosen]
 		
 	@staticmethod
-	def roulette(pop, fitness_dict, ga):
-		fitness = [i[1] for i in fitness_dict]
+	def roulette(fitness_mappings, ga):
+		fitness = [i[1] for i in fitness_mappings]
 		if ga.selection_handler == SelectionHandlers.roulette:
 			if ga.fitness_type == 'max':
 				pass
@@ -97,7 +71,8 @@ class SelectionHandlers:
 		relative_fitness = [f/total_fit for f in fitness]
 		probabilities = [sum(relative_fitness[:i+1]) for i in range(len(relative_fitness))]
 		chosen = []
-		for n in range(len(pop)-math.ceil(ga.cross_prob * len(pop))):
+		pop = [x[1] for x in fitness_mappings]
+		for n in range(len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))):
 			r = random.random()
 			for (i, individual) in enumerate(pop):
 				if r <= probabilities[i]:
@@ -106,40 +81,40 @@ class SelectionHandlers:
 		return chosen
 
 	@staticmethod
-	def rank(pop, fitness_dict, ga):
+	def rank(fitness_mappings, ga):
 		if ga.fitness_type == 'max':
-			new = [i[0] for i in sorted(fitness_dict, key=operator.itemgetter(1))]
+			new = [i[0] for i in sorted(fitness_mappings, key=operator.itemgetter(1))]
 		elif ga.fitness_type == 'min':
-			new = [i[0] for i in sorted(fitness_dict, key=operator.itemgetter(1), reverse = True)]
+			new = [i[0] for i in sorted(fitness_mappings, key=operator.itemgetter(1), reverse = True)]
 		elif ga.fitness_type[0] == 'equal':
-			new_dict = [(x[0],abs(x[1]-ga.fitness_type[1])) for x in fitness_dict]
+			new_dict = [(x[0],abs(x[1]-ga.fitness_type[1])) for x in fitness_mappings]
 			new = [i[0] for i in sorted(new_dict, key=operator.itemgetter(1), reverse = True)]
 		for i in range(len(new)):
 			new[i]=(new[i],i+1)
-		return SelectionHandlers.roulette(pop, new, ga)
+		return SelectionHandlers.roulette(new, ga)
 
 	@staticmethod
-	def SUS(pop, fitness_dict, ga):
+	def SUS(fitness_mappings, ga):
 
 		if ga.fitness_type == 'max':
-			s_inds = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)
+			s_inds = sorted(fitness_mappings, key=operator.itemgetter(1), reverse=True)
 		elif ga.fitness_type == 'min':
-			s_inds = fitness_dict
+			s_inds = fitness_mappings
 			maxim = (max(s_inds, key = operator.itemgetter(1)))[1]
 			for x in range(len(s_inds)):
 				s_inds[x] = (s_inds[x][0],maxim - s_inds[x][1])
-			s_inds = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)
+			s_inds = sorted(fitness_mappings, key=operator.itemgetter(1), reverse=True)
 		elif ga.fitness_type[0] == 'equal':
-			s_inds = fitness_dict
+			s_inds = fitness_mappings
 			for x in range(len(s_inds)):
 				s_inds[x] = (s_inds[x][0],abs(s_inds[x][1] - ga.fitness_type[1]))
 			maxim = (max(s_inds, key = operator.itemgetter(1)))[1]
 			for x in range(len(s_inds)):
 				s_inds[x] = (s_inds[x][0],maxim - s_inds[x][1])
-			s_inds = sorted(fitness_dict, key=operator.itemgetter(1), reverse=True)
-		distance = sum([i[1] for i in fitness_dict]) / float(ga.population.population_size)
+			s_inds = sorted(fitness_mappings, key=operator.itemgetter(1), reverse=True)
+		distance = sum([i[1] for i in fitness_mappings]) / float(ga.population.population_size)
 		start = random.uniform(0, distance)
-		points = [start + i*distance for i in range(len(pop)-math.ceil(ga.cross_prob * len(pop)))]
+		points = [start + i*distance for i in range(len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings)))]
 		chosen = []
 		for p in points:
 			i = 0

@@ -92,7 +92,7 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 
 	"""
 
-	def __init__(self,noOfGenes,minValue,maxValue,duplicates=False,data_type=int):
+	def __init__(self,noOfGenes,minValue,maxValue,duplicates=False):
 		"""
 		Parameters :
 		-----------
@@ -108,9 +108,6 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 		if noOfGenes <= 0 :
 			raise ValueError('No of genes cannot be negative')
 
-		if data_type != int:
-			raise ValueError('Invalid data type for range factory genes')
-
 		if minValue > maxValue:
 			raise ValueError('minValue cannot be greater than maxValue')
 
@@ -118,7 +115,6 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 			raise ValueError('Invalid duplicated value given')
 		
 		ChromosomeFactory.__init__(self,noOfGenes)
-		self.data_type = data_type
 		self.minValue = minValue
 		self.maxValue = maxValue
 		self.duplicates = duplicates
@@ -132,7 +128,6 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 		chromosome : List of genes representing each chromosome
 
 		"""
-		#print(self.minValue,"++++",self.maxValue)
 		try:
 			if self.duplicates:
 				chromosome = random.choices(range(self.minValue,self.maxValue+1), k = self.noOfGenes)
@@ -140,14 +135,5 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 				chromosome = random.sample(range(self.minValue,self.maxValue+1), self.noOfGenes)
 			return chromosome
 		except:
-			raise Exception('Unable to generated sample from given max %s min %s noOfGenes %s'%(self.minValue,self.maxValue,self.noOfGenes))
+			raise Exception('Unable to generated chromosome from given max %s min %s noOfGenes %s'%(self.minValue,self.maxValue,self.noOfGenes))
 
-
-if __name__ == '__main__':
-	print("Entered main in chromosome factory")
-	#factory1 = ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1|7')
-	#print(factory1.createChromosome())
-	#factory2 = ChromosomeRangeFactory(int,8,3,11)
-	#print(factory2.createChromosome())
-	factory = ChromosomeRegexFactory(noOfGenes=3,pattern='a|B|c',data_type=str)
-	print(factory.createChromosome())

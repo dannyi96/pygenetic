@@ -13,9 +13,6 @@ class Statistics:
 
 
 	def __init__(self):
-		self.max_fitnesses = []
-		self.iterations = []
-		self.iterationNumber = 1
 		self.statistic_dict = {'best':[],'worst':[],'avg':[],'diversity':[],'mutation_rate':[]}
 
 	def add_statistic(self,statistic,value):
@@ -32,9 +29,6 @@ class Statistics:
 		else:
 			raise Exception('Invalid Statistic')
 
-		#self.max_fitnesses.append(max_fitness)
-		#print("max fitnesses list = ",self.max_fitnesses)
-		#print("iteration number   = ",self.iterations)
 
 	def plot(self):
 		"""
@@ -44,20 +38,20 @@ class Statistics:
 		fig,ax = plt.subplots()
 		for statistic in self.statistic_dict:
 			print(statistic,self.statistic_dict[statistic])
-			ax.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
-		#fig.legend(loc='upper left')
+			ax.plot(range(1,len(self.statistic_dict[statistic])+1),self.statistic_dict[statistic],label=statistic)
+		fig.legend(loc='upper left')
 		return fig
 
 	def plot_statistics(self,statistics):
 		fig,ax = plt.subplots()
 		for statistic in statistics:
 			print(statistic,self.statistic_dict[statistic])
-			ax.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
-		#fig.legend(loc='upper left')
+			ax.plot(range(1,len(self.statistic_dict[statistic])+1),self.statistic_dict[statistic],label=statistic)
+		fig.legend(loc='upper left')
 		return fig
 
 	def plot_statistic(self,statistic):
 		fig,ax = plt.subplots()
 		ax.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
-		#fig.legend(loc='upper left')
+		fig.legend(loc='upper left')
 		return fig

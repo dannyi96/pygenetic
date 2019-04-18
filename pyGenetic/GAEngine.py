@@ -1,14 +1,11 @@
 import Population
-import ChromosomeFactory
 import random
-import numpy as np
 import collections
-import Utils
 import Evolution
 import Statistics
 import bisect
 import math
-import numpy
+import numpy as np
 
 class GAEngine:
 	"""This Class is the main driver program which contains and invokes the operators used in Genetic algorithm
@@ -90,10 +87,9 @@ class GAEngine:
   	"""
 
 
-	def __init__(self,factory,population_size=100,cross_prob=0.8,mut_prob=0.1,fitness_type='max',adaptive_mutation=True, population_control=False,hall_of_fame_injection=True,efficient_iteration_halt=True,use_pyspark=False):
+	def __init__(self,factory,population_size=100,cross_prob=0.7,mut_prob=0.1,fitness_type='max',adaptive_mutation=True, population_control=False,hall_of_fame_injection=True,efficient_iteration_halt=True,use_pyspark=False):
 		self.fitness_func = None
 		self.factory = factory
-		self.population = Population.Population(factory,population_size)
 		self.cross_prob = cross_prob
 		self.mut_prob = mut_prob
 		self.adaptive_mutation = adaptive_mutation
@@ -103,18 +99,22 @@ class GAEngine:
 		self.mutation_handlers_weights = []
 		self.selection_handler = None
 		self.fitness_type = fitness_type
+		self.fitness_mappings = None
+		self.population = None
+		self.population_size = population_size
 		if type(self.fitness_type) == str:
 			if self.fitness_type == 'max':
 				self.best_fitness = None, float("-inf")
 			elif self.fitness_type == 'min':
 				self.best_fitness = None, float("inf")
+			else:
+				raise Exception('Invalid Fitness Type given to GAEngine')
 		elif type(self.fitness_type) == tuple or type(self.fitness_type) == list:
 			if self.fitness_type[0] == 'equal':
 				self.best_fitness = None, float("inf")
-		if adaptive_mutation == True:
-			self.dynamic_mutation = None
-			self.diversity = None
-		self.evolution = Evolution.StandardEvolution(adaptive_mutation=adaptive_mutation,pyspark=use_pyspark)
+		else:
+			raise Exception('Invalid Fitness Type given to GAEngine')
+		self.evolution = Evolution.StandardEvolution(pyspark=use_pyspark)
 		self.population_control = population_control
 		self.hall_of_fame_injection = hall_of_fame_injection
 		self.efficient_iteration_halt = efficient_iteration_halt
@@ -174,30 +174,6 @@ class GAEngine:
 			xtra_args.append(arg)
 		self.mutation_external_data.update({mutation_handler:tuple(xtra_args)})
 
-
-	def setCrossoverProbability(self,cross_prob):
-		"""
-		Sets crossover probability value
-
-		Parameters :
-		-----------
-		cross_prob : float
-
-		"""
-
-		self.cross_prob = cross_prob
-
-	def setMutationProbability(self,mut_prob):
-		"""
-		Sets mutation probability instance variable
-
-		Parameters:
-		----------
-		Mutation probability
-
-		"""
-		self.mut_prob = mut_prob
-
 	def doCrossover(self, cross_func, member1, member2):
 		if cross_func in self.crossover_external_data:
 			return cross_func(member1, member2, *(self.crossover_external_data[cross_func]))
@@ -246,15 +222,41 @@ class GAEngine:
 		else:
 			return self.fitness_func(chromosome)
 
-	def generateFitnessDict(self):
+	def generateFitnessMappings(self):
 		"""
 		Generates a  dictionary of (individual, fitness_score) and also stores the dictionary
 		containing fittest chromosome depending on fitness_type(max/min/equal)
 
 		"""
 
-		self.fitness_dict = [(member, self.calculateFitness(member)) for member in self.population.members]
+		self.fitness_mappings = [(member, self.calculateFitness(member)) for member in self.population.members]
+		if type(self.fitness_type) == str:
+			if self.fitness_type == 'max':
+				self.fitness_mappings.sort(key=lambda x:x[1],reverse=True)
+				self.best_fitness = self.fitness_mappings[0]
+				if self.hall_of_fame:
+					if self.best_fitness[1] > self.hall_of_fame[1]:
+						self.hall_of_fame = self.best_fitness
+				else:
+					self.hall_of_fame = self.best_fitness
 
+			elif self.fitness_type == 'min':
+				self.fitness_mappings.sort(key=lambda x:x[1])
+				self.best_fitness = self.fitness_mappings[0]
+				if self.hall_of_fame:
+					if self.best_fitness[1] < self.hall_of_fame[1]:
+						self.hall_of_fame = self.best_fitness
+				else:
+					self.hall_of_fame = self.best_fitness
+
+		elif type(self.fitness_type) == tuple or type(self.fitness_type) == list:
+			self.fitness_mappings.sort(key=lambda x:abs(x[1]-self.fitness_type[1]))
+			self.best_fitness = self.fitness_mappings[0]
+			if self.hall_of_fame:
+				if abs(self.fitness_type[1] - self.best_fitness[1]) < abs(self.fitness_type[1] - self.hall_of_fame[1]):
+					self.hall_of_fame = self.best_fitness
+			else:
+				self.hall_of_fame = self.best_fitness
 
 	def handle_selection(self):
 
@@ -267,36 +269,11 @@ class GAEngine:
 		List of  fittest members of population
 
 		"""
-		self.generateFitnessDict()
-		if self.fitness_type == 'max':
-			self.fitness_dict.sort(key=lambda x:x[1],reverse=True)
-			self.best_fitness = self.fitness_dict[0]
-			if self.hall_of_fame:
-				if self.best_fitness[1] > self.hall_of_fame[1]:
-					self.hall_of_fame = self.best_fitness
-			else:
-				self.hall_of_fame = self.best_fitness
-		elif self.fitness_type == 'min':
-			self.fitness_dict.sort(key=lambda x:x[1])
-			self.best_fitness = self.fitness_dict[0]
-			if self.hall_of_fame:
-				if self.best_fitness[1] < self.hall_of_fame[1]:
-					self.hall_of_fame = self.best_fitness
-			else:
-				self.hall_of_fame = self.best_fitness
-		elif self.fitness_type[0] == 'equal':
-			self.fitness_dict.sort(key=lambda x:abs(x[1]-self.fitness_type[1]))
-			self.best_fitness = self.fitness_dict[0]
-			if self.hall_of_fame:
-				if abs(self.fitness_type[1] - self.best_fitness[1]) < abs(self.fitness_type[1] - self.hall_of_fame[1]):
-					self.hall_of_fame = self.best_fitness
-			else:
-				self.hall_of_fame = self.best_fitness
-
+		self.generateFitnessMappings()
 		if self.selection_external_data:
-			return self.selection_handler(self.population.members,self.fitness_dict,self, *(self.selection_external_data))
+			return self.selection_handler(self.fitness_mappings,self, *(self.selection_external_data))
 		else:
-			return self.selection_handler(self.population.members,self.fitness_dict,self)
+			return self.selection_handler(self.fitness_mappings,self)
 
 	def normalizeWeights(self):
 		"""
@@ -362,14 +339,42 @@ class GAEngine:
 						default value : 50
 
 		"""
+		self.population = Population.Population(self.factory,self.population_size)
 		self.statistics = Statistics.Statistics()
+		self.continue_evolve(noOfIterations)
+		
+	def continue_evolve(self, noOfIterations=20):
 		self.normalizeWeights()
+		if self.population == None:
+			raise Exception('Call evolve before calling continue_evolve')
 		for i in range(noOfIterations):
-			if self.hall_of_fame_injection and (i+1)%20 == 0:
-				print('hi1',len(self.population.members))
-				self.population.members.append(self.hall_of_fame[0])
-				print('hi2',len(self.population.members))
+			self.generateFitnessMappings()
+			fitnesses = [ x[1] for x in self.fitness_mappings]
+			self.statistics.add_statistic('best',self.fitness_mappings[0][1])
+			self.statistics.add_statistic('worst',self.fitness_mappings[-1][1])
+			self.mean_fitness = sum(fitnesses)/len(fitnesses)
+			self.statistics.add_statistic('avg',self.mean_fitness)
+			if self.adaptive_mutation:
+				self.diversity = math.sqrt(sum((fitness - self.mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
+				self.dynamic_mutation = self.mut_prob * ( 1 + ((self.best_fitness[1]-self.diversity) / (self.diversity+self.best_fitness[1]) ) )
+				self.dynamic_mutation = np.clip(self.dynamic_mutation,0.0001,0.8)
+				print("Diversity = ",self.diversity)
+				print('Dynamic mutation value = ',self.dynamic_mutation)
+				self.statistics.add_statistic('mutation_rate',self.dynamic_mutation)
+				self.statistics.add_statistic('diversity',self.diversity)
+
 			result = self.evolution.evolve(self)
+
+			if self.hall_of_fame_injection and (i+1)%20 == 0:
+				print('Hall of fame chromosome ',self.hall_of_fame[0] , ' injected to population')
+				self.population.new_members = [self.hall_of_fame[0]] + self.population.new_members
+
+			if self.population_control:
+				if len(self.population.new_members) > self.population_size:
+					self.population.new_members = self.population.new_members[:self.population_size]
+				elif len(self.population.new_members) < self.population_size:
+					self.population.new_members = self.population.new_members * int(self.population_size/len(self.population.new_members)) + self.population.new_members[:self.population_size%len(self.population.new_members)]
+				print('Population Control has taken place')
 
 			if self.efficient_iteration_halt:
 				if len(self.last_20_fitnesses)==20:
@@ -380,165 +385,14 @@ class GAEngine:
 				else:
 					self.last_20_fitnesses.append(self.best_fitness[1])
 
-			fitnesses = [x[1] for x in self.fitness_dict]
+			# For next iteration
+			self.population.members = self.population.new_members
+			self.population.new_members = []
 
-			if self.adaptive_mutation == True:
-				mean_fitness = sum(fitnesses)/len(fitnesses)
-				average_square_deviation = math.sqrt(sum((fitness - mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
-				self.diversity = average_square_deviation
-				print("AVG SQ DEV = ", average_square_deviation)
-				self.dynamic_mutation = self.mut_prob * ( 1 + ((self.best_fitness[1]-average_square_deviation) / (average_square_deviation+self.best_fitness[1]) ) )
-				#print(mean_fitness)
-				#print(average_square_deviation)
-				self.dynamic_mutation = np.clip(self.dynamic_mutation,0.001,0.8)
-				print("Diversity = ",self.diversity)
-				#print(ga.best_fitness)
-				print('Adaptive mutation value = ',self.dynamic_mutation)
-
-			if self.population_control:
-				if len(self.population.members) > self.population.population_size:
-					self.population.members = self.population.members[:self.population.population_size]
-				elif len(self.population.members) < self.population.population_size:
-					self.population.members = self.population.members * int(len(self.population.population_size)/len(self.population.members)) + self.population.members[:len(self.population.population_size)%len(self.population.members)]
-				print(self.population.population_size)
-				print('hi',len(self.population.members))
-			print(self.population.population_size)
-			print('hi',len(self.population.members))
-			self.statistics.add_statistic('best',self.fitness_dict[0][1])
-			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
-			#print('Fitness Dict', self.fitness_dict)
-			self.statistics.add_statistic('avg',sum(fitnesses)/len(fitnesses))
-			if self.adaptive_mutation:
-				self.statistics.add_statistic('mutation_rate',self.dynamic_mutation)
-				self.statistics.add_statistic('diversity',self.diversity)
 			if result == 1:
-				print('SOLVED')
+				print('GA Problem Solved')
 				break
 		print("Best fitness in this generation = ", self.best_fitness)
 		print("Best among all generations = ", self.hall_of_fame)
-		print(self.fitness_dict[:10])
-		
+		print("Top fittest chromosomes of this generation: ", self.fitness_mappings[:10])
 
-	def continue_evolve(self, noOfIterations=20):
-		self.normalizeWeights()
-		for i in range(noOfIterations):
-			if self.hall_of_fame_injection and (i+1)%20 == 0:
-				self.population.members.append(self.hall_of_fame[0])
-			result = self.evolution.evolve(self)
-			if self.population_control:
-				if len(self.population.members) > self.population.population_size:
-					self.population.members = self.population.members[:self.population.population_size]
-				elif len(self.population.members) < self.population.population_size:
-					self.population.members = self.population.members * int(len(self.population.population_size)/len(self.population.members)) + self.population.members[:len(self.population.population_size)%len(self.population.members)]
-
-			self.statistics.add_statistic('best',self.fitness_dict[0][1])
-			self.statistics.add_statistic('worst',self.fitness_dict[-1][1])
-			#print('Fitness Dict', self.fitness_dict)
-			fitnesses = [x[1] for x in self.fitness_dict]
-			self.statistics.add_statistic('avg',sum(fitnesses)/len(fitnesses))
-			if self.adaptive_mutation:
-				self.statistics.add_statistic('mutation_rate',self.dynamic_mutation)
-				self.statistics.add_statistic('diversity',self.diversity)
-			if result == 1:
-				print('SOLVED')
-				break
-			elif self.efficient_iteration_halt and result == -1:
-				print('SATURATED')
-				break
-		#self.statistics.plot_statistics(['max','min','avg'])
-		#if self.adaptive_mutation:
-		#	self.statistics.plot_statistics(['diversity'])
-		#	self.statistics.plot_statistics(['mutation_rate'])
-
-
-if __name__ == '__main__':
-	# #factory = ChromosomeFactory.ChromosomeRegexFactory(int,noOfGenes=4,pattern='0|1')
-	# #ga = GAEngine(lambda x:sum(x),'MAX',factory,20)
-	# #print(ga.fitness_func)
-	# #print(ga.fitness_type)
-	# #ga.calculateAllFitness()
-	# import copy
-	# factory = ChromosomeFactory.ChromosomeRangeFactory(8,0,8,data_type = int)
-	# '''def fitness(board):
-	# 	fitness = 0
-	# 	for i in range(len(board)):
-	# 		isSafe = True
-	# 		for j in range(len(board)):
-	# 			if i!=j:
-	# 				if (board[i] == board[j]) or (abs(board[i] - board[j]) == abs(i-j)):
-	# 					isSafe = False
-	# 					break
-	# 		if(isSafe==True):
-	# 			fitness += 1
-	# 	return fitness'''
-
-	# def PMX1(chromosome1, chromosome2, lol, abc): # Partially Matched Crossover
-	# 	size = min(len(chromosome1), len(chromosome2))
-	# 	a = random.randint(1, size - 2)
-	# 	b = random.randint(1, size - 1)
-	# 	if b==a:
-	# 		b+=1
-	# 	elif b<a:
-	# 		a,b=b,a
-	# 	new_chromosome1 = chromosome1[:a]+chromosome2[a:b]+chromosome1[b:]
-	# 	new_chromosome2 = chromosome2[:a]+chromosome1[a:b]+chromosome2[b:]
-	# 	mapping1=chromosome2[a:b]
-	# 	mapping2=chromosome1[a:b]
-	# 	i = b
-	# 	while(i!=a):
-	# 		while new_chromosome1[i] in mapping1:
-	# 			new_chromosome1[i] = mapping2[mapping1.index(new_chromosome1[i])]
-	# 		while new_chromosome2[i] in mapping2:
-	# 			new_chromosome2[i] = mapping1[mapping2.index(new_chromosome2[i])]
-	# 		i = (i+1)%size
-	# 	#print("lol = ",lol)
-	# 	#print("abc = ",abc)
-	# 	return new_chromosome1, new_chromosome2
-
-	# def OX1(chromosome1, chromosome2, lol_ox): # Ordered Crossover
-	# 	size = min(len(chromosome1), len(chromosome2))
-	# 	a = random.randint(1, size - 2)
-	# 	b = random.randint(1, size - 1)
-	# 	if b==a:
-	# 		b+=1
-	# 	elif b<a:
-	# 		a,b=b,a
-	# 	new_chromosome1 = [None]*(a)+chromosome1[a:b]+[None]*(size-b)
-	# 	new_chromosome2 = [None]*(a)+chromosome2[a:b]+[None]*(size-b)
-	# 	i,j,k = b,b,b
-	# 	while True:
-	# 		if chromosome2[i] not in new_chromosome1:
-	# 			new_chromosome1[j] = chromosome2[i]
-	# 			j = (j+1)%size
-	# 		if chromosome1[i] not in new_chromosome2:
-	# 			new_chromosome2[k] = chromosome1[i]
-	# 			k = (k+1)%size
-	# 		i = (i+1)%size
-	# 		if i==b or (j==a and k==a):
-	# 			break
-	# 	#print("lol_ox = ",lol_ox)
-	# 	return new_chromosome1, new_chromosome2
-
-	# matrix = [[0,172,145,607,329,72,312,120],[172,0,192,494,209,158,216,92],[145,192,0,490,237,75,205,100],[607,494,490,0,286,545,296,489],[329,209,237,286,0,421,49,208],[72,158,75,545,421,0,249,75],[312,216,205,296,49,249,9,194],[120,92,100,489,208,75,194,0]]
-	# # best sequence i found: 0 5 2 7 1 6 4 3
-
-
-	# ga = GAEngine(factory,100,fitness_type='min',mut_prob = 0.4)
-	# ga.addCrossoverHandler(PMX1, 9, [9,8,7], 'extra_lol')
-
-	# ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
-	# ga.addCrossoverHandler(OX1, 3, (4,5,6,7))
-	# ga.addMutationHandler(Utils.MutationHandlers.swap)
-
-	# ga.setSelectionHandler(Utils.SelectionHandlers.tournament, 3)
-	# ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
-
-	factory = ChromosomeFactory.ChromosomeRangeFactory(data_type=int,noOfGenes=8,minValue=0,maxValue=20,duplicates=True)
-	ga = GAEngine(factory=factory,population_size=40,cross_prob=0.4,efficient_iteration_halt = True,mut_prob=0.2,fitness_type='min',adaptive_mutation=True,use_pyspark=False)
-	ga.addCrossoverHandler(Utils.CrossoverHandlers.twoPoint,1)
-	ga.addMutationHandler(Utils.MutationHandlers.swap,1)
-	ga.setSelectionHandler(Utils.SelectionHandlers.SUS)
-	ga.setFitnessHandler(Utils.Fitness.addition)
-
-
-	ga.evolve(50)

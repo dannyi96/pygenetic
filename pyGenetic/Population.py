@@ -1,5 +1,3 @@
-import ChromosomeFactory
-
 class Population:
 	"""
 	Class contians info on population of candidate solutions
@@ -32,10 +30,4 @@ class Population:
 
 		for i in range(self.population_size):
 			self.members.append(factory.createChromosome())
-		#print("First men = ",self.members)
 
-if __name__ == '__main__':
-	print("Entered main in population")
-	factory = ChromosomeFactory.ChromosomeFactory(int,noOfGenes=4,pattern='0|1')
-	pop = Population(factory)
-	print(pop.members)
