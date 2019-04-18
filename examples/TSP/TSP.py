@@ -21,7 +21,7 @@ ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
 	# ga.setSelectionHandler(Utils.SelectionHandlers.basic)
 	# Provide max iteration here ???
 ga.evolve(100)
-fig = ga.statistics.plot_statistics(['best','worst','avg'])
+fig = ga.statistics.plot_statistics(['best-fitness','worst-fitness','avg-fitness'])
 plt.show()
 fig = ga.statistics.plot_statistics(['diversity','mutation_rate'])
 plt.show()
@@ -30,7 +30,7 @@ plt.show()
 
 ga.continue_evolve(20)
 
-fig = ga.statistics.plot_statistics(['best','worst','avg'])
+fig = ga.statistics.plot_statistics(['best-fitness','worst-fitness','avg-fitness'])
 plt.show()
 fig = ga.statistics.plot_statistics(['diversity','mutation_rate'])
 plt.show()

@@ -350,10 +350,10 @@ class GAEngine:
 		for i in range(noOfIterations):
 			self.generateFitnessMappings()
 			fitnesses = [ x[1] for x in self.fitness_mappings]
-			self.statistics.add_statistic('best',self.fitness_mappings[0][1])
-			self.statistics.add_statistic('worst',self.fitness_mappings[-1][1])
+			self.statistics.add_statistic('best-fitness',self.fitness_mappings[0][1])
+			self.statistics.add_statistic('worst-fitness',self.fitness_mappings[-1][1])
 			self.mean_fitness = sum(fitnesses)/len(fitnesses)
-			self.statistics.add_statistic('avg',self.mean_fitness)
+			self.statistics.add_statistic('avg-fitness',self.mean_fitness)
 			if self.adaptive_mutation:
 				self.diversity = math.sqrt(sum((fitness - self.mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
 				self.dynamic_mutation = self.mut_prob * ( 1 + ((self.best_fitness[1]-self.diversity) / (self.diversity+self.best_fitness[1]) ) )
