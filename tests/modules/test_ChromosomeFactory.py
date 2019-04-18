@@ -86,45 +86,40 @@ if __name__ == '__main__':
     test_ChromosomeRangeFactory()
 '''
 
-@pytest.mark.parametrize("noOfGenes, minVal, maxVal, duplicates, data_type", [
-( 1, 2 , 100 ,False,int),
-(-1 ,3 ,100,False, int),
-(2, 0, -9 ,False, int),
-(2, 0, 9 , int , int),
-(3, 0 , 9, True, list)
+@pytest.mark.parametrize("noOfGenes, minVal, maxVal, duplicates", [
+( 1, 2 , 100 ,False),
+(-1 ,3 ,100,False),
+(2, 0, -9 ,False),
+(2, 0, 9 , int),
+(3, 0 , 9, True)
 ])
-def test_errors_ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type):
+def test_errors_ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates):
     # Test case 7: Test for exception when no of genes less than or equal to 0
     if noOfGenes<=0:
         with pytest.raises(ValueError):
-            factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type)
+            factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates)
         return
-
-    # Test case 8: Test for exception when invalid data type is given
-    if data_type != int:
-        with pytest.raises(ValueError):
-            factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type)
-            
-    # Test case 9: Test for exception when invalid range is given
+         
+    # Test case 8: Test for exception when invalid range is given
     if minVal > maxVal:    
         with pytest.raises(ValueError):
-            factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type)
+            factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates)
         return
 
-    # Test case 10: Test errors for invalid duplicates type
+    # Test case 9: Test errors for invalid duplicates type
     if type(duplicates) != bool:
         with pytest.raises(ValueError):
-            factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type)
+            factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates)
         return
 
 
-@pytest.mark.parametrize("noOfGenes, minVal, maxVal, duplicates, data_type", [
-( 3, 2 , 10 ,False,int)
+@pytest.mark.parametrize("noOfGenes, minVal, maxVal, duplicates", [
+( 3, 2 , 10 ,False)
 
 ])
-def test_functionality_ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type):
+def test_functionality_ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates):
     
-    factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates, data_type)
+    factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes, minVal, maxVal, duplicates)
     chromosome = factory.createChromosome()
     
     # Test case 11: Check if correct no of genes are produced
