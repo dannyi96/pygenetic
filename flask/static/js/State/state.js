@@ -4,12 +4,38 @@ $(document).ready(function() {
     var crossover_func_cnt = 0
     var mutation_func_cnt = 0
     var $form = $('#main_form')
+    $("#run").attr("disabled", true);
+    $("#download_code").attr("disabled", true);
+
+    function preventFormSubmition()
+    {
+        allValid = true;
+        var inputs = $(".validName");
+        for(var i = 0; i < inputs.length ; i++){
+            console.log($(inputs[i]).css("color"));
+            if( $(inputs[i]).val()=='' || $(inputs[i]).css("color") == 'red'){
+                allValid  = false;
+            }
+        }
+        console.log(allValid);
+        if(allValid){
+            $("#run").attr("disabled",false);
+            $("#download_code").attr("disabled", false);
+        }
+    }
+
+    
     function polling(event,form,generationNumber)
     {
         var MAX_ITER = parseInt(document.getElementById('no-of-evolutions').value)
         console.log(generationNumber);
+        var best_fitness;
         if(generationNumber > MAX_ITER)
         {
+            console.log('HERE');
+            var date = new Date();
+            var timestamp = date.getTime();
+            document.getElementById('fitness_graph_image').src = '/plot_fitness_graph?lastmod='+ timestamp;
             return;
         }
         else if(generationNumber == 1)
@@ -19,12 +45,13 @@ $(document).ready(function() {
                     {
                         type: "POST",
                         url: '/ga_init',
-                        data: form.serialize(),
                         async: false,
+                        data: form.serialize(),
                         success: function(data) 
                         {
                             
                             var fitness_response = data['Best-Fitnesses'];
+                            best_fitness = fitness_response[0][1];
                             var str = `<div class='col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn' id='funcDeclWrapper'> 
                                         <div class='container-fluid'> 
                                             <div class='row'> 
@@ -97,9 +124,9 @@ $(document).ready(function() {
                                     </div>`;
                             
                             $('#results').append(str); 
-                
-                        }
-                    });
+                            $('html, body').animate({scrollTop:$(document).height()}, 'fast');
+                    }
+                });
         }
         else
         {
@@ -108,12 +135,12 @@ $(document).ready(function() {
                     type: "GET",
                     async: false,
                     url: '/ga_evolve',
-                    data: form.serialize(),
                     success: function(data) 
                     {
                         
                         
                         var fitness_response = data['Best-Fitnesses'];
+                        best_fitness = fitness_response[0][1];
                         var str = `<div class='col-xl-12 col-lg-12 col-md-12 col-12 noPadColumn' id='funcDeclWrapper'> 
                             <div class='container-fluid'> 
                                 <div class='row'> 
@@ -186,9 +213,20 @@ $(document).ready(function() {
                         </div>`;
                
                 $('#results').append(str); 
-                
-                }
+                $('html, body').animate({scrollTop:$(document).height()}, 'fast');
+            }
             });
+        }
+        if(document.getElementById('fitness-achieve-select').value == 'equal')
+        {
+            if(best_fitness == parseInt(document.getElementById('fitness-achive-value').value))
+            {
+                var date = new Date();
+                var timestamp = date.getTime();
+                document.getElementById('fitness_graph_image').src = '/plot_fitness_graph?lastmod='+ timestamp;
+                console.log('pewdiepie');
+                return;
+            }
         }
         //$("html, body").animate({ scrollTop: $(document).height() }, "slow");
         setTimeout(polling,0,event,form,generationNumber+1);
@@ -294,7 +332,7 @@ $(document).ready(function() {
             </div>\
         </div>\
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
-            <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="top" data-content="Invalid Name" id="fitness-achive-value" name="crossover-weight'+crossover_func_cnt.toString()+'">\
+            <input type="text" class="form-control validName funcName crossoverWeight" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="top" data-content="Invalid Name" id="fitness-achive-value" name="crossover-weight'+crossover_func_cnt.toString()+'">\
         </div>\
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
             <div class="input-group-append">\
@@ -326,30 +364,6 @@ $(document).ready(function() {
                 </div>\
             </div>\
         </div>\
-        <div class="container-fluid" id="crossover-data'+crossover_func_cnt.toString()+'" style="display:none;">\
-        <div class="row" id="targetFuncDeclWrapperRow">\
-            <div class="col-xl-12 col-lg-12 col-md-12 col-12">\
-                <div class="container-fluid">\
-                    <div class="row">\
-                        <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
-                            <span class="monkeyPatchShiftToRight"> Extra data to be passed as arguments to crossover function [Note: Please add one variable per line. No comments allowed.]</span>\
-                        </div>\
-                    </div>\
-                    <div class="row" id="targetFuncDeclDivRow">\
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">\
-                            <div class="container-fluid repeatableTargetFuncDeclList">\
-                                <div class="row">\
-                                    <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
-                                        <textarea class="form-control" cols="1000" rows="5" name="crossover-extra-data'+crossover_func_cnt.toString()+'"></textarea>\
-                                    </div>\
-                                </div>\
-                            </div>\
-                        </div>\
-                    </div>\
-                </div>\
-            </div>\
-        </div>\
-    </div>\
     </div>\
         ');
     });
@@ -369,7 +383,7 @@ $(document).ready(function() {
             </div>\
         </div>\
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
-            <input type="text" class="form-control validName funcName" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="top" data-content="Invalid Name" id="fitness-achive-value" name="mutation-weight'+mutation_func_cnt.toString()+'">\
+            <input type="text" class="form-control validName funcName mutationWeight" placeholder="Weight" aria-label="Function Name" aria-describedby="basic-addon4" tabindex="0" data-toggle="popover" data-trigger="manual" data-placement="top" data-content="Invalid Name" id="fitness-achive-value" name="mutation-weight'+mutation_func_cnt.toString()+'">\
         </div>\
         <div class="col-xl-2 col-lg-2 col-md-2 col-2">\
             <div class="input-group-append">\
@@ -401,30 +415,6 @@ $(document).ready(function() {
                 </div>\
             </div>\
         </div>\
-        <div class="container-fluid" id="mutation-data'+mutation_func_cnt.toString()+'" style="display:none;">\
-        <div class="row" id="targetFuncDeclWrapperRow">\
-            <div class="col-xl-12 col-lg-12 col-md-12 col-12">\
-                <div class="container-fluid">\
-                    <div class="row">\
-                        <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
-                            <span class="monkeyPatchShiftToRight"> Extra data to be passed as arguments to mutation function [Note: Please add one variable per line. No comments allowed.]</span>\
-                        </div>\
-                    </div>\
-                    <div class="row" id="targetFuncDeclDivRow">\
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">\
-                            <div class="container-fluid repeatableTargetFuncDeclList">\
-                                <div class="row">\
-                                    <div class="col-xl-8 col-lg-8 col-md-8 col-8">\
-                                        <textarea class="form-control" cols="1000" rows="5" name="mutation-extra-data'+mutation_func_cnt.toString()+'"></textarea>\
-                                    </div>\
-                                </div>\
-                            </div>\
-                        </div>\
-                    </div>\
-                </div>\
-            </div>\
-        </div>\
-    </div>\
     </div>\
         ');
     });
@@ -726,34 +716,86 @@ $(document).ready(function() {
 
     // END : Code Download Functionality (includes form submission without forms per se)
     
-    // START : State name validation
+    // START : State input validation
+    /*
     function matchExact(r, str) {
        var match = str.match(r);
        return match != null && str == match[0];
     }
+    */
+
+    function isPositiveNumber(inputValue){
+        if(!(isNaN(inputValue))){
+            return (inputValue > 0);
+        }
+        
+        else{return false;}
+    }
+    
+
     $(".entireStateWrapper").on("focus",".validName", function(event) {
         $(this).popover("hide");
     });
 
     $(".entireStateWrapper").on("input",".validName", function(event) {
-        // data-toggle="tooltip" data-placement="left" title="Tooltip on top"
         var res;
         
-        res = matchExact(/[A-Za-z_]+[A-Za-z0-9_]*/g,$(this).val()); //basically it's a valid variable in a language like C++
-        
-        if($(this).hasClass("retTypeName") || $(this).hasClass("paramType"))
-        {
-            res = matchExact(/([A-Za-z_]+[A-Za-z0-9_]*)[\&\*]*/g,$(this).val()); //basically it's a valid variable in a language like C++
+        if($(this).hasClass("noOfGenes") || $(this).hasClass("rangeFactoryInput") || 
+            $(this).hasClass("fitnessValue") || $(this).hasClass("crossoverWeight") || $(this).hasClass("mutationWeight") ||
+            $(this).hasClass("noOfEvolutions"))
+            {
+             res = isPositiveNumber($(this).val());
         }
+
+        
+        if($(this).hasClass("rangeFactoryMinInput") || $(this).hasClass("rangeFactoryMaxInput")){
+            if(!(isNaN($(this).val()))){
+                res = true;
+            }
+            else{
+                res = false;
+            }
+        }
+
+        /*
+        if($(this).hasClass("regexInput")){
+
+            var regex = new RegExp([0-9]);
+            var charRegex = new  RegExp([a-zA-Z])
+            if(($(this).val()).test(regex) || ($(this).val()).test(charRegex)){
+                res = true;
+            }
+            else{res = false;}
+        }
+        */
+
+        if($(this).hasClass("populationSize")){
+            if(!(isNaN($(this).val())) && $(this).val() >= 5){
+                res = true;
+            }
+            else{res = false;}
+
+        }
+        
+        if($(this).hasClass("crossoverRate") || $(this).hasClass("mutationRate")){
+            if(!(isNaN($(this).val())) && !(isNaN($(this).val())) && $(this).val() > 0 && $(this).val() < 1){
+                res = true;
+            }
+            else{res = false;}
+        }
+
+
 
         if(res==false){
             console.log("here");
             $(this).attr("isValidInput",false);
             $(this).css('color', 'red');
+            
         }
         else{
             $(this).attr("isValidInput",true);
             $(this).css('color', 'green');
+          
         }
     });
 
@@ -771,6 +813,53 @@ $(document).ready(function() {
         if($(this).attr("isValidInput") == "true"){
             $(this).css('color', 'black');
         }
+    });
+    var wto;
+    // Disabling / enabling submit
+    $("input, select").change(function(){
+        allValid = true;
+        var inputs = $(".validName");
+        var factory = $("#gene-generation").val();
+        console.log(factory);
+        if(factory == '1drange')
+        {
+            if($('#range-factory-min-value').val()=='' || $('#range-factory-min-value').css("color") == 'rgb(255, 0, 0)')
+                allValid = false
+            if($('#range-factory-max-value').val()=='' || $('#range-factory-max-value').css("color") == 'rgb(255, 0, 0)')
+                allValid = false
+        }
+        else if(factory == '1dregex')
+        {
+            console.log($('#regexInput').val());
+            if($('#regexInput').val()=='' || $('#regexInput').css("color") == 'rgb(255, 0, 0)')
+                allValid = false
+        }
+        var fitness_type = $('#fitness-achieve-select');
+        if( fitness_type.val() == 'equal')
+        {
+            if($('#fitness-achive-value').val()=='' || $('#regexInput').css("color") == 'rgb(255, 0, 0)')
+                allValid = false
+        }
+        console.log(allValid);
+
+        for(var i = 0; i < inputs.length ; i++){
+            console.log($(inputs[i]).css("color"));
+            if( $(inputs[i]).val()=='' || $(inputs[i]).css("color") == 'rgb(255, 0, 0)'){
+                allValid  = false;
+                console.log(inputs[i]);
+            }
+        }
+        console.log(allValid);
+        if(allValid){
+            $("#run").attr("disabled",false);
+            $("#download_code").attr("disabled", false);
+        }
+        else
+        {
+            $("#run").attr("disabled",true);
+            $("#download_code").attr("disabled", true);
+        }
+
     });
     // END : State name validation
 

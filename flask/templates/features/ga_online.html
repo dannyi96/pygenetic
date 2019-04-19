@@ -23,142 +23,6 @@
             document.getElementById('regex').style.display = 'none';               
         }
     }
-    
-    function validateNoOfGenes(){
-
-        var noOfGenes = document.getElementById('no-of-genes').value;
-        if(isNaN(noOfGenes)){
-            document.getElementById('no-of-genes').style.color = 'red';
-        }
-
-        else{
-            if(noOfGenes <= 0){
-                 document.getElementById('no-of-genes').style.color = 'red';
-            }
-            else{
-                document.getElementById('no-of-genes').style.color = 'green';
-            }
-        }
-
-    }
-
-    function validatePopulationSize(){
-        var popsize = document.getElementById('population-size').value;
-
-        if(isNaN(popsize)){
-            document.getElementById('population-size').style.color = 'red';
-        }
-        else{
-            if(popsize <= 0){
-                 document.getElementById('population-size').style.color = 'red';
-            }
-            else{
-                document.getElementById('population-size').style.color = 'green';
-            }
-        }
-    }
-
-    function validateCrossoverRate(){
-        var crossoverRate = document.getElementById('crossover-rate').value;
-
-        if(isNaN(crossoverRate)){
-            document.getElementById('crossover-rate').style.color = 'red';
-        }
-        else{
-            if(crossoverRate < 0 ){
-                document.getElementById('crossover-rate').style.color = 'red';
-            }
-            else{
-                document.getElementById('crossover-rate').style.color = 'green';
-            }
-        }
-
-    }
-
-    function validateMutationRate(){
-        var mutationRate = document.getElementById('mutation-rate').value;
-
-        if(isNaN(mutationRate)){
-            document.getElementById('mutation-rate').style.color = 'red';
-        }
-        else{
-            if(mutationRate < 0 ){
-                document.getElementById('mutation-rate').style.color = 'red';
-            }
-            else{
-                document.getElementById('mutation-rate').style.color = 'green';
-            }
-        }
-
-    }
-
-    function validateCrossoverWeight(){
-        var crossoverWeight = document.getElementById('crossover-weight').value;
-
-        if(isNaN(crossoverWeight)){
-            document.getElementById('crossover-weight').style.color = 'red';
-        }
-        else{
-            if(crossoverWeight <=0 ){
-                document.getElementById('crossover-weight').style.color = 'red';
-            }
-            else{
-                document.getElementById('crossover-weight').style.color = 'green';
-            }
-        }
-
-    }
-
-    function validateMutationWeight(){
-        var mutationWeight = document.getElementById('mutation-weight').value;
-
-        if(isNaN(mutationWeight)){
-            document.getElementById('mutation-weight').style.color = 'red';
-        }
-        else{
-            if(mutationWeight <=0 ){
-                document.getElementById('mutation-weight').style.color = 'red';
-            }
-            else{
-                document.getElementById('mutation-weight').style.color = 'green';
-            }
-        }
-
-    }
-
-    function validateRangeFactoryInput(){
-        var minval = document.getElementById('range-factory-min-value').value;
-        var maxval = document.getElementById('range-factory-max-value').value;
-
-        if(isNaN(minval) || isNaN(maxval) || minval > maxval){
-                
-            document.getElementById('range-factory-min-value').style.color = 'red';
-            document.getElementById('range-factory-max-value').style.color = 'red';
-        }
-        else {
-            document.getElementById('range-factory-min-value').style.color = 'green';
-            document.getElementById('range-factory-max-value').style.color = 'green';
-            
-        }
-
-
-    }
-
-    function validateNoOfEvolutions(){
-        var noOfEvolutions = document.getElementById('no-of-evolutions').value;
-
-        if(isNaN(noOfEvolutions)){
-            document.getElementById('no-of-evolutions').style.color = 'red';
-        }
-        else{
-            if(noOfEvolutions <=0 ){
-                document.getElementById('no-of-evolutions').style.color = 'red';
-            }
-            else{
-                document.getElementById('no-of-evolutions').style.color = 'green';
-            }
-        }
-}
 
     function placeFitnessTextArea()
     {
@@ -181,22 +45,18 @@
         var option = calling_id.value;
         var num = (calling_id.id).slice(16,)
         var code_id = 'crossover-code'
-        var data_id = 'crossover-data'
         if (!isNaN(parseInt(num)))
         {
             code_id = 'crossover-code'+num.toString()
-            data_id = 'crossover-data'+num.toString()
         }
         if(option=="custom")
         {
             document.getElementById(code_id).style.display = '';
-            document.getElementById(data_id).style.display = '';
             
         }
         else
         {
             document.getElementById(code_id).style.display = 'none';
-            document.getElementById(data_id).style.display = 'none';
         }
     }
 
@@ -205,38 +65,45 @@
         var option = calling_id.value;
         var num = (calling_id.id).slice(15,)
         var code_id = 'mutation-code'
-        var data_id = 'mutation-data'
         if (!isNaN(parseInt(num)))
         {
             code_id = 'mutation-code'+num.toString()
-            data_id = 'mutation-data'+num.toString()
         }
         if(option=="custom")
         {
             document.getElementById(code_id).style.display = '';
-            document.getElementById(data_id).style.display = '';
             
         }
         else
         {
             document.getElementById(code_id).style.display = 'none';
-            document.getElementById(data_id).style.display = 'none';
         }
     }
 
     function placeSelectionTextArea()
     {
         var option = document.getElementById('selection-select').value;
-        if(option=="custom")
+        if(option=="tournament")
+        {
+            document.getElementById('selection-code').style.display = 'none';
+            document.getElementById('selection-data').style.display = 'none';
+            document.getElementById('tourn-head').style.display = '';
+            document.getElementById('tourn-size').style.display = '';
+        }
+        else if(option=="custom")
         {
             document.getElementById('selection-code').style.display = '';
             document.getElementById('selection-data').style.display = '';
+            document.getElementById('tourn-head').style.display = 'none';
+            document.getElementById('tourn-size').style.display = 'none';
             
         }
         else
         {
             document.getElementById('selection-code').style.display = 'none';
             document.getElementById('selection-data').style.display = 'none';
+            document.getElementById('tourn-head').style.display = 'none';
+            document.getElementById('tourn-size').style.display = 'none';
         }
     }
 
@@ -297,7 +164,7 @@
                                             </div>
 
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="No of genes" id = "no-of-genes" onfocusout = "validateNoOfGenes()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="no-of-genes">
+                                                <input type="text" class="form-control validName noOfGenes" placeholder="No of genes" id = "no-of-genes"  aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="no-of-genes">
                                             </div>
                                         </div>
                                     </div>
@@ -306,9 +173,6 @@
                         </div>
                         <div class="container-fluid" id="range" style="display:none;">
                             <div class="row">
-                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Data Type </span>
-                                </div>
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                     <span class="monkeyPatchShiftToRight"> Min Value </span>
                                 </div>
@@ -323,22 +187,16 @@
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
-                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control" name="1drange-datatype">
-                                                    <option value="int"> Integer </option>
-                                                    <option value="char"> Character </option>
-                                                </select>
-                                            </div>
 
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" id = "range-factory-min-value" onfocusout="validateRangeFactoryInput()" placeholder="Min Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1drange-min">
+                                                <input type="text" class="form-control rangeFactoryMinInput" id = "range-factory-min-value"  placeholder="Min Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1drange-min">
                                             </div>
                                             
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" id = "range-factory-max-value"   onfocusout="validateRangeFactoryInput()" placeholder="Max Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1drange-max">
+                                                <input type="text" class="form-control rangeFactoryMaxInput" id = "range-factory-max-value"   placeholder="Max Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1drange-max">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control" name="1drange-duplicate">
+                                                <select class="form-control" name="1drange-duplicate" id="1drange-duplicate">
                                                     <option value="yes"> Yes </option>
                                                     <option value="no"> No </option>
                                                 </select>
@@ -348,7 +206,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="container-fluid" id="regex" style="display:none;">
+                        <div class="container-fluid" id="regex">
                             <div class="row">
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                     <span class="monkeyPatchShiftToRight"> Regex </span>
@@ -362,12 +220,12 @@
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Regex" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1dregex-regex">
+                                                <input type="text" class="form-control regexInput" id="regexInput" placeholder="Regex" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1dregex-regex">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <select class="form-control" name="1dregex-datatype">
-                                                    <option value="int"> Integer </option>
-                                                    <option value="char"> Character </option>
+                                                    <option value="int" class = "integerRegex"> Integer </option>
+                                                    <option value="char" class = "characterRegex"> Character </option>
                                                 </select>
                                             </div>
                                         </div>
@@ -512,13 +370,13 @@
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Population size" id = "population-size" onfocusout="validatePopulationSize()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="population-size">
+                                                <input type="text" class="form-control validName populationSize" placeholder="Population size" id = "population-size" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="population-size">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Crossover Rate" id = "crossover-rate" onfocusout = "validateCrossoverRate()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="crossover-rate">
+                                                <input type="text" class="form-control validName crossoverRate" placeholder="Crossover Rate" id = "crossover-rate" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="crossover-rate">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Mutation Rate" id = "mutation-rate" onfocusout = "validateMutationRate()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="mutation-rate">
+                                                <input type="text" class="form-control validName mutationRate" placeholder="Mutation Rate" id = "mutation-rate" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="mutation-rate">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <select class="form-control" id="fitness-achieve-select" onchange="placeAchieveTag()" name="fitness-type">
@@ -528,7 +386,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Fitness value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" style="display:none;" name="fitness-equal">
+                                                <input type="text" class="form-control fitnessValue" placeholder="Fitness value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" style="display:none;" name="fitness-equal">
                                             </div>
                                         </div>
                                     </div>
@@ -584,7 +442,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Weight" id = "crossover-weight" onfocusout = "validateCrossoverWeight()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="crossover-weight0">
+                                                <input type="text" class="form-control validName crossoverWeight" placeholder="Weight" id = "crossover-weight"  aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="crossover-weight0">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group-append">
@@ -607,30 +465,6 @@
                                                                         <div class="row">
                                                                             <div class="col-xl-8 col-lg-8 col-md-8 col-8">
                                                                                 <textarea class="form-control" cols="1000" rows="5" name="custom-crossover0">#Enter crossover func here</textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="container-fluid" id="crossover-data" style="display:none;">
-                                                <div class="row" id="targetFuncDeclWrapperRow">
-                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
-                                                        <div class="container-fluid">
-                                                            <div class="row">
-                                                                <div class="col-xl-8 col-lg-8 col-md-8 col-8">
-                                                                    <span class="monkeyPatchShiftToRight"> Extra data to be passed as arguments to crossover function [Note: Please add one variable per line. No comments allowed.]</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row" id="targetFuncDeclDivRow">
-                                                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
-                                                                    <div class="container-fluid repeatableTargetFuncDeclList">
-                                                                        <div class="row">
-                                                                            <div class="col-xl-8 col-lg-8 col-md-8 col-8">
-                                                                                <textarea class="form-control" cols="1000" rows="5" name="crossover-extra-data0"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -691,7 +525,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <input type="text" class="form-control validName funcName" placeholder="Weight" id = "mutation-weight" onfocusout = "validateMutationWeight()" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="mutation-weight0">
+                                                <input type="text" class="form-control validName mutationWeight" placeholder="Weight" id = "mutation-weight"  aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' id="fitness-achive-value" name="mutation-weight0">
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group-append">
@@ -714,30 +548,6 @@
                                                                         <div class="row">
                                                                             <div class="col-xl-8 col-lg-8 col-md-8 col-8">
                                                                                 <textarea class="form-control" cols="1000" rows="5" name="custom-mutation0">#Enter mutation func here</textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="container-fluid" id="mutation-data" style="display:none;">
-                                                <div class="row" id="targetFuncDeclWrapperRow">
-                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-12">
-                                                        <div class="container-fluid">
-                                                            <div class="row">
-                                                                <div class="col-xl-8 col-lg-8 col-md-8 col-8">
-                                                                    <span class="monkeyPatchShiftToRight"> Extra data to be passed as arguments to mutation function [Note: Please add one variable per line. No comments allowed.]</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row" id="targetFuncDeclDivRow">
-                                                                <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
-                                                                    <div class="container-fluid repeatableTargetFuncDeclList">
-                                                                        <div class="row">
-                                                                            <div class="col-xl-8 col-lg-8 col-md-8 col-8">
-                                                                                <textarea class="form-control" cols="1000" rows="5" name="mutation-extra-data0"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -780,6 +590,9 @@
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                     <span class="monkeyPatchShiftToRight"> Selection Type </span>
                                 </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight" id="tourn-head" style="display:none;"> Tournament Size </span>
+                                </div>
                             </div>
                             <div class="row" id="targetFuncDeclDivRow">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
@@ -799,6 +612,9 @@
                                                         <option value="custom"> Custom </option>
                                                     </select>
                                                 </div>
+                                            </div>
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2" id = "tourn-size" style="display:none;">
+                                                <input type="text" class="form-control validName tournsize" placeholder="tournsize" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' name="tournament-size">
                                             </div>
                                         </div>
                                     </div>
@@ -894,7 +710,7 @@
                                         <div class="row">
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <div class="input-group repeatableStateListGroup">
-                                                    <input type="text" class="form-control validName funcName" onfocusout = "validateNoOfEvolutions()" placeholder="Number of evolutions" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="no-of-evolutions" id="no-of-evolutions">
+                                                    <input type="text" class="form-control validName noOfEvolutions" placeholder="Number of evolutions" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="no-of-evolutions" id="no-of-evolutions">
                                                 </div>
                                             </div>
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
@@ -934,6 +750,7 @@
     <div id="results">
 
     </div>
+    <img id="fitness_graph_image">
     <iframe id="hidden_iframe" style="display:none;"></iframe>
     
     <!-- Upload Buttons JS -->

@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 import random
 import math
+import Utils
 import numpy as np
-#import pyspark
 
 class BaseEvolution(ABC):
 	"""
@@ -48,8 +48,7 @@ class StandardEvolution(BaseEvolution):
 	pyspark : boolean to indicated if parallelization should be supported by using pyspark
 
 	"""
-	def __init__(self,adaptive_mutation=True,pyspark=False):
-		self.adaptive_mutation = adaptive_mutation
+	def __init__(self,pyspark=False):
 		self.pyspark = pyspark
 
 	def __evolve_normal(self,ga):
@@ -78,37 +77,31 @@ class StandardEvolution(BaseEvolution):
 
 		# get (1-r) * cross_prob new members
 		ga.population.new_members = ga.handle_selection()
-		print("Best member = ",ga.best_fitness[0])
-		print("Best fitness = ",ga.best_fitness[1])
+		print("Members left after selection = ",len(ga.population.members))
+		print("Best member after selection = ",ga.best_fitness[0])
+		print("Best fitness after selection = ",ga.best_fitness[1])
 		if ga.fitness_type[0] == 'equal':
 			if ga.best_fitness[1] == ga.fitness_type[1]:
 				return 1
-		if len(ga.last_20_fitnesses)==20:
-			ga.last_20_fitnesses.popleft()
-			ga.last_20_fitnesses.append(ga.best_fitness[1])
-			if all(x == ga.last_20_fitnesses[0] for x in ga.last_20_fitnesses):
-				return -1
-		else:
-			ga.last_20_fitnesses.append(ga.best_fitness[1])
 
 		fitnesses = []
-		total = 0 #This is not being used
-		for chromosome in ga.population.members:
-			fitness = ga.calculateFitness(chromosome)
+		total_fitness = 0
+		for chromosome in ga.fitness_mappings:
+			fitness = chromosome[1]
 			if fitness == 0:
 				fitness = random.uniform(0.01, 0.02)
-			total += fitness
+			total_fitness += fitness
 			fitnesses.append(fitness)
 
-		p = [ elem/sum(fitnesses) for elem in fitnesses]
-		#print("p = ",p)
+		p = [ elem/total_fitness for elem in fitnesses]
+
 		n = math.ceil(ga.cross_prob * len(p))
 		if n %2 == 1:
 			n -= 1
-			ga.population.members.append(ga.population.members[0])
+			ga.population.new_members.append(ga.population.members[random.randint(0,len(p)-1)])
 
 		crossover_indexes = np.random.choice(len(p),n,p=p, replace=False)
-		#print("crossover_indices = ",crossover_indexes)
+		print("crossover_indices = ",crossover_indexes)
 
 		crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
 
@@ -117,27 +110,16 @@ class StandardEvolution(BaseEvolution):
 			crossoverHandler = ga.chooseCrossoverHandler()
 			child1, child2 = ga.doCrossover(crossoverHandler,father,mother)
 			ga.population.new_members.extend([child1,child2])
-		#print("adaptive_mutation value passed = ",self.adaptive_mutation)
 
-		if self.adaptive_mutation == True:
-			mean_fitness = sum(fitnesses)/len(fitnesses)
-			average_square_deviation = math.sqrt(sum((fitness - mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
-			ga.diversity = average_square_deviation
-			ga.dynamic_mutation = ga.mut_prob * ( 1 + ((ga.best_fitness[1]-average_square_deviation) / (ga.best_fitness[1]+average_square_deviation) ) )
-			#print(mean_fitness)
-			#print(average_square_deviation)
-			print("Diversity = ",ga.diversity)
-			#print(ga.best_fitness)
-			print('Adaptive mutation value = ',ga.dynamic_mutation)
-			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.dynamic_mutation*len(p)), replace=False)
-		else:
-			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
+		print("adaptive_mutation value passed = ",ga.adaptive_mutation)
+
+		mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
+		print("mutation_indexes = ",mutation_indexes)
 		for index in mutation_indexes:
 			mutationHandler = ga.chooseMutationHandler()
 			ga.population.new_members[index] = ga.doMutation(mutationHandler,ga.population.new_members[index])
-		ga.population.members = ga.population.new_members
-		#print("New members = ",ga.population.members)
-		ga.population.new_members = []
+		print("New generation members = ", ga.population.new_members)
+		print("Length of new generation ", len(ga.population.new_members))
 		return 0
 
 	def __evolve_pyspark(self,ga):
@@ -148,82 +130,70 @@ class StandardEvolution(BaseEvolution):
 		# Fitness Value Mapping and making selection
 		mapped_chromosomes_rdd = chromosomes_rdd.map(lambda x: (x,ga.calculateFitness(x)))
 		#print(mapped_chromosomes_rdd.collect())
-		selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
+		if ga.selection_handler == Utils.SelectionHandlers.best:
+			if type(ga.fitness_type) == str:
+				if ga.fitness_type == 'max':
+					selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
+					ga.best_fitness = selected_chromosomes[0]
+				elif ga.fitness_type == 'min':
+					selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
+					ga.best_fitness = selected_chromosomes[0]
+			elif type(ga.fitness_type) == tuple or type(ga.fitness_type) == list:
+				if ga.fitness_type[0] == 'equal':
+					selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: abs(x[1]-ga.fitness_type[1]))
+					ga.best_fitness = selected_chromosomes[0]
+		else:
+			selected_chromosomes = ga.handle_selection()
 		#selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
-		#print(selected_chromosomes)
-		ga.best_fitness = selected_chromosomes[0]
-		print('BEST', ga.best_fitness[1])
-		ga.population.new_members = [x[0] for x in selected_chromosomes]
-		#print(ga.population.new_members)
-		#exit()
+		print('Members left after selection =  ', selected_chromosomes)
+		print('Best member after selection = ', ga.best_fitness[0])
+		print('Best fitness after selection = ', ga.best_fitness[1])
+		ga.population.new_members = selected_chromosomes
+
+		if ga.fitness_type[0] == 'equal':
+			if ga.best_fitness[1] == ga.fitness_type[1]:
+				return 1
+
 		n = math.ceil(ga.cross_prob * len(ga.population.members))
 		if n %2 == 1:
 			n -= 1
-			ga.population.members.append(ga.population.members[0])
+			ga.population.new_members.append(ga.population.members[random.randint(0,len(ga.population.members)-1)])
 
-		total_fitness = mapped_chromosomes_rdd.values().sum()
-		#print(total_fitness)
-		#print(type(total_fitness))
+		total_fitness = mapped_chromosomes_rdd.map(lambda x: (x[0],x[1]) if x[1] > 0 else (x[0],random.uniform(0.01, 0.02))).values().sum()
+
 		p = mapped_chromosomes_rdd.map(lambda x: (x[0],x[1]/total_fitness)).values().collect()
-		#print(p)
-		#print(type(p))
-		#print(sum(p))
+
+		p[random.randint(0,len(p)-1)] += (1-sum(p))
+
 
 		# Crossover Mapping
 		crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
-		#print("crossover_indices = ",crossover_indexes)
-		#crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
-
+		print("crossover_indices = ",crossover_indexes)
+		crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
 		crossover_pair_indexes = [(crossover_indexes[i],crossover_indexes[i+1]) for i in range(0,len(crossover_indexes),2)]
-		#print(crossover_indexes)
-		#print(crossover_pair_indexes)
-		
+
 		crossover_pair_indexes_rdd = sc.parallelize(crossover_pair_indexes)
 		crossover_before = crossover_pair_indexes_rdd.map(lambda x: (ga.population.members[0],ga.population.members[1]))
-		#print(crossover_before.collect())
-		crossover_results = crossover_before.map(lambda x:(x,ga.chooseCrossoverHandler()(x[0],x[1])))#.flatmap
-		#print(crossover_results.collect())
-		result_test = crossover_results.flatMap(lambda x:x[1]).collect()
-		#print(result_test)
-		#print(type(result_test))
+		crossover_after = crossover_before.map(lambda x:(x,ga.chooseCrossoverHandler()(x[0],x[1])))
 
-		ga.population.new_members.extend(result_test)
-
-		#print(len(ga.population.members))
-		#print(len(ga.population.new_members))
-		#print(ga.population.new_members)
+		crossover_results = crossover_after.flatMap(lambda x:x[1]).collect()
+		ga.population.new_members.extend(crossover_results)
 
 		# Mutation Handling
+		print("adaptive_mutation value passed = ",ga.adaptive_mutation)
+		print("Dynamic Mutation Rate = ", ga.dynamic_mutation)
+		
 		mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
-		#print(mutation_indexes)
+		print("mutation_indexes = ",mutation_indexes)
 		mutation_indexes_rdd = sc.parallelize(mutation_indexes)
-		mutation_results = mutation_indexes_rdd.map(lambda x:(x,ga.population.new_members[x]))
-		#print(mutation_results.collect())
-		mutation_results = mutation_results.map(lambda x:(x[0],x[1],ga.chooseMutationHandler()(list(x[1])))).collect()
-		#print(mutation_results)
-		#print('BEFORE')
-		#print(ga.population.new_members)
+		mutation_before = mutation_indexes_rdd.map(lambda x:(x,ga.population.new_members[x]))
+		mutation_results = mutation_before.map(lambda x:(x[0],x[1],ga.chooseMutationHandler()(list(x[1])))).collect()
+
 		for entry in mutation_results:
 			ga.population.new_members[entry[0]] = entry[2]
 
-		#print('AFTER')
-		#print(ga.population.new_members)
-
-		ga.population.members = ga.population.new_members 
-		ga.population.new_members = []
-
-
-		# Crossover Mapping
-		#crossover_indexes = np.random.choice(len(ga.population.members),n,p=p, replace=False)
-		#print("crossover_indices = ",crossover_indexes)
-		#crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
-
-
-
-
-
-
-
+		print("New generation members = ", ga.population.new_members)
+		print("Length of new generation ", len(ga.population.new_members))
 
 	def evolve(self,ga):
 		"""
@@ -236,5 +206,4 @@ class StandardEvolution(BaseEvolution):
 		if self.pyspark == False:
 			return self.__evolve_normal(ga)
 		else:
-			if self.__evolve_pyspark(ga):
-				return 1
+			return self.__evolve_pyspark(ga)

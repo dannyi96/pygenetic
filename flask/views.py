@@ -1,6 +1,6 @@
 #from server.flaskr import app
 
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, make_response
 from werkzeug import secure_filename
 from urllib.parse import unquote
 import os
@@ -8,8 +8,10 @@ import datetime
 import json
 import sys
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import gc
 import pickle
+from io import BytesIO
 
 #ga = None
 file_index = 0
@@ -61,7 +63,7 @@ def commonCodeCreate():
 			duplicates=False
 		#factory = ChromosomeFactory.ChromosomeRangeFactory(payload["1drange-datatype"],int(payload["no-of-genes"]),int(payload["1drange-min"]),int(payload["1drange-max"]),str(duplicates))
 		print(">>> str(duplicates) is ",str(duplicates))
-		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1drange-datatype"]+",noOfGenes="+payload["no-of-genes"]+",minValue="+payload["1drange-min"]+",maxValue="+payload["1drange-max"]+",duplicates="+str(duplicates)+")\n"
+		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes="+payload["no-of-genes"]+",minValue="+payload["1drange-min"]+",maxValue="+payload["1drange-max"]+",duplicates="+str(duplicates)+")\n"
 	elif(payload["gene-generation"]=="1dregex"):
 		#factory = ChromosomeFactory.ChromosomeRegexFactory(payload["1dregex-datatype"],int(payload["no-of-genes"]),payload["1dregex-regex"])
 		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1dregex-datatype"]+",noOfGenes="+payload["no-of-genes"]+",pattern='"+payload["1dregex-regex"]+"'"+")\n"
@@ -217,7 +219,7 @@ def ga_init():
 			duplicates=False
 		#factory = ChromosomeFactory.ChromosomeRangeFactory(payload["1drange-datatype"],int(payload["no-of-genes"]),int(payload["1drange-min"]),int(payload["1drange-max"]),str(duplicates))
 		print(">>> str(duplicates) is ",str(duplicates))
-		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1drange-datatype"]+",noOfGenes="+payload["no-of-genes"]+",minValue="+payload["1drange-min"]+",maxValue="+payload["1drange-max"]+",duplicates="+str(duplicates)+")\n"
+		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes="+payload["no-of-genes"]+",minValue="+payload["1drange-min"]+",maxValue="+payload["1drange-max"]+",duplicates="+str(duplicates)+")\n"
 	elif(payload["gene-generation"]=="1dregex"):
 		#factory = ChromosomeFactory.ChromosomeRegexFactory(payload["1dregex-datatype"],int(payload["no-of-genes"]),payload["1dregex-regex"])
 		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1dregex-datatype"]+",noOfGenes="+payload["no-of-genes"]+",pattern='"+payload["1dregex-regex"]+"'"+")\n"
@@ -249,18 +251,7 @@ def ga_init():
 				custom_name = cleaned[cleaned.find("def ")+4:]
 				custom_name = custom_name[:custom_name.find("(")]
 				precode += cleaned + "\n"
-				if(unquote(payload["crossover-extra-data"+str(i)]).strip() != "#Enter data here" and payload["crossover-extra-data"+str(i)] != ''):
-					datas = unquote(payload["crossover-extra-data"+str(i)]).split('\r\n')
-					while(datas[-1].strip() == ''):
-						datas = datas[:len(datas)-1]
-					datas_string = ""
-					for x in datas:
-						precode += x +"\n"
-						datas_string += "," + x[:x.find("=")].strip()
-
-					code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"+str(i)]+datas_string+")\n"
-				else:
-					code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"+str(i)]+")\n"
+				code += "ga.addCrossoverHandler("+custom_name+","+payload["crossover-weight"+str(i)]+")\n"
 			i+=1
 		else:
 			break
@@ -275,24 +266,15 @@ def ga_init():
 				custom_name = cleaned[cleaned.find("def ")+4:]
 				custom_name = custom_name[:custom_name.find("(")]
 				precode += cleaned + "\n"
-				if(unquote(payload["mutation-extra-data"+str(i)]).strip() != "#Enter data here" and payload["mutation-extra-data"+str(i)] != ''):
-					datas = unquote(payload["mutation-extra-data"+str(i)]).split('\r\n')
-					while(datas[-1].strip() == ''):
-						datas = datas[:len(datas)-1]
-					datas_string = ""
-					for x in datas:
-						precode += x +"\n"
-						datas_string += "," + x[:x.find("=")].strip()
-
-					code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"+str(i)]+datas_string+")\n"
-				else:
-					code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"+str(i)]+")\n"
+				code += "ga.addMutationHandler("+custom_name+","+payload["mutation-weight"+str(i)]+")\n"
 			i+=1
 		else:
 			break
 	
 
-	if(payload["selection-type"] != "custom"):
+	if(payload["selection-type"] == "tournament"):
+		code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+","+payload["tournament-size"]+")\n"
+	elif(payload["selection-type"] != "custom"):
 		code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+")\n"
 	else:
 		cleaned = unquote(payload["custom-selection"])
@@ -351,7 +333,7 @@ def ga_init():
 	print(ga.calculateFitness([1,2]))
 	print('swah')
 	#ga_list.append(ga)
-	response = jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
+	response = jsonify({'Best-Fitnesses':ga.fitness_mappings[:10]})
 	print(id(ga))
 	print(type(id(ga)))
 	print(str(id(ga)))
@@ -377,7 +359,24 @@ def ga_evolve():
 	ga.continue_evolve(1)
 	for key in persistent_store:
 		print( key , persistent_store[ key ])
-	return jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
+	return jsonify({'Best-Fitnesses':ga.fitness_mappings[:10]})
+
+@app.route('/plot_fitness_graph')
+def plot_fitness_graph():
+	ga = persistent_store[(request.cookies.get('ga_object'))]
+	print(persistent_store)
+	print(ga)
+	print(ga.statistics.statistic_dict['best'])
+	print(persistent_store)
+	del persistent_store[request.cookies.get('ga_object')]
+	print(persistent_store)
+	graph = ga.statistics.plot_statistics(['best','worst','avg'])
+	canvas = FigureCanvas(graph)
+	output = BytesIO()
+	canvas.print_png(output)
+	response = make_response(output.getvalue())
+	response.mimetype = 'image/png'
+	return response
 
 @app.route('/get_file/<path:path>')
 def get_file(path):
