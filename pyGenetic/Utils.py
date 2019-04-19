@@ -41,6 +41,7 @@ class SelectionHandlers:
 		
 	@staticmethod
 	def tournament(fitness_mappings, ga, tournsize):
+		print("\n\n\ntournsize = ",tournsize,"\n\n\n")
 		chosen = []
 		for i in range(len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))):
 			aspirants = random.sample(fitness_mappings, tournsize)
@@ -71,7 +72,9 @@ class SelectionHandlers:
 		relative_fitness = [f/total_fit for f in fitness]
 		probabilities = [sum(relative_fitness[:i+1]) for i in range(len(relative_fitness))]
 		chosen = []
-		pop = [x[1] for x in fitness_mappings]
+		pop = [x[0] for x in fitness_mappings]
+		print("\n\n\n",pop,"\n\n\n")
+		print("\n\n\n",fitness,"\n\n\n")
 		for n in range(len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))):
 			r = random.random()
 			for (i, individual) in enumerate(pop):

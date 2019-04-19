@@ -112,7 +112,7 @@ class StandardEvolution(BaseEvolution):
 			ga.population.new_members.extend([child1,child2])
 
 		print("adaptive_mutation value passed = ",ga.adaptive_mutation)
-		print("Dynamic Mutation Rate = ", ga.dynamic_mutation)
+		#print("Dynamic Mutation Rate = ", ga.dynamic_mutation)
 
 		if ga.adaptive_mutation == True:
 			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.dynamic_mutation*len(p)), replace=False)

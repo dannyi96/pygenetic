@@ -83,16 +83,27 @@
     function placeSelectionTextArea()
     {
         var option = document.getElementById('selection-select').value;
-        if(option=="custom")
+        if(option=="tournament")
+        {
+            document.getElementById('selection-code').style.display = 'none';
+            document.getElementById('selection-data').style.display = 'none';
+            document.getElementById('tourn-head').style.display = '';
+            document.getElementById('tourn-size').style.display = '';
+        }
+        else if(option=="custom")
         {
             document.getElementById('selection-code').style.display = '';
             document.getElementById('selection-data').style.display = '';
+            document.getElementById('tourn-head').style.display = 'none';
+            document.getElementById('tourn-size').style.display = 'none';
             
         }
         else
         {
             document.getElementById('selection-code').style.display = 'none';
             document.getElementById('selection-data').style.display = 'none';
+            document.getElementById('tourn-head').style.display = 'none';
+            document.getElementById('tourn-size').style.display = 'none';
         }
     }
 
@@ -163,9 +174,6 @@
                         <div class="container-fluid" id="range" style="display:none;">
                             <div class="row">
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Data Type </span>
-                                </div>
-                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                     <span class="monkeyPatchShiftToRight"> Min Value </span>
                                 </div>
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
@@ -179,12 +187,6 @@
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
                                     <div class="container-fluid repeatableTargetFuncDeclList">
                                         <div class="row">
-                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                                <select class="form-control" name="1drange-datatype">
-                                                    <option value="int"> Integer </option>
-                                                    <option value="char"> Character </option>
-                                                </select>
-                                            </div>
 
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <input type="text" class="form-control rangeFactoryMinInput" id = "range-factory-min-value"  placeholder="Min Value" aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="1drange-min">
@@ -588,6 +590,9 @@
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                     <span class="monkeyPatchShiftToRight"> Selection Type </span>
                                 </div>
+                                <div class="col-xl-2 col-lg-2 col-md-2 col-2">
+                                    <span class="monkeyPatchShiftToRight" id="tourn-head" style="display:none;"> Tournament Size </span>
+                                </div>
                             </div>
                             <div class="row" id="targetFuncDeclDivRow">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
@@ -607,6 +612,9 @@
                                                         <option value="custom"> Custom </option>
                                                     </select>
                                                 </div>
+                                            </div>
+                                            <div class="col-xl-2 col-lg-2 col-md-2 col-2" id = "tourn-size" style="display:none;">
+                                                <input type="text" class="form-control validName tournsize" placeholder="tournsize" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' name="tournament-size">
                                             </div>
                                         </div>
                                     </div>
