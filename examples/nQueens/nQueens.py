@@ -18,7 +18,7 @@ def fitness(board):
 		return fitness
 
 factory = ChromosomeFactory.ChromosomeRangeFactory(data_type=int,noOfGenes=14,minValue=1,maxValue=14)
-ga = GAEngine.GAEngine(factory,100,fitness_type=('equal',14),mut_prob = 0.3,use_pyspark=True)
+ga = GAEngine.GAEngine(factory,100,fitness_type=('equal',14),mut_prob = 0.3,use_pyspark=False)
 #ga.addCrossoverHandler(Utils.CrossoverHandlers.PMX, 9)
 
 ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
