@@ -63,7 +63,7 @@ def commonCodeCreate():
 			duplicates=False
 		#factory = ChromosomeFactory.ChromosomeRangeFactory(payload["1drange-datatype"],int(payload["no-of-genes"]),int(payload["1drange-min"]),int(payload["1drange-max"]),str(duplicates))
 		print(">>> str(duplicates) is ",str(duplicates))
-		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1drange-datatype"]+",noOfGenes="+payload["no-of-genes"]+",minValue="+payload["1drange-min"]+",maxValue="+payload["1drange-max"]+",duplicates="+str(duplicates)+")\n"
+		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes="+payload["no-of-genes"]+",minValue="+payload["1drange-min"]+",maxValue="+payload["1drange-max"]+",duplicates="+str(duplicates)+")\n"
 	elif(payload["gene-generation"]=="1dregex"):
 		#factory = ChromosomeFactory.ChromosomeRegexFactory(payload["1dregex-datatype"],int(payload["no-of-genes"]),payload["1dregex-regex"])
 		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1dregex-datatype"]+",noOfGenes="+payload["no-of-genes"]+",pattern='"+payload["1dregex-regex"]+"'"+")\n"
@@ -219,7 +219,7 @@ def ga_init():
 			duplicates=False
 		#factory = ChromosomeFactory.ChromosomeRangeFactory(payload["1drange-datatype"],int(payload["no-of-genes"]),int(payload["1drange-min"]),int(payload["1drange-max"]),str(duplicates))
 		print(">>> str(duplicates) is ",str(duplicates))
-		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1drange-datatype"]+",noOfGenes="+payload["no-of-genes"]+",minValue="+payload["1drange-min"]+",maxValue="+payload["1drange-max"]+",duplicates="+str(duplicates)+")\n"
+		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes="+payload["no-of-genes"]+",minValue="+payload["1drange-min"]+",maxValue="+payload["1drange-max"]+",duplicates="+str(duplicates)+")\n"
 	elif(payload["gene-generation"]=="1dregex"):
 		#factory = ChromosomeFactory.ChromosomeRegexFactory(payload["1dregex-datatype"],int(payload["no-of-genes"]),payload["1dregex-regex"])
 		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1dregex-datatype"]+",noOfGenes="+payload["no-of-genes"]+",pattern='"+payload["1dregex-regex"]+"'"+")\n"
@@ -272,7 +272,9 @@ def ga_init():
 			break
 	
 
-	if(payload["selection-type"] != "custom"):
+	if(payload["selection-type"] == "tournament"):
+		code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+","+payload["tournament-size"]+")\n"
+	elif(payload["selection-type"] != "custom"):
 		code += "ga.setSelectionHandler(Utils.SelectionHandlers."+payload["selection-type"]+")\n"
 	else:
 		cleaned = unquote(payload["custom-selection"])
@@ -331,7 +333,7 @@ def ga_init():
 	print(ga.calculateFitness([1,2]))
 	print('swah')
 	#ga_list.append(ga)
-	response = jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
+	response = jsonify({'Best-Fitnesses':ga.fitness_mappings[:10]})
 	print(id(ga))
 	print(type(id(ga)))
 	print(str(id(ga)))
@@ -357,7 +359,7 @@ def ga_evolve():
 	ga.continue_evolve(1)
 	for key in persistent_store:
 		print( key , persistent_store[ key ])
-	return jsonify({'Best-Fitnesses':ga.fitness_dict[:10]})
+	return jsonify({'Best-Fitnesses':ga.fitness_mappings[:10]})
 
 @app.route('/plot_fitness_graph')
 def plot_fitness_graph():

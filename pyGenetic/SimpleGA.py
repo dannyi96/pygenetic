@@ -1,13 +1,7 @@
-import Population
-import ChromosomeFactory
 import random
-import numpy as np
-import collections
 import Utils
-import Evolution
-import Statistics
-import bisect
 import math
+import numpy as np
 
 class SimpleGA:
 
@@ -42,7 +36,7 @@ class SimpleGA:
 			else:
 				chromosome = random.sample(range(self.minValue,self.maxValue+1), self.noOfGenes)
 			self.population.append(chromosome)
-		#print(self.population)
+		print("Initial population: ", self.population)
 
 	def doCrossover(self, chromosome1, chromosome2):
 		if self.crossover_handler == 'distinct':
@@ -69,30 +63,30 @@ class SimpleGA:
 	def calculateFitness(self,chromosome):
 		return self.fitness_func(chromosome)
 
-	def generateFitnessDict(self):
-		self.fitness_dict = [(member, self.calculateFitness(member)) for member in self.population]
-		print(self.fitness_dict)	
+	def generateFitnessMappings(self):
+		self.fitness_mappings = [(member, self.calculateFitness(member)) for member in self.population]
+		print(self.fitness_mappings)	
 
 	def handle_selection(self):
-		self.generateFitnessDict()
+		self.generateFitnessMappings()
 		if self.fitness_type == 'max':
-			self.fitness_dict.sort(key=lambda x:x[1],reverse=True)
-			self.best_fitness = self.fitness_dict[0]
+			self.fitness_mappings.sort(key=lambda x:x[1],reverse=True)
+			self.best_fitness = self.fitness_mappings[0]
 		elif self.fitness_type == 'min':
-			self.fitness_dict.sort(key=lambda x:x[1])
-			self.best_fitness = self.fitness_dict[0]
+			self.fitness_mappings.sort(key=lambda x:x[1])
+			self.best_fitness = self.fitness_mappings[0]
 		elif self.fitness_type[0] == 'equal':
-			self.fitness_dict.sort(key=lambda x:abs(x[1]-self.fitness_type[1]))
-			self.best_fitness = self.fitness_dict[0]
+			self.fitness_mappings.sort(key=lambda x:abs(x[1]-self.fitness_type[1]))
+			self.best_fitness = self.fitness_mappings[0]
 		else:
 			raise Exception('Invalid fitness type')
 
 		if self.selection_handler == 'best':
-			return Utils.SelectionHandlers.best(self.population,self.fitness_dict,self)
+			return Utils.SelectionHandlers.best(self.fitness_mappings,self)
 		elif self.selection_handler == 'roulette':
-			return Utils.SelectionHandlers.roulette(self.population,self.fitness_dict,self)
+			return Utils.SelectionHandlers.roulette(self.fitness_mappings,self)
 		elif self.selection_handler == 'rank':
-			return Utils.SelectionHandlers.rank(self.population,self.fitness_dict,self)
+			return Utils.SelectionHandlers.rank(self.fitness_mappings,self)
 		else:
 			raise Exception('Invalid Mutation given as input')
 
@@ -108,7 +102,7 @@ class SimpleGA:
 					return 1
 			fitnesses = []
 			total = 0 #This is not being used
-			for chromosome in ga.fitness_dict:
+			for chromosome in ga.fitness_mappings:
 				fitness = chromosome[1]
 				if fitness == 0:
 					fitness = random.uniform(0.01, 0.02)
@@ -138,9 +132,10 @@ class SimpleGA:
 			#print("New members = ",ga.population.members)
 			new_population = []
 		print("Best fitness in this generation = ", self.best_fitness)
-		print(self.fitness_dict[:10])
+		print(self.fitness_mappings[:10])
 	
 if __name__ == '__main__':
 	ga = SimpleGA(minValue=1,maxValue=10,noOfGenes=10,fitness_func=lambda x:sum(x),duplicates=False,population_size=100,cross_prob=0.8,mut_prob=0.1,crossover_handler='onePoint',mutation_handler='swap',selection_handler='best',fitness_type='max')
-	ga.generateFitnessDict()
+	ga.generateFitnessMappings()
 	ga.evolve(2)
+	print(ga.best_fitness)
