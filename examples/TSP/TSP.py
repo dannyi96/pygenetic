@@ -16,7 +16,7 @@ ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
 ga.addCrossoverHandler(Utils.CrossoverHandlers.OX, 3)
 ga.addMutationHandler(Utils.MutationHandlers.swap)
 
-ga.setSelectionHandler(Utils.SelectionHandlers.largest)
+ga.setSelectionHandler(Utils.SelectionHandlers.SUS)
 ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
 	# ga.setSelectionHandler(Utils.SelectionHandlers.basic)
 	# Provide max iteration here ???
@@ -30,6 +30,14 @@ plt.show()
 
 ga.continue_evolve(20)
 
+fig = ga.statistics.plot_statistics(['best-fitness','worst-fitness','avg-fitness'])
+plt.show()
+fig = ga.statistics.plot_statistics(['diversity','mutation_rate'])
+plt.show()
+fig = ga.statistics.plot_statistics(['mutation_rate'])
+plt.show()
+
+ga.evolve(30)
 fig = ga.statistics.plot_statistics(['best-fitness','worst-fitness','avg-fitness'])
 plt.show()
 fig = ga.statistics.plot_statistics(['diversity','mutation_rate'])

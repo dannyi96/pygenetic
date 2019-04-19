@@ -112,12 +112,8 @@ class StandardEvolution(BaseEvolution):
 			ga.population.new_members.extend([child1,child2])
 
 		print("adaptive_mutation value passed = ",ga.adaptive_mutation)
-		#print("Dynamic Mutation Rate = ", ga.dynamic_mutation)
 
-		if ga.adaptive_mutation == True:
-			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.dynamic_mutation*len(p)), replace=False)
-		else:
-			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
+		mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
 		print("mutation_indexes = ",mutation_indexes)
 		for index in mutation_indexes:
 			mutationHandler = ga.chooseMutationHandler()
@@ -186,10 +182,8 @@ class StandardEvolution(BaseEvolution):
 		# Mutation Handling
 		print("adaptive_mutation value passed = ",ga.adaptive_mutation)
 		print("Dynamic Mutation Rate = ", ga.dynamic_mutation)
-		if ga.adaptive_mutation == True:
-			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.dynamic_mutation*len(p)), replace=False)
-		else:
-			mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
+		
+		mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
 		print("mutation_indexes = ",mutation_indexes)
 		mutation_indexes_rdd = sc.parallelize(mutation_indexes)
 		mutation_before = mutation_indexes_rdd.map(lambda x:(x,ga.population.new_members[x]))

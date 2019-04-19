@@ -91,8 +91,11 @@ class GAEngine:
 		self.fitness_func = None
 		self.factory = factory
 		self.cross_prob = cross_prob
-		self.mut_prob = mut_prob
 		self.adaptive_mutation = adaptive_mutation
+		if self.adaptive_mutation:
+			self.initial_mut_prob = mut_prob
+		else:
+			self.mut_prob = mut_prob
 		self.crossover_handlers = []
 		self.crossover_handlers_weights = []
 		self.mutation_handlers = []
@@ -123,7 +126,6 @@ class GAEngine:
 		self.crossover_external_data = {}
 		self.mutation_external_data = {}
 		self.hall_of_fame = None
-		self.last_20_fitnesses = collections.deque([])
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1, *args):
 		"""
@@ -258,7 +260,7 @@ class GAEngine:
 			else:
 				self.hall_of_fame = self.best_fitness
 
-	def handle_selection(self):
+	def handle_selection(self,repeat_chromosome_sorting=False):
 
 		"""
 		Invokes generateFitnessDict() to generate dictionary of (chromosome,fitness)
@@ -269,7 +271,8 @@ class GAEngine:
 		List of  fittest members of population
 
 		"""
-		self.generateFitnessMappings()
+		if repeat_chromosome_sorting:
+			self.generateFitnessMappings()
 		if self.selection_external_data:
 			return self.selection_handler(self.fitness_mappings,self, *(self.selection_external_data))
 		else:
@@ -341,6 +344,7 @@ class GAEngine:
 		"""
 		self.population = Population.Population(self.factory,self.population_size)
 		self.statistics = Statistics.Statistics()
+		self.last_20_fitnesses = collections.deque([])
 		self.continue_evolve(noOfIterations)
 		
 	def continue_evolve(self, noOfIterations=20):
@@ -354,20 +358,20 @@ class GAEngine:
 			self.statistics.add_statistic('worst-fitness',self.fitness_mappings[-1][1])
 			self.mean_fitness = sum(fitnesses)/len(fitnesses)
 			self.statistics.add_statistic('avg-fitness',self.mean_fitness)
+			self.diversity = math.sqrt(sum((fitness - self.mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
 			if self.adaptive_mutation:
-				self.diversity = math.sqrt(sum((fitness - self.mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
-				self.dynamic_mutation = self.mut_prob * ( 1 + ((self.best_fitness[1]-self.diversity) / (self.diversity+self.best_fitness[1]) ) )
-				self.dynamic_mutation = np.clip(self.dynamic_mutation,0.0001,0.8)
+				self.mut_prob = self.initial_mut_prob * ( 1 + ((self.best_fitness[1]-self.diversity) / (self.diversity+self.best_fitness[1]) ) )
+				self.mut_prob = np.clip(self.mut_prob,0.0001,0.8)
 				print("Diversity = ",self.diversity)
-				print('Dynamic mutation value = ',self.dynamic_mutation)
-				self.statistics.add_statistic('mutation_rate',self.dynamic_mutation)
-				self.statistics.add_statistic('diversity',self.diversity)
+				print('New mutation value = ',self.mut_prob)
+			self.statistics.add_statistic('mutation_rate',self.mut_prob)
+			self.statistics.add_statistic('diversity',self.diversity)
 
 			result = self.evolution.evolve(self)
 
 			if self.hall_of_fame_injection and (i+1)%20 == 0:
 				print('Hall of fame chromosome ',self.hall_of_fame[0] , ' injected to population')
-				self.population.new_members = [self.hall_of_fame[0]] + self.population.new_members
+				self.population.new_members.insert(0,self.hall_of_fame[0]) 
 
 			if self.population_control:
 				if len(self.population.new_members) > self.population_size:
