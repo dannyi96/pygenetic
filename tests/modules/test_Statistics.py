@@ -8,6 +8,8 @@ import Population
 import ChromosomeFactory
 import pytest
 import Statistics
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import array
 import numpy
