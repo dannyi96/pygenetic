@@ -11,7 +11,7 @@ import pytest
 
 def test_ann():
 	# load pima indians dataset
-	dataset = numpy.loadtxt("../examples/ANN_topology/input.csv", delimiter=",")
+	dataset = numpy.loadtxt("examples/ANN_topology/input.csv", delimiter=",")
 	# split into input (X) and output (Y) variables
 	X = dataset[:,0:8]
 	Y = dataset[:,8]
