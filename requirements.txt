@@ -1,7 +1,8 @@
-numpy==1.15.4
-Werkzeug==0.14.1
-matplotlib==2.2.2
-pytest==4.0.0
 rstr==2.2.6
-locustio==0.11.0
+Keras==2.2.4
+numpy==1.15.4
 pyspark==2.4.1
+pytest==4.0.0
+matplotlib==2.2.2
+Werkzeug==0.14.1
+locustio==0.11.0
