@@ -123,6 +123,26 @@ class StandardEvolution(BaseEvolution):
 		return 0
 
 	def __evolve_pyspark(self,ga):
+		"""
+		Private method which performs iterations using pyspark
+
+		Outline of Algorithm:
+		---------------------
+		Selection :
+					- Initial population rdd creation
+					- Each chromosome is mapped to key-value pair (chromosome , fitness)
+					- Depending on type of fitness type fitest chromosomes are selected for crossover
+					- The mapped chromosome rdd is transformed to another rdd containing probabilities for crossover 
+						which are calculated by normalizing fitness values of each chromosome  
+		
+		Crossover :
+					- Rdd containing chromosome pairs to be crossed over are created using the probability score calculated
+					- New chromosomes are appended to population
+		Mutation:
+					- Mutation chromosome rdds are created which are transformed to rdd (index, mutated chromosome)
+					- Then collect action is applied to get the mutated chromsomes and used  to replace the corresponding members of population
+
+		"""
 		from pyspark import SparkContext
 		sc = SparkContext.getOrCreate()
 		#print(ga.population.members)
