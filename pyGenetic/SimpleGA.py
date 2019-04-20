@@ -94,15 +94,15 @@ class SimpleGA:
 		for i in range(noOfIterations):
 			new_population = self.handle_selection()
 			print("*** Members left after selection = ",len(new_population))
-			print("Best member = ",ga.best_fitness[0])
-			print("Best fitness = ",ga.best_fitness[1])
-			if ga.fitness_type[0] == 'equal':
-				if ga.best_fitness[1] == ga.fitness_type[1]:
+			print("Best member = ",self.best_fitness[0])
+			print("Best fitness = ",self.best_fitness[1])
+			if self.fitness_type[0] == 'equal':
+				if self.best_fitness[1] == self.fitness_type[1]:
 					print('Solved')
 					return 1
 			fitnesses = []
 			total = 0 #This is not being used
-			for chromosome in ga.fitness_mappings:
+			for chromosome in self.fitness_mappings:
 				fitness = chromosome[1]
 				if fitness == 0:
 					fitness = random.uniform(0.01, 0.02)
@@ -110,7 +110,7 @@ class SimpleGA:
 				fitnesses.append(fitness)
 			print(fitnesses)	
 			p = [ elem/total for elem in fitnesses]
-			n = math.ceil(ga.cross_prob * len(p))
+			n = math.ceil(self.cross_prob * len(p))
 			if n %2 == 1:
 				n -= 1
 				self.population.append(self.population[0])
@@ -122,20 +122,14 @@ class SimpleGA:
 
 			for i in range(0,len(crossover_chromosomes)-1,2):
 				father,mother = crossover_chromosomes[i], crossover_chromosomes[i+1]
-				child1, child2 = ga.doCrossover(father,mother)
+				child1, child2 = self.doCrossover(father,mother)
 				new_population.extend([child1,child2])
 			#print("adaptive_mutation value passed = ",self.adaptive_mutation)
-			mutation_indexes = np.random.choice(len(new_population),int(ga.mut_prob*len(p)), replace=False)
+			mutation_indexes = np.random.choice(len(new_population),int(self.mut_prob*len(p)), replace=False)
 			for index in mutation_indexes:
-				new_population[index] = ga.doMutation(new_population[index])
+				new_population[index] = self.doMutation(new_population[index])
 			self.population = new_population
 			#print("New members = ",ga.population.members)
 			new_population = []
 		print("Best fitness in this generation = ", self.best_fitness)
 		print(self.fitness_mappings[:10])
-	
-if __name__ == '__main__':
-	ga = SimpleGA(minValue=1,maxValue=10,noOfGenes=10,fitness_func=lambda x:sum(x),duplicates=False,population_size=100,cross_prob=0.8,mut_prob=0.1,crossover_handler='onePoint',mutation_handler='swap',selection_handler='best',fitness_type='max')
-	ga.generateFitnessMappings()
-	ga.evolve(2)
-	print(ga.best_fitness)
