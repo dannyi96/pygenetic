@@ -58,6 +58,6 @@ class Statistics:
 		fig,ax = plt.subplots()
 		ax.set_xlabel('Generation')
 		ax.set_ylabel('Statistic')
-		ax.plot(range(len(self.statistic_dict[statistic])),self.statistic_dict[statistic],label=statistic)
+		ax.plot(range(1,len(self.statistic_dict[statistic])+1),self.statistic_dict[statistic],label=statistic)
 		fig.legend(loc='upper left')
 		return fig
