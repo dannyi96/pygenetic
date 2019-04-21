@@ -155,13 +155,16 @@ class StandardEvolution(BaseEvolution):
 				if ga.fitness_type == 'max':
 					selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
 					ga.best_fitness = selected_chromosomes[0]
+					selected_chromosomes = [ x[0] for x in selected_chromosomes]
 				elif ga.fitness_type == 'min':
 					selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
 					ga.best_fitness = selected_chromosomes[0]
+					selected_chromosomes = [ x[0] for x in selected_chromosomes]
 			elif type(ga.fitness_type) == tuple or type(ga.fitness_type) == list:
 				if ga.fitness_type[0] == 'equal':
 					selected_chromosomes = mapped_chromosomes_rdd.takeOrdered(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: abs(x[1]-ga.fitness_type[1]))
 					ga.best_fitness = selected_chromosomes[0]
+					selected_chromosomes = [ x[0] for x in selected_chromosomes]
 		else:
 			selected_chromosomes = ga.handle_selection()
 		#selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
@@ -201,7 +204,7 @@ class StandardEvolution(BaseEvolution):
 
 		# Mutation Handling
 		print("adaptive_mutation value passed = ",ga.adaptive_mutation)
-		print("Dynamic Mutation Rate = ", ga.dynamic_mutation)
+		print("Dynamic Mutation Rate = ", ga.mut_prob)
 		
 		mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
 		print("mutation_indexes = ",mutation_indexes)
