@@ -603,8 +603,6 @@
                                                     <select class="form-control selection-type" id="selection-select" onchange="placeSelectionTextArea()" name="selection-type"> 
                                                         <option value="best"> best </option>
                                                         <option value="random"> random </option>
-                                                        <option value="smallest"> smallest </option>
-                                                        <option value="largest"> largest </option>
                                                         <option value="tournament"> tournament </option>
                                                         <option value="roulette"> roulette </option>
                                                         <option value="rank"> rank </option>
@@ -739,9 +737,11 @@
             </div>
         </div>
     </div>
-    <button type="submit" form="main_form" value="Submit" id="download_code">Submit</button>
-    
-    <button type="submit" form="main_form" value="Run" id="run">Run</button>
+    <span style="display: inline;">
+        <button type="submit" class="btn btn-info" style="width: 40%;" form="main_form" value="Run" id="run">Run Online !</button>
+
+        <button type="submit" class="btn btn-secondary" style="width: 40%;float: right;" form="main_form" value="Submit" id="download_code">Download Equivalent Code !</button>
+    </span>
     </form>
 
     <div id="results">
