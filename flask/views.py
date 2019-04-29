@@ -366,11 +366,11 @@ def plot_fitness_graph():
 	ga = persistent_store[(request.cookies.get('ga_object'))]
 	print(persistent_store)
 	print(ga)
-	print(ga.statistics.statistic_dict['best'])
+	print(ga.statistics.statistic_dict['best-fitness'])
 	print(persistent_store)
 	del persistent_store[request.cookies.get('ga_object')]
 	print(persistent_store)
-	graph = ga.statistics.plot_statistics(['best','worst','avg'])
+	graph = ga.statistics.plot_statistics(['best-fitness','worst-fitness','avg-fitness'])
 	canvas = FigureCanvas(graph)
 	output = BytesIO()
 	canvas.print_png(output)
