@@ -69,7 +69,7 @@ def commonCodeCreate():
 		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1dregex-datatype"]+",noOfGenes="+payload["no-of-genes"]+",pattern='"+payload["1dregex-regex"]+"'"+")\n"
 	elif(payload["gene-generation"]=="custom"):
 		cleaned = unquote(payload["custom-chromosome"])
-		precode += cleaned + "\n"
+		code = cleaned + "\n"
 
 	if(payload["pySpark"]=="yes"):
 		pyspark = True
@@ -229,7 +229,7 @@ def ga_init():
 		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1dregex-datatype"]+",noOfGenes="+payload["no-of-genes"]+",pattern='"+payload["1dregex-regex"]+"'"+")\n"
 	elif(payload["gene-generation"]=="custom"):
 		cleaned = unquote(payload["custom-chromosome"])
-		precode += cleaned + "\n"
+		code = cleaned + "\n"
 
 	if(payload["pySpark"]=="yes"):
 		pyspark = True
@@ -245,6 +245,7 @@ def ga_init():
 		fit_type = "'"+payload["fitness-type"]+"'"
 	elif(payload["fitness-type"]=="equal"):
 		fit_type = ('equal',float(payload["fitness-equal"]))
+
 	
 	code += "ga = GAEngine.GAEngine(factory=factory,population_size="+payload["population-size"]+",cross_prob="+payload["crossover-rate"]+",mut_prob="+payload["mutation-rate"]+",fitness_type="+str(fit_type)+",adaptive_mutation="+str(adaptive)+",use_pyspark="+str(pyspark)+")\n"
 	
