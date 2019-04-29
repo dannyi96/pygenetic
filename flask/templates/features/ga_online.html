@@ -12,15 +12,30 @@
     function displayGenerationOptions()
     {
         var option = document.getElementById('gene-generation').value;
-        if(option == "1dregex")
+        
+        if(option == "custom")
         {
+            document.getElementById('range').style.display = 'none';
+            document.getElementById('no-of-genes').style.display = 'none';
+            document.getElementById('no-of-genes-name').style.display = 'none';
+            document.getElementById('regex').style.display = 'none';
+            document.getElementById('chromosome-code').style.display = '';       
+        }
+        else {
+            document.getElementById('no-of-genes').style.display = '';
+            document.getElementById('no-of-genes-name').style.display = '';
+            if(option == "1dregex")
+            {
             document.getElementById('regex').style.display = '';
             document.getElementById('range').style.display = 'none';
-        }
-        else if(option == "1drange")
-        {
+            document.getElementById('chromosome-code').style.display = 'none';
+            }
+            else if(option == "1drange")
+            {
             document.getElementById('range').style.display = '';
-            document.getElementById('regex').style.display = 'none';               
+            document.getElementById('regex').style.display = 'none';
+            document.getElementById('chromosome-code').style.display = 'none';           
+            }
         }
     }
 
@@ -149,7 +164,7 @@
                                     <span class="monkeyPatchShiftToRight"> Chromosome Factory </span>
                                 </div>
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-2">
-                                    <span class="monkeyPatchShiftToRight"> Genes/chromosome </span>
+                                    <span class="monkeyPatchShiftToRight" id="no-of-genes-name"> Genes/chromosome </span>
                                 </div>
                             </div>
                             <div class="row" id="targetFuncDeclDivRow">
@@ -160,11 +175,36 @@
                                                 <select class="form-control" id="gene-generation" onchange="displayGenerationOptions()" name="gene-generation">
                                                     <option value="1dregex"> 1DRegex </option>
                                                     <option value="1drange"> 1DRange </option>
+                                                    <option value="custom"> Custom </option>
                                                 </select>
                                             </div>
 
                                             <div class="col-xl-2 col-lg-2 col-md-2 col-2">
                                                 <input type="text" class="form-control validName noOfGenes" placeholder="No of genes" id = "no-of-genes"  aria-label="Function Name" aria-describedby="basic-addon4" tabindex='0' data-toggle='popover' data-trigger='manual' data-placement='top' data-content='Invalid Name' name="no-of-genes">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid" id="chromosome-code" style="display:none;">
+                            <div class="row" id="targetFuncDeclWrapperRow">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-xl-8 col-lg-8 col-md-8 col-8">
+                                                <span class="monkeyPatchShiftToRight"> Input custom ChromosomeFactory class</span>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="targetFuncDeclDivRow">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-12 customBorder funcToDelete noPadColumn">
+                                                <div class="container-fluid repeatableTargetFuncDeclList">
+                                                    <div class="row">
+                                                        <div class="col-xl-8 col-lg-8 col-md-8 col-8">
+                                                            <textarea class="form-control" cols="1000" rows="5" name="custom-chromosome">#Enter class definition here. You also need to initialize a variable to be used during GAEngine initialization.</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
