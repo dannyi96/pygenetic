@@ -1,11 +1,6 @@
 import sys
 import pytest
-sys.path.append('../../pyGenetic/')
-sys.path.append('../pyGenetic/')
-sys.path.append('./pyGenetic/')
-sys.path.append('.')
-
-import GAEngine,Utils,ChromosomeFactory
+from pygenetic import ChromosomeFactory, Utils, GAEngine
 
 def select_all(fitness_mappings, ga):
         return [i[0] for i in fitness_mappings]

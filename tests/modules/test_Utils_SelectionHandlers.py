@@ -1,13 +1,8 @@
 import sys
-sys.path.append('../../pyGenetic/')
-sys.path.append('../pyGenetic/')
-sys.path.append('./pyGenetic/')
-sys.path.append('.')
+from pygenetic import Utils, ChromosomeFactory, GAEngine, Population
 
 import pytest
 import unittest.mock as mock
-import Utils , GAEngine , ChromosomeFactory, Population
-from types import SimpleNamespace
 
 @pytest.mark.parametrize("fitness_dict, expected_results", [
 ([([1, 3, 4, 2], 2), ([3, 4, 1, 2], 0),([1, 2, 3, 4], 3),([4, 3, 2, 1], 1),([3, 2, 1, 4], 4)] ,  [[3, 2, 1, 4]])

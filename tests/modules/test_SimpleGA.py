@@ -1,10 +1,5 @@
 import sys
-sys.path.append('../../pyGenetic/')
-sys.path.append('../pyGenetic/')
-sys.path.append('./pyGenetic/')
-sys.path.append('.')
-
-import SimpleGA
+from pygenetic import SimpleGA
 import pytest
 
 @pytest.mark.parametrize("minValue, maxValue, noOfGenes, duplicates, population_size,crossover_handler,mutation_handler,selection_handler,fitness_type", [

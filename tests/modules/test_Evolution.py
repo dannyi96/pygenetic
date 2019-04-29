@@ -1,11 +1,5 @@
 import sys
-sys.path.append('../../pyGenetic/')
-sys.path.append('../pyGenetic/')
-sys.path.append('./pyGenetic/')
-sys.path.append('.')
-
-import Evolution
-
+from pygenetic import *
 
 def test_evolve():
     pass

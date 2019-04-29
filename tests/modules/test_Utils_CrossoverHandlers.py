@@ -1,11 +1,7 @@
 import sys
-sys.path.append('../../pyGenetic/')
-sys.path.append('../pyGenetic/')
-sys.path.append('./pyGenetic/')
-sys.path.append('.')
+from pygenetic import Utils
 
 import pytest
-import Utils
 import unittest.mock as mock
 import random
 

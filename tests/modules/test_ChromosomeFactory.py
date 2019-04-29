@@ -1,10 +1,5 @@
 import sys
-sys.path.append('../../pyGenetic/')
-sys.path.append('../pyGenetic/')
-sys.path.append('./pyGenetic/')
-sys.path.append('.')
-
-import ChromosomeFactory
+from pygenetic import ChromosomeFactory
 import pytest
 import re
 
