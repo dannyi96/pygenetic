@@ -1,10 +1,9 @@
-import GAEngine
-from ChromosomeFactory import *
+from pygenetic.ChromosomeFactory import *
+from pygenetic import Utils, GAEngine
 from keras.models import Sequential
 from keras.layers import Dense
 import numpy
 import random
-import Utils
 import copy
 
 class ANNTopologyChromosomeFactory(ChromosomeFactory):

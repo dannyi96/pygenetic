@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setuptools.setup(
     name="pygenetic",
-    version="0.1.0",
+    version="0.2.0",
     author="Bharatraj S Telkar, Daniel Isaac, Shreyas V Patil",
     author_email="telkarraj@gmail.com, danielbcbs2@gmail.com, pshreyasv100@gmail.com",
     description="An Efficient Python Genetic Algorithm API",
@@ -28,7 +28,6 @@ setuptools.setup(
           'pytest==4.0.0',
           'matplotlib==2.2.2',
           'Werkzeug==0.14.1',
-          'locustio==0.11.0',
           'tensorflow==1.12.0'
       ],
 )
