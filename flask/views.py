@@ -67,6 +67,9 @@ def commonCodeCreate():
 	elif(payload["gene-generation"]=="1dregex"):
 		#factory = ChromosomeFactory.ChromosomeRegexFactory(payload["1dregex-datatype"],int(payload["no-of-genes"]),payload["1dregex-regex"])
 		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1dregex-datatype"]+",noOfGenes="+payload["no-of-genes"]+",pattern='"+payload["1dregex-regex"]+"'"+")\n"
+	elif(payload["gene-generation"]=="custom"):
+		cleaned = unquote(payload["custom-chromosome"])
+		precode += cleaned + "\n"
 
 	if(payload["pySpark"]=="yes"):
 		pyspark = True
@@ -223,6 +226,9 @@ def ga_init():
 	elif(payload["gene-generation"]=="1dregex"):
 		#factory = ChromosomeFactory.ChromosomeRegexFactory(payload["1dregex-datatype"],int(payload["no-of-genes"]),payload["1dregex-regex"])
 		code = "factory = ChromosomeFactory.ChromosomeRangeFactory(data_type="+payload["1dregex-datatype"]+",noOfGenes="+payload["no-of-genes"]+",pattern='"+payload["1dregex-regex"]+"'"+")\n"
+	elif(payload["gene-generation"]=="custom"):
+		cleaned = unquote(payload["custom-chromosome"])
+		precode += cleaned + "\n"
 
 	if(payload["pySpark"]=="yes"):
 		pyspark = True
