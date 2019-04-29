@@ -1,11 +1,5 @@
 import sys
-sys.path.append('../../pyGenetic/')
-sys.path.append('../pyGenetic/')
-sys.path.append('./pyGenetic/')
-sys.path.append('.')
-
-import SimpleGA
-import ANNEvolve
+from pygenetic import ANNEvolve
 import numpy
 import pytest
 

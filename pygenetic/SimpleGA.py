@@ -1,5 +1,5 @@
 import random
-import Utils
+from pygenetic import Utils
 import math
 import numpy as np
 

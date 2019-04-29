@@ -6,24 +6,6 @@ $(document).ready(function() {
     var $form = $('#main_form')
     $("#run").attr("disabled", true);
     $("#download_code").attr("disabled", true);
-
-    function preventFormSubmition()
-    {
-        allValid = true;
-        var inputs = $(".validName");
-        for(var i = 0; i < inputs.length ; i++){
-            console.log($(inputs[i]).css("color"));
-            if( $(inputs[i]).val()=='' || $(inputs[i]).css("color") == 'red'){
-                allValid  = false;
-            }
-        }
-        console.log(allValid);
-        if(allValid){
-            $("#run").attr("disabled",false);
-            $("#download_code").attr("disabled", false);
-        }
-    }
-
     
     function polling(event,form,generationNumber)
     {
@@ -35,12 +17,14 @@ $(document).ready(function() {
             console.log('HERE');
             var date = new Date();
             var timestamp = date.getTime();
+            $('#results').append('<br/><h3> GA Statistics </h3><br/>')
             document.getElementById('fitness_graph_image').src = '/plot_fitness_graph?lastmod='+ timestamp;
             return;
         }
         else if(generationNumber == 1)
         {
                 $('#results').empty();
+                document.getElementById("fitness_graph_image").src= ''; 
                 $.ajax(
                     {
                         type: "POST",
@@ -123,6 +107,7 @@ $(document).ready(function() {
                                         </div> 
                                     </div>`;
                             
+                            $('#results').append('<br/><br/><h3> GA Results (Best 5 Chromosomes) </h3><br/>')
                             $('#results').append(str); 
                             $('html, body').animate({scrollTop:$(document).height()}, 'fast');
                     }
@@ -837,7 +822,13 @@ $(document).ready(function() {
         var fitness_type = $('#fitness-achieve-select');
         if( fitness_type.val() == 'equal')
         {
-            if($('#fitness-achive-value').val()=='' || $('#regexInput').css("color") == 'rgb(255, 0, 0)')
+            if($('#fitness-achive-value').val()=='' || $('#fitness-achive-value').val() != parseInt($('#fitness-achive-value').val()))
+                allValid = false
+        }
+        var selection_type = $('#selection-select');
+        if( selection_type.val() == 'tournament')
+        {
+            if($('#tournsize').val()=='' || $('#tournsize').val() != parseInt($('#tournsize').val()))
                 allValid = false
         }
         console.log(allValid);

@@ -1,8 +1,6 @@
-import Population
+from pygenetic import Population, Evolution, Statistics
 import random
 import collections
-import Evolution
-import Statistics
 import bisect
 import math
 import numpy as np

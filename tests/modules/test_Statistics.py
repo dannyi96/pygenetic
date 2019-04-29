@@ -1,13 +1,6 @@
 import sys
-sys.path.append('../../pyGenetic/')
-sys.path.append('../pyGenetic/')
-sys.path.append('./pyGenetic/')
-sys.path.append('.')
-
-import Population
-import ChromosomeFactory
+from pygenetic import Statistics
 import pytest
-import Statistics
 import matplotlib
 import os
 if os.environ.get('DISPLAY','') == '':
