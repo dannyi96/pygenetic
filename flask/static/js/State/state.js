@@ -6,7 +6,23 @@ $(document).ready(function() {
     var $form = $('#main_form')
     $("#run").attr("disabled", true);
     $("#download_code").attr("disabled", true);
-    
+    function download(filename, text) 
+    {
+        var pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        pom.setAttribute('download', filename);
+
+        if (document.createEvent) {
+          var event = document.createEvent('MouseEvents');
+          event.initEvent('click', true, true);
+          pom.dispatchEvent(event);
+      }
+      else {
+            pom.click();
+        }
+    }
+
+
     function polling(event,form,generationNumber)
     {
         var MAX_ITER = parseInt(document.getElementById('no-of-evolutions').value)
@@ -246,8 +262,8 @@ $(document).ready(function() {
                     url: '/commonCodeCreate',
                     data: form.serialize(),
                     success: function(data){
-                        filename = data['Filename'];
-                        document.getElementById('hidden_iframe').src = '/get_file/'+filename+'.py';
+                        console.log(data);
+                        download('ga.py', data);
                     }
             });
             console.log('here4');

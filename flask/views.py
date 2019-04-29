@@ -1,6 +1,6 @@
 #from server.flaskr import app
 
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, make_response
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, make_response, Response
 from werkzeug import secure_filename
 from urllib.parse import unquote
 import os
@@ -14,7 +14,7 @@ import pickle
 from io import BytesIO
 
 #ga = None
-file_index = 0
+#file_index = 0
 #ga_list = []
 # Custom imports
 #from GOF_templates import render
@@ -156,13 +156,14 @@ def commonCodeCreate():
 	print()
 	print("complete code ---> \n",code,"\n*******")
 	print()
-	filename = str(file_index)
-	file_index += 1
-	file = open(app.config['UPLOAD_FOLDER']+filename+".py", "w")
-	file.write(code)
-	file.close()
-	return jsonify({'Filename': filename})
+	#filename = str(file_index)
+	#file_index += 1
+	#file = open(app.config['UPLOAD_FOLDER']+filename+".py", "w")
+	#file.write(code)
+	#file.close()
+	#return jsonify({'Filename': filename})
 	#exec(code,globals())
+	return Response(code,mimetype="text/plain",headers={"Content-Disposition":"attachment;filename=ga.py"})
 
 	
 
