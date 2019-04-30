@@ -124,6 +124,7 @@ class GAEngine:
 		self.crossover_external_data = {}
 		self.mutation_external_data = {}
 		self.hall_of_fame = None
+		self.extra_statistics = {}
 
 	def addCrossoverHandler(self,crossover_handler, weight = 1, *args):
 		"""
@@ -327,6 +328,11 @@ class GAEngine:
 	def setEvolution(self,evolution):
 		self.evolution = evolution
 
+	def addStatistic(self,statistic,statistic_function):
+		if type(statistic) != str:
+			raise Exception('Invalid Statistics key')
+		self.extra_statistics[statistic] = statistic_function
+
 	def evolve(self,noOfIterations=50):
 		"""
 		Performs the evolution by invoking the evolve method from Evolution.py module
@@ -364,6 +370,9 @@ class GAEngine:
 				print('New mutation value = ',self.mut_prob)
 			self.statistics.add_statistic('mutation_rate',self.mut_prob)
 			self.statistics.add_statistic('diversity',self.diversity)
+			for statistic in self.extra_statistics:
+				print('HERE')
+				self.statistics.add_statistic(statistic,self.extra_statistics[statistic](self.fitness_mappings,self))
 
 			result = self.evolution.evolve(self)
 

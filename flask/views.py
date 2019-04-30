@@ -13,15 +13,8 @@ import gc
 import pickle
 from io import BytesIO
 
-#ga = None
-#file_index = 0
-#ga_list = []
-# Custom imports
-#from GOF_templates import render
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'static/uploads/' 
 persistent_store = {}
-#app.secret_key = 'secretkeyhereplease'
 
 @app.route("/")
 def home():
@@ -156,13 +149,6 @@ def commonCodeCreate():
 	print()
 	print("complete code ---> \n",code,"\n*******")
 	print()
-	#filename = str(file_index)
-	#file_index += 1
-	#file = open(app.config['UPLOAD_FOLDER']+filename+".py", "w")
-	#file.write(code)
-	#file.close()
-	#return jsonify({'Filename': filename})
-	#exec(code,globals())
 	return Response(code,mimetype="text/plain",headers={"Content-Disposition":"attachment;filename=ga.py"})
 
 	
@@ -385,11 +371,6 @@ def plot_fitness_graph():
 	response = make_response(output.getvalue())
 	response.mimetype = 'image/png'
 	return response
-
-@app.route('/get_file/<path:path>')
-def get_file(path):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], path, as_attachment=True)
-
 
 @app.route("/downloadCode",methods=["POST"])
 def downloadCode():

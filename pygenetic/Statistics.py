@@ -2,7 +2,7 @@ import matplotlib
 import os
 if os.environ.get('DISPLAY','') == '':
     print('Warning: no DISPLAY environment variable found. Using matplotlib non-interactive Agg backend')
-    matplotlib.use('Agg')
+    #matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 class Statistics:
@@ -32,7 +32,7 @@ class Statistics:
 		if statistic in self.statistic_dict:
 			self.statistic_dict[statistic].append(value)
 		else:
-			raise Exception('Invalid Statistic')
+			self.statistic_dict[statistic] = [value]
 
 
 	def plot(self):
