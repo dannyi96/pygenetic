@@ -223,6 +223,12 @@ class CustomEvolution(Evolution.BaseEvolution):
     # Return 1 if the required fitness value is found else no need to return anything
 ```
 
+You can then create the custom Evolution Instance and add it to the GAEngine
+```
+evolution = CustomEvolution(...)
+ga.setEvolution(evolution)
+```
+
 ## 2. Usage of `SimpleGA`: the High Level pygenetic GA API 
 
 Very Simple GAs can be executed using `SimpleGA`
