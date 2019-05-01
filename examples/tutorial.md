@@ -57,7 +57,8 @@ It can easily created using the factory created earlier
 
 ```
 >>> from pygenetic import GAEngine
->>> ga = GAEngine.GAEngine(factory=factory,population_size=100,fitness_type=('equal',8),cross_prob=0.7,mut_prob = 0.1)
+>>> ga = GAEngine.GAEngine(factory=factory,population_size=100,fitness_type=('equal',8),
+				cross_prob=0.7,mut_prob = 0.1)
 ```
 where `factory` is the ChromosomeFactory to be used in the GA
       `population_size` is the size of population to be used in the GA
@@ -176,7 +177,7 @@ print(ga.best_fitness)
 ```
 This returns a tuple where the first element is the best chromosome and the second element is the corresponding best fitness value
 
-### 1.5 Statistics
+### 1.6 Statistics
 
 By default, we can view the following GA statistics after Evolution - `'best-fitness','worst-fitness','avg-fitness','diversity', 'mutation_rate'`
 
@@ -198,7 +199,7 @@ fig = ga.statistics.plot_statistics(['range'])
 plt.show()
 ```
 
-### 1.6 Custom Evolutions
+### 1.7 Custom Evolutions
 
 Users can define some custom evolution by subclassing `BaseEvolution` and filling `ga.population.new_members` with the new members from the evolution in the `def evolve(self,ga)` function where `ga` is the `GAEngine` object. Return 1 from this function if the required fitness value is found else no need to return anything
 
