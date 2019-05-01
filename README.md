@@ -4,7 +4,7 @@
 pygenetic is a Python Genetic Algorithm API which is User-Friendly as well as Generic in nature unlike most GA APIs which make a trade off between the two.
 
 ## Motivation
-![alt text](https://github.com/danny311296/pygenetic/blob/phase1/examples/imgs/motivation.png)
+![alt text](https://github.com/danny311296/pygenetic/blob/phase1/reports/imgs/motivation.png)
 While some APIs like DEAP and many more recent ones which are very efficient and generic are less user friendly in nature, other APIs like genetics and other smaller ones which are the best in terms of user friendliness, they are less generic. This API intends to strike a balance - good in terms of both user friendliness and genericity.
 
 ## Features
