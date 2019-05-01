@@ -88,7 +88,7 @@ class StandardEvolution(BaseEvolution):
 		total_fitness = 0
 		for chromosome in ga.fitness_mappings:
 			fitness = chromosome[1]
-			if fitness == 0:
+			if fitness <= 0:
 				fitness = random.uniform(0.01, 0.02)
 			total_fitness += fitness
 			fitnesses.append(fitness)
