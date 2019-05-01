@@ -15,7 +15,7 @@ While some APIs like DEAP and many more recent ones which are very efficient and
 * Supports Hall of Fame(best ever chromosome) Injection so that the best chromosome isn't lost in later generations due to the selection method used.
 * Supports Efficient Iteration Halt 
 * Supports Visualization of Statistics like max, min, avg, diversity of fitnesses, mutation rates. Users can also define custom statistics
-* Supports Multiple Crossovers and Mutations to enhance diversity
+* Supports usage of multiple crossovers and mutations in one GA execution to enhance diversity
 * Supports Population Control which users can make use of in various research purposes
 * Provides a bunch of Standard Selection, Crossovers, Mutations and Fitness Functions
 * Provides continue evolve feature so users can continue from previous evolutions instead of starting all over again.
