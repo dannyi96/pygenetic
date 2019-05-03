@@ -8,10 +8,6 @@ class BaseEvolution(ABC):
 	"""
 	Abstract class to be inherited to implement the specific evolution procedure
 
-	Instance Members :
-	------------------
-	max_iterations ; int
-
 	Methods :
 	---------
 	evolve() : abstract method to be implemeted by derived classes
@@ -36,15 +32,12 @@ class BaseEvolution(ABC):
 
 class StandardEvolution(BaseEvolution):
 	"""
-	Class inherits from BaseEvolution and contain implementations of abstract 
-	evolution method in  BaseEvolution
+	Class inherits from BaseEvolution and contains implementations of abstract 
+	evolution method in BaseEvolution
 
 	Instance Members :
 	------------------
 
-	max_iterations : int
-	adaptive_mutation : boolean to indicated if rate of mutation should 
-						change dynamically during each iteration
 	pyspark : boolean to indicated if parallelization should be supported by using pyspark
 
 	"""
@@ -55,6 +48,10 @@ class StandardEvolution(BaseEvolution):
 
 		"""
 		Private method which performs an iteration
+
+		Parameters :
+		-------------
+		ga : reference to the GAEngine object
 
 		Outline of Algorithm :
 		---------------------
@@ -125,6 +122,10 @@ class StandardEvolution(BaseEvolution):
 	def __evolve_pyspark(self,ga):
 		"""
 		Private method which performs iterations using pyspark
+
+		Parameters :
+		-------------
+		ga : reference to the GAEngine object
 
 		Outline of Algorithm:
 		---------------------
@@ -218,6 +219,10 @@ class StandardEvolution(BaseEvolution):
 	def evolve(self,ga):
 		"""
 		Invokes the private method __evolve_normal to perform an iteration Genetic Algorithm
+
+		Parameters :
+		-------------
+		ga : reference to the GAEngine object
 
 		Returns : 1 if optimal solution was found
 

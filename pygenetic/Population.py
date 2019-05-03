@@ -2,12 +2,15 @@ class Population:
 	"""
 	Class contians info on population of candidate solutions
 
-	Instance Members:
+	Instance Members :
 	----------------
 	population_size : int
 	members : List containing the members of population 
 	new_members : List containing members of population after each iteration
 
+	Methods :
+	----------
+	createMembers() : Generates initial members of population by invoking one of the methods from ChromosomeFactory.py module
 
 	"""
 
@@ -19,7 +22,7 @@ class Population:
 
 	def createMembers(self,factory):
 		"""
-		Generates initial meembers of population by invoking one of the methods from
+		Generates initial members of population by invoking one of the methods from
 		ChromosomeFactory.py module
 
 		Parameters :
