@@ -1,4 +1,3 @@
-import sys
 from pygenetic import SimpleGA
 import pytest
 

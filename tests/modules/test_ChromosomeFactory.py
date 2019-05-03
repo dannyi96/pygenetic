@@ -1,4 +1,3 @@
-import sys
 from pygenetic import ChromosomeFactory
 import pytest
 import re

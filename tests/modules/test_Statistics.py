@@ -1,4 +1,3 @@
-import sys
 from pygenetic import Statistics
 import pytest
 import matplotlib

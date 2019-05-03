@@ -1,6 +1,3 @@
-import sys
-sys.path.append('../../flask/')
-
 from locust import HttpLocust, TaskSet, task
 
 class makeRequests(TaskSet):

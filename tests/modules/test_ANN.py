@@ -1,4 +1,3 @@
-import sys
 from pygenetic import ANNEvolve
 import numpy
 import pytest

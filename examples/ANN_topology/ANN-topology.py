@@ -1,6 +1,3 @@
-import sys
-sys.path.append('../../pygenetic/')
-
 import ANNEvolve 
 import numpy
 # load pima indians dataset

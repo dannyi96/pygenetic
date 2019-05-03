@@ -1,10 +1,7 @@
-import sys
-sys.path.append('../../pygenetic/')
-
 import cProfile
-import GAEngine
-import Utils
-import ChromosomeFactory
+from pygenetic import GAEngine
+from pygenetic import Utils
+from pygenetic import ChromosomeFactory
 
 factory = ChromosomeFactory.ChromosomeRangeFactory(8,0,8,data_type=int)
 

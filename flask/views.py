@@ -6,7 +6,6 @@ from urllib.parse import unquote
 import os
 import datetime
 import json
-import sys
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import gc
@@ -28,10 +27,8 @@ def ga_online():
 @app.route("/commonCodeCreate",methods=["POST"])
 def commonCodeCreate():
 	global file_index
-	import sys
-	sys.path.insert(0, '../pygenetic')
 	payload = request.form
-	precode = "import GAEngine\nimport Utils\nimport ChromosomeFactory\n"
+	precode = "from pygenetic import GAEngine,Utils,ChromosomeFactory\n"
 	for i in payload:
 		print(payload[i])
 
@@ -139,11 +136,8 @@ def commonCodeCreate():
 
 @app.route('/ga_init',methods=['POST'])
 def ga_init():
-	import sys
-	sys.path.insert(0, '../pygenetic')
-
 	payload = request.form
-	precode = "import GAEngine\nimport Utils\nimport ChromosomeFactory\n"
+	precode = "from pygenetic import GAEngine,Utils,ChromosomeFactory\n"
 	for i in payload:
 		print(payload[i])
 

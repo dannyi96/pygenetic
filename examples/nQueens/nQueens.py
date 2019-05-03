@@ -1,6 +1,3 @@
-import sys 
-
-sys.path.append('../..')
 from pygenetic import GAEngine, ChromosomeFactory, Utils
 import matplotlib.pyplot as plt
 

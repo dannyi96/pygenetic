@@ -10,12 +10,11 @@ class ChromosomeFactory(ABC):
 
 	Instance variables :
 	------------------
-	data_type : type of data of each gene in chromosome
 	noOfGenes : number of genes in each chromosome
 
 	Methods :
 	---------
-	createChromosome () : Abstract method to be implemented by derived classes
+	createChromosome() : Abstract method to be implemented by derived classes
 
 	"""
 
@@ -43,9 +42,9 @@ class ChromosomeRegexFactory(ChromosomeFactory):
 		Parameters :
 		------------
 
-		data_type : datatype of each gene
 		noOfGenes : int ,  number of genes in each chromosome
 		pattern : string containing individual genes
+		data_type : datatype of each gene
 
 		"""
 
@@ -97,11 +96,11 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 		Parameters :
 		-----------
 
-		data_type : datatype of each gene
 		noOfGenes : int , number of genes in each chromosome
 		minValue : int , lower bound of range
 		maxValue : int , upper bound of range
 		duplicates : boolean , indicates if gene can be repeated in chromosome
+		data_type : datatype of each gene
 
 		"""
 

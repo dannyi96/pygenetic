@@ -1,4 +1,3 @@
-import sys
 from pygenetic import Utils, ChromosomeFactory, GAEngine, Population
 
 import pytest

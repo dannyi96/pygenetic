@@ -1,4 +1,3 @@
-import sys
 from pygenetic import ChromosomeFactory, Population
 import pytest
 
