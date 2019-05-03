@@ -22,6 +22,7 @@ Contents:
   modules
   pygenetic
   README
+  tutorial
 
 
 
