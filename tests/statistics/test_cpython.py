@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../../pyGenetic/')
+sys.path.append('../../pygenetic/')
 
 import cProfile
 import GAEngine

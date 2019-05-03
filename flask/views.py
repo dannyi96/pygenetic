@@ -29,7 +29,7 @@ def ga_online():
 def commonCodeCreate():
 	global file_index
 	import sys
-	sys.path.insert(0, '../pyGenetic')
+	sys.path.insert(0, '../pygenetic')
 	payload = request.form
 	precode = "import GAEngine\nimport Utils\nimport ChromosomeFactory\n"
 	for i in payload:
@@ -140,7 +140,7 @@ def commonCodeCreate():
 @app.route('/ga_init',methods=['POST'])
 def ga_init():
 	import sys
-	sys.path.insert(0, '../pyGenetic')
+	sys.path.insert(0, '../pygenetic')
 
 	payload = request.form
 	precode = "import GAEngine\nimport Utils\nimport ChromosomeFactory\n"
@@ -256,8 +256,6 @@ def ga_init():
 			code += "ga.setFitnessHandler("+custom_name+")\n"
 
 	print()
-	print("precode ---> \n",precode)
-	print("code ---> \n",code)
 	code = precode + code
 	print("complete code ---> \n",code,"\n*******")
 	print()
