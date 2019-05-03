@@ -41,7 +41,3 @@ def test_mock_bitFlip(chromosome,random_index,expected_result):
 	with mock.patch('random.randint', lambda x,y:random_index):
 		assert Utils.MutationHandlers.bitFlip(chromosome) == expected_result
 
-# if __name__ == '__main__':
-#     test_exhaustive_swap()
-#     test_mock_swap()
-#     test_bitFlip()

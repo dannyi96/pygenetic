@@ -145,11 +145,9 @@ class StandardEvolution(BaseEvolution):
 		"""
 		from pyspark import SparkContext
 		sc = SparkContext.getOrCreate()
-		#print(ga.population.members)
 		chromosomes_rdd = sc.parallelize(ga.population.members)
 		# Fitness Value Mapping and making selection
 		mapped_chromosomes_rdd = chromosomes_rdd.map(lambda x: (x,ga.calculateFitness(x)))
-		#print(mapped_chromosomes_rdd.collect())
 		if ga.selection_handler == Utils.SelectionHandlers.best:
 			if type(ga.fitness_type) == str:
 				if ga.fitness_type == 'max':
@@ -167,7 +165,6 @@ class StandardEvolution(BaseEvolution):
 					selected_chromosomes = [ x[0] for x in selected_chromosomes]
 		else:
 			selected_chromosomes = ga.handle_selection()
-		#selected_chromosomes = mapped_chromosomes_rdd.top(len(ga.population.members)-math.ceil(ga.cross_prob * len(ga.population.members)),key=lambda x: x[1])
 		print('Members left after selection =  ', selected_chromosomes)
 		print('Best member after selection = ', ga.best_fitness[0])
 		print('Best fitness after selection = ', ga.best_fitness[1])
@@ -225,7 +222,6 @@ class StandardEvolution(BaseEvolution):
 		Returns : 1 if optimal solution was found
 
 		"""
-		#print(self.max_iterations)
 		if self.pyspark == False:
 			return self.__evolve_normal(ga)
 		else:

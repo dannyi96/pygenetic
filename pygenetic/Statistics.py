@@ -2,7 +2,6 @@ import matplotlib
 import os
 if os.environ.get('DISPLAY','') == '':
     print('Warning: no DISPLAY environment variable found. Using matplotlib non-interactive Agg backend')
-    #matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 class Statistics:

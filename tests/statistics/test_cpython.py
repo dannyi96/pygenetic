@@ -15,15 +15,10 @@ matrix = [[0,172,145,607,329,72,312,120],[172,0,192,494,209,158,216,92],[145,192
 ga = GAEngine.GAEngine(factory,100,fitness_type='min',mut_prob = 0.3)
 ga.addCrossoverHandler(Utils.CrossoverHandlers.PMX, 9)
 
-#ga = GAEngine(fitness,8,factory,20)#,fitness_type='equal')
-#ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 9)
-
 ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
 ga.addCrossoverHandler(Utils.CrossoverHandlers.OX, 3)
 ga.addMutationHandler(Utils.MutationHandlers.swap)
 
 ga.setSelectionHandler(Utils.SelectionHandlers.SUS)
 ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
-# ga.setSelectionHandler(Utils.SelectionHandlers.basic)
-# Provide max iteration here ???
 cProfile.run('ga.evolve(20)')

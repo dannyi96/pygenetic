@@ -101,7 +101,7 @@ class SimpleGA:
 					print('Solved')
 					return 1
 			fitnesses = []
-			total = 0 #This is not being used
+			total = 0
 			for chromosome in self.fitness_mappings:
 				fitness = chromosome[1]
 				if fitness == 0:
@@ -116,7 +116,6 @@ class SimpleGA:
 				self.population.append(self.population[0])
 
 			crossover_indexes = np.random.choice(len(p),n,p=p, replace=False)
-			#print("crossover_indices = ",crossover_indexes)
 
 			crossover_chromosomes = [ self.population[index] for index in crossover_indexes]
 
@@ -124,12 +123,10 @@ class SimpleGA:
 				father,mother = crossover_chromosomes[i], crossover_chromosomes[i+1]
 				child1, child2 = self.doCrossover(father,mother)
 				new_population.extend([child1,child2])
-			#print("adaptive_mutation value passed = ",self.adaptive_mutation)
 			mutation_indexes = np.random.choice(len(new_population),int(self.mut_prob*len(p)), replace=False)
 			for index in mutation_indexes:
 				new_population[index] = self.doMutation(new_population[index])
 			self.population = new_population
-			#print("New members = ",ga.population.members)
 			new_population = []
 		print("Best fitness in this generation = ", self.best_fitness)
 		print(self.fitness_mappings[:10])

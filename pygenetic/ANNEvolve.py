@@ -85,4 +85,3 @@ if __name__ == '__main__':
 	a = ANNTopologyEvolve(X,Y,hiddenLayers=2)
 	a.evolve()
 	print(a.best_fitness)
-	#a.evolve()

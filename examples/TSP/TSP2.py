@@ -14,8 +14,6 @@ def range_of_generation(fitness_mappings,ga):
 	return abs(fitness_mappings[0][1] - fitness_mappings[-1][1])
 
 ga.addStatistic('range',range_of_generation)
-	#ga = GAEngine(fitness,8,factory,20)#,fitness_type='equal')
-	#ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 9)
 
 ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
 ga.addCrossoverHandler(Utils.CrossoverHandlers.OX, 3)
@@ -23,8 +21,6 @@ ga.addMutationHandler(Utils.MutationHandlers.swap)
 
 ga.setSelectionHandler(Utils.SelectionHandlers.random)
 ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
-	# ga.setSelectionHandler(Utils.SelectionHandlers.basic)
-	# Provide max iteration here ???
 ga.evolve(20)
 # fig = ga.statistics.plot_statistics(['best-fitness','worst-fitness','avg-fitness'])
 # plt.show()

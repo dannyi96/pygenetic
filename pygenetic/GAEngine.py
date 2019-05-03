@@ -138,21 +138,12 @@ class GAEngine:
 
 		"""
 
-		#try: 
-		#	crossoverhandlers = dir(Utils.CrossoverHandlers)
-		#	if crossover_handler not in crossoverhandlers:
-		#		raise NotImplementedError('No such crossover handler found')
-
-
 		self.crossover_handlers.append(crossover_handler)
 		self.crossover_handlers_weights.append(weight)
 		xtra_args = []
 		for arg in args:
 			xtra_args.append(arg)
 		self.crossover_external_data.update({crossover_handler:tuple(xtra_args)})
-		
-		#except NotImplementedError as ni:
-		#	print(ni)
 
 			
 
