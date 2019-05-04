@@ -1,4 +1,5 @@
 from pygenetic import Population, Evolution, Statistics
+# import Population, Evolution, Statistics
 import random
 import collections
 import bisect
@@ -389,13 +390,13 @@ class GAEngine:
 		for i in range(len(self.mutation_handlers_weights)):
 			cumsum += self.mutation_handlers_weights[i]
 			self.mutation_handlers_weights[i] = cumsum/total
-		print("mutation_handlers_weights = ",self.mutation_handlers_weights)
+		# print("mutation_handlers_weights = ",self.mutation_handlers_weights)
 		total = sum(self.crossover_handlers_weights)
 		cumsum = 0
 		for i in range(len(self.crossover_handlers_weights)):
 			cumsum += self.crossover_handlers_weights[i]
 			self.crossover_handlers_weights[i] = cumsum/total
-		print("crossover_handlers_weights = ",self.crossover_handlers_weights)
+		# print("crossover_handlers_weights = ",self.crossover_handlers_weights)
 
 	def chooseCrossoverHandler(self):
 		"""
@@ -481,6 +482,7 @@ class GAEngine:
 		self.normalizeWeights()
 		if self.population == None:
 			raise Exception('Call evolve before calling continue_evolve')
+		print("gen\tavg\t\tbest\tworst\t")
 		for i in range(noOfIterations):
 			self.generateFitnessMappings()
 			fitnesses = [ x[1] for x in self.fitness_mappings]
@@ -489,21 +491,22 @@ class GAEngine:
 			self.mean_fitness = sum(fitnesses)/len(fitnesses)
 			self.statistics.add_statistic('avg-fitness',self.mean_fitness)
 			self.diversity = math.sqrt(sum((fitness - self.mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
+			print("%i\t%.2f\t\t%s\t%s\t" % (i,self.mean_fitness,self.fitness_mappings[0][1],self.fitness_mappings[-1][1]))
 			if self.adaptive_mutation:
 				self.mut_prob = self.initial_mut_prob * ( 1 + ((self.best_fitness[1]-self.diversity) / (self.diversity+self.best_fitness[1]) ) )
 				self.mut_prob = np.clip(self.mut_prob,0.0001,0.8)
-				print("Diversity = ",self.diversity)
-				print('New mutation value = ',self.mut_prob)
+				# print("Diversity = ",self.diversity)
+				# print('New mutation value = ',self.mut_prob)
 			self.statistics.add_statistic('mutation_rate',self.mut_prob)
 			self.statistics.add_statistic('diversity',self.diversity)
 			for statistic in self.extra_statistics:
-				print('HERE')
+				# print('HERE')
 				self.statistics.add_statistic(statistic,self.extra_statistics[statistic](self.fitness_mappings,self))
 
 			result = self.evolution.evolve(self)
 
 			if self.hall_of_fame_injection and (i+1)%20 == 0:
-				print('Hall of fame chromosome ',self.hall_of_fame[0] , ' injected to population')
+				# print('Hall of fame chromosome ',self.hall_of_fame[0] , ' injected to population')
 				self.population.new_members.insert(0,self.hall_of_fame[0]) 
 
 			if self.population_control:
@@ -511,7 +514,7 @@ class GAEngine:
 					self.population.new_members = self.population.new_members[:self.population_size]
 				elif len(self.population.new_members) < self.population_size:
 					self.population.new_members = self.population.new_members * int(self.population_size/len(self.population.new_members)) + self.population.new_members[:self.population_size%len(self.population.new_members)]
-				print('Population Control has taken place')
+				# print('Population Control has taken place')
 
 			if self.efficient_iteration_halt:
 				if len(self.last_20_fitnesses)==20:
@@ -529,7 +532,14 @@ class GAEngine:
 			if result == 1:
 				print('GA Problem Solved')
 				break
-		print("Best fitness in this generation = ", self.best_fitness)
-		print("Best among all generations = ", self.hall_of_fame)
-		print("Top fittest chromosomes of this generation: ", self.fitness_mappings[:10])
+		# print("Best fitness in this generation = ", self.best_fitness)
+		# print("Best among all generations = ", self.hall_of_fame)
+		# print("Top fittest chromosomes of this generation: ", self.fitness_mappings[:10])
+		self.generateFitnessMappings()
+		fitnesses = [ x[1] for x in self.fitness_mappings]
+		self.statistics.add_statistic('best-fitness',self.fitness_mappings[0][1])
+		self.statistics.add_statistic('worst-fitness',self.fitness_mappings[-1][1])
+		self.mean_fitness = sum(fitnesses)/len(fitnesses)
+		self.statistics.add_statistic('avg-fitness',self.mean_fitness)
+		print("%i\t%.2f\t\t%s\t%s\t" % (noOfIterations,self.mean_fitness,self.fitness_mappings[0][1],self.fitness_mappings[-1][1]))
 
