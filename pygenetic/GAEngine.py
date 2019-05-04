@@ -6,11 +6,12 @@ import math
 import numpy as np
 
 class GAEngine:
-	"""This Class is the main driver program which contains and invokes the operators used in Genetic algorithm
+	"""
+	This Class is the main driver program which contains and invokes the operators used in Genetic algorithm
 
 	GAEngine keeps track of specific type of operators the user has specified for running the algorithm
 
-	Methods
+	Methods :
 	---------
 	addCrossoverHandler(crossover_handler, weight, *args)
 		Sets the function to be used for crossover operation

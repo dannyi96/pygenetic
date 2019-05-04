@@ -10,27 +10,96 @@ class SelectionHandlers:
 	
 	Methods :
 	--------
-	basic() : Performs selection operation based fitness scores of candidates
+	random() : Randomly selects a fixed number of chromosomes from fitness mappings
+	smallest() : Sorts and selects a fixed number of the smallest chromosomes from fitness mappings
+	largest() : Sorts and selects a fixed number of the largest chromosomes from fitness mappings
+	best() : Performs selection based on fitness type (min,max or equal).
+				min -> smallest, max -> largest, equal -> least absolute difference
+	tournament() : Performs tournament selection
+	roulette() : Performs roulette based selection
+	rank() : Ranks population based on fitness type, then performs roulette selection
+	SUS() : Performs selection based on Stochastic Universal Sampling
 
 	"""
 
 	@staticmethod
 	def random(fitness_mappings, ga):
+		"""
+		Randomly selects a fixed number of chromosomes from fitness mappings
+	
+		Parameters :
+		----------
+		fitness_mappings : list
+					list storing population members and associated fitness values
+		ga : Class reference
+					Reference to GAEngine class
+
+		Returns :
+		----------
+		Filtered population list based on selection method
+
+		"""
 		pop = ga.population.members
 		return [random.choice(pop) for i in range(len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings)))]
 
 	@staticmethod
 	def smallest(fitness_mappings, ga):
+		"""
+		Sorts and selects a fixed number of the smallest chromosomes from fitness mappings
+	
+		Parameters :
+		----------
+		fitness_mappings : list
+					list storing population members and associated fitness values
+		ga : Class reference
+					Reference to GAEngine class
+
+		Returns :
+		----------
+		Filtered population list based on selection method
+		
+		"""
 		new = sorted(fitness_mappings, key=operator.itemgetter(1))[:len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))]
 		return [i[0] for i in new]
 		
 	@staticmethod
 	def largest(fitness_mappings, ga):
+		"""
+		Sorts and selects a fixed number of the largest chromosomes from fitness mappings
+	
+		Parameters :
+		----------
+		fitness_mappings : list
+					list storing population members and associated fitness values
+		ga : Class reference
+					Reference to GAEngine class
+
+		Returns :
+		----------
+		Filtered population list based on selection method
+		
+		"""
 		new = sorted(fitness_mappings, key=operator.itemgetter(1), reverse=True)[:len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))]
 		return [i[0] for i in new]
 
 	@staticmethod
 	def best(fitness_mappings, ga):
+		"""
+		Performs selection based on fitness type (min,max or equal).
+		min -> smallest, max -> largest, equal -> least absolute difference
+	
+		Parameters :
+		----------
+		fitness_mappings : list
+					list storing population members and associated fitness values
+		ga : Class reference
+					Reference to GAEngine class
+
+		Returns :
+		----------
+		Filtered population list based on selection method
+		
+		"""
 		if ga.fitness_type == 'max':
 			new = sorted(fitness_mappings, key=operator.itemgetter(1), reverse=True)[:len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))]
 		elif ga.fitness_type == 'min':
@@ -41,6 +110,21 @@ class SelectionHandlers:
 		
 	@staticmethod
 	def tournament(fitness_mappings, ga, tournsize):
+		"""
+		Performs tournament selection
+	
+		Parameters :
+		----------
+		fitness_mappings : list
+					list storing population members and associated fitness values
+		ga : Class reference
+					Reference to GAEngine class
+
+		Returns :
+		----------
+		Filtered population list based on selection method
+		
+		"""
 		chosen = []
 		for i in range(len(fitness_mappings)-math.ceil(ga.cross_prob * len(fitness_mappings))):
 			aspirants = random.sample(fitness_mappings, tournsize)
@@ -56,6 +140,21 @@ class SelectionHandlers:
 		
 	@staticmethod
 	def roulette(fitness_mappings, ga):
+		"""
+		Performs roulette based selection
+	
+		Parameters :
+		----------
+		fitness_mappings : list
+					list storing population members and associated fitness values
+		ga : Class reference
+					Reference to GAEngine class
+
+		Returns :
+		----------
+		Filtered population list based on selection method
+		
+		"""
 		fitness = [i[1] for i in fitness_mappings]
 		if ga.selection_handler == SelectionHandlers.roulette:
 			if ga.fitness_type == 'max':
@@ -82,6 +181,21 @@ class SelectionHandlers:
 
 	@staticmethod
 	def rank(fitness_mappings, ga):
+		"""
+		Ranks population based on fitness type, then performs roulette selection
+	
+		Parameters :
+		----------
+		fitness_mappings : list
+					list storing population members and associated fitness values
+		ga : Class reference
+					Reference to GAEngine class
+
+		Returns :
+		----------
+		Filtered population list based on selection method
+		
+		"""
 		if ga.fitness_type == 'max':
 			new = [i[0] for i in sorted(fitness_mappings, key=operator.itemgetter(1))]
 		elif ga.fitness_type == 'min':
@@ -95,7 +209,21 @@ class SelectionHandlers:
 
 	@staticmethod
 	def SUS(fitness_mappings, ga):
+		"""
+		Performs selection based on Stochastic Universal Sampling
+	
+		Parameters :
+		----------
+		fitness_mappings : list
+					list storing population members and associated fitness values
+		ga : Class reference
+					Reference to GAEngine class
 
+		Returns :
+		----------
+		Filtered population list based on selection method
+		
+		"""
 		if ga.fitness_type == 'max':
 			s_inds = sorted(fitness_mappings, key=operator.itemgetter(1), reverse=True)
 		elif ga.fitness_type == 'min':
@@ -134,6 +262,7 @@ class MutationHandlers:
 	Methods :
 	---------
 	swap() : Performs mutation by swapping genes of chromosome in single point manner
+	bitFlip() : Performs mutation by choosing one gene and flipping it to it's complement
 
 	"""
 
@@ -146,14 +275,13 @@ class MutationHandlers:
 		Parameters :
 		-----------
 		chromosome : List
+					The chromosome on which mutation is to be performed
 
 		Returns :
 		---------
 		Mutated Chromosome
 
 		"""
-
-
 		index = random.randint(0,len(chromosome)-2)
 		newchrom = copy.copy(chromosome)
 		newchrom[index], newchrom[index+1] = newchrom[index+1], newchrom[index]
@@ -162,6 +290,19 @@ class MutationHandlers:
 	# only when genes are binary
 	@staticmethod
 	def bitFlip(chromosome):
+		"""
+		Performs mutation by choosing one gene and flipping it to it's complement
+
+		Parameters :
+		-----------
+		chromosome : List
+					The chromosome on which mutation is to be performed
+
+		Returns :
+		---------
+		Mutated Chromosome
+
+		"""
 		index = random.randint(0,len(chromosome)-1)
 		chromosome[index] = type(chromosome[index])(not chromosome[index])
 		return chromosome
@@ -176,6 +317,10 @@ class CrossoverHandlers:
 
 	distinct() : performs crossover between to chromosomes by appending genes from one chromosome 
 				into other without duplicating the gene present in first chromosome 
+	onePoint() : Performs one-point crossover on two chromosomes by swapping second halves of each chromosome
+	twoPoint() : Performs two-point crossover on two chromosomes by swapping the mid part of each chromosome
+	PMX() : Performs Partially Matched Crossover on two chromosomes
+	OX() : Performs Ordered Crossover on two chromosomes
 
 	"""
 
@@ -210,6 +355,19 @@ class CrossoverHandlers:
 		
 	@staticmethod
 	def onePoint(chromosome1, chromosome2):
+		"""
+		Performs one-point crossover on two chromosomes by swapping second halves of each chromosome
+
+		Parameters :
+		------------
+		chromosome1 : chromosome as one parent
+		chromosome2 : chromosome as second parent
+
+		Returns :
+		----------
+		Tuple containing two new offspring chromosomes produced by crossover 
+
+		"""
 		size = min(len(chromosome1), len(chromosome2))
 		r = random.randint(1, size - 1)
 		new_chromosome1 = chromosome1[:r]+chromosome2[r:]
@@ -218,6 +376,19 @@ class CrossoverHandlers:
 
 	@staticmethod
 	def twoPoint(chromosome1, chromosome2):
+		"""
+		Performs two-point crossover on two chromosomes by swapping the mid part of each chromosome
+
+		Parameters :
+		------------
+		chromosome1 : chromosome as one parent
+		chromosome2 : chromosome as second parent
+
+		Returns :
+		----------
+		Tuple containing two new offspring chromosomes produced by crossover 
+
+		"""
 		size = min(len(chromosome1), len(chromosome2))
 		a = random.randint(1, size - 2)
 		b = random.randint(1, size - 1)
@@ -231,6 +402,19 @@ class CrossoverHandlers:
 		
 	@staticmethod
 	def PMX(chromosome1, chromosome2): # Partially Matched Crossover
+		"""
+		Performs Partially Matched Crossover on two chromosomes
+
+		Parameters :
+		------------
+		chromosome1 : chromosome as one parent
+		chromosome2 : chromosome as second parent
+
+		Returns :
+		----------
+		Tuple containing two new offspring chromosomes produced by crossover 
+
+		"""
 		size = min(len(chromosome1), len(chromosome2))
 		a = random.randint(1, size - 2)
 		b = random.randint(1, size - 1)
@@ -253,6 +437,19 @@ class CrossoverHandlers:
 	
 	@staticmethod
 	def OX(chromosome1, chromosome2): # Ordered Crossover
+		"""
+		Performs Ordered Crossover on two chromosomes
+
+		Parameters :
+		------------
+		chromosome1 : chromosome as one parent
+		chromosome2 : chromosome as second parent
+
+		Returns :
+		----------
+		Tuple containing two new offspring chromosomes produced by crossover 
+
+		"""
 		size = min(len(chromosome1), len(chromosome2))
 		a = random.randint(1, size - 2)
 		b = random.randint(1, size - 1)
@@ -282,7 +479,9 @@ class Fitness:
 
 	Methods :
 	--------
-	sum() : calculates fitness scores of a candidate
+	addition() : calculates fitness scores of a candidate
+	TSP() : Specific to Travelling Salesman Problem
+			Calculates fitness score of a chromosome as sum of distances between each adjacent city in given chromosome
 
 	"""
 
@@ -295,15 +494,33 @@ class Fitness:
 		Parameters :
 		-----------
 		chromosome : list
+					The chromosome whose fitness is to be calculated
 		
 		Returns :
 		----------
 		Fitness score 
+
 		"""
 		return sum(chromosome)
 		
 	@staticmethod
 	def TSP(chromosome, matrix):
+		"""
+		Specific to Travelling Salesman Problem
+		Calculates fitness score of a chromosome as sum of distances between each adjacent city in given chromosome
+
+		Parameters :
+		-----------
+		chromosome : list
+					Sequence of cities to be visited in order
+		matrix : 2D list
+					Gives distances between cities
+		
+		Returns :
+		----------
+		Fitness score 
+		
+		"""
 		total = 0
 		for i in range(len(chromosome)-1):
 			total += matrix[chromosome[i]][chromosome[i+1]]

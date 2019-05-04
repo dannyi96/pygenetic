@@ -11,8 +11,8 @@ class Statistics:
 
 	Instance Members:
 	-----------------
-	max_fitnesses : List containing the maximum fitness scores discovered in each iteration
-	iterations : List containing count of each iteration
+	statistic_dict : A dictionary storing different statistics mapped to list storing each generation data
+				Stats stored are best-fitness, worst-fitness, avg-fitness, diversity and mutation-rate
 
 	"""
 
@@ -22,11 +22,12 @@ class Statistics:
 
 	def add_statistic(self,statistic,value):
 		"""
-		Keeps track of max fitness scores of each iteration and iteration number
+		Appends a value to specified statistic, usually called after each iteration
 
 		Parameters :
 		------------
-		max_fitness : float , fitness score after an iteration
+		statistic : The statistic for which the value is relevant and is to be appended
+		value : Th evalue to be appended
 
 		"""
 		if statistic in self.statistic_dict:
@@ -37,7 +38,7 @@ class Statistics:
 
 	def plot(self):
 		"""
-		Generates a line graph to display change in fitness values over iterations
+		Generates a line graph for each statistic to display change over iterations
 
 		"""
 		fig,ax = plt.subplots()
@@ -50,6 +51,14 @@ class Statistics:
 		return fig
 
 	def plot_statistics(self,statistics):
+		"""
+		Generates a line graph for list of specified statistics to display change over iterations
+
+		Parameters :
+		----------
+		statistics : A list of statistic names whose variation is to be shown
+
+		"""
 		fig,ax = plt.subplots()
 		ax.set_xlabel('Generation')
 		ax.set_ylabel('Statistic')
@@ -60,6 +69,14 @@ class Statistics:
 		return fig
 
 	def plot_statistic(self,statistic):
+		"""
+		Generates a line graph for specified statistic to display change over iterations
+
+		Parameters :
+		----------
+		statistic : The statistic name whose variation is to be shown
+
+		"""
 		fig,ax = plt.subplots()
 		ax.set_xlabel('Generation')
 		ax.set_ylabel('Statistic')

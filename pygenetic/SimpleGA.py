@@ -4,7 +4,22 @@ import math
 import numpy as np
 
 class SimpleGA:
+	"""
+	This Class is the driver program which contains and invokes the operators used in Genetic algorithm
+	This class can be invoked to implement a non-generic genetic solution 
+	SimpleGA keeps track of specific type of operators the user has specified for running the algorithm
 
+	Methods :
+	----------
+	create_initial_population() : Generates initial members of population by randomly generating chromosomes based on range
+	doCrossover() : Performs crossover by calling specific utility function based on crossover_handler
+	doMutation() : Performs mutation by calling specific utility function based on mutation_handler
+	calculateFitness() : Returns fitness associated with chromosome passed as argument
+	generateFitnessMappings() : Generates a list of population members and associated fitnesses
+	handleSelection() : Generates fitness mappings and performs selection by calling specific utility function based on selection_handler
+	evolve() : Performs evolution for specified number of iterations
+
+	"""
 	def __init__(self,minValue,maxValue,noOfGenes,fitness_func,duplicates=False,population_size=100,cross_prob=0.8,mut_prob=0.1,crossover_handler='onePoint',mutation_handler='swap',selection_handler='best',fitness_type='max'):
 		self.minValue = minValue
 		self.maxValue = maxValue
@@ -29,6 +44,10 @@ class SimpleGA:
 		self.fitness_func = fitness_func
 
 	def create_initial_population(self):
+		"""
+		Generates initial members of population by randomly generating chromosomes based on range
+
+		"""
 		self.population = []
 		for i in range(self.population_size):
 			if self.duplicates:
@@ -39,6 +58,19 @@ class SimpleGA:
 		print("Initial population: ", self.population)
 
 	def doCrossover(self, chromosome1, chromosome2):
+		"""
+		Performs crossover by calling specific utility function based on crossover_handler
+
+		Parameters :
+		----------
+		chromosome1 : chromosome as one parent
+		chromosome2 : chromosome as second parent
+
+		Returns :
+		----------
+		Tuple containing two new offspring chromosomes produced by crossover 
+
+		"""
 		if self.crossover_handler == 'distinct':
 			return Utils.CrossoverHandlers.distinct(chromosome1,chromosome2)
 		elif self.crossover_handler == 'onePoint':
@@ -53,21 +85,57 @@ class SimpleGA:
 			raise Exception('Invalid Crossover given as input')
 
 	def doMutation(self, chromosome1):
+		"""
+		Performs mutation by calling specific utility function based on mutation_handler
+
+		Parameters :
+		----------
+		chromosome1 : chromosome as subject
+
+		Returns :
+		----------
+		Mutated chromosome
+
+		"""
 		if self.mutation_handler == 'swap':
 			return Utils.MutationHandlers.swap(chromosome1)
-		elif self.crossover_handler == 'bitFlip':
+		elif self.mutation_handler == 'bitFlip':
 			return Utils.MutationHandlers.bitFlip(chromosome1)
 		else:
 			raise Exception('Invalid Mutation given as input')
 
 	def calculateFitness(self,chromosome):
+		"""
+		Returns fitness associated with chromosome passed as argument
+
+		Parameters :
+		----------
+		chromosome : chromosome whose fitness is to be calculated
+
+		Returns :
+		----------
+		Fitness of that chromosome
+
+		"""
 		return self.fitness_func(chromosome)
 
 	def generateFitnessMappings(self):
+		"""
+		Generates a list of population members and associated fitnesses
+
+		"""
 		self.fitness_mappings = [(member, self.calculateFitness(member)) for member in self.population]
 		print(self.fitness_mappings)	
 
 	def handle_selection(self):
+		"""
+		Generates fitness mappings and performs selection by calling specific utility function based on selection_handler
+
+		Returns :
+		----------
+		Filtered population list based on selection method
+
+		"""
 		self.generateFitnessMappings()
 		if self.fitness_type == 'max':
 			self.fitness_mappings.sort(key=lambda x:x[1],reverse=True)
@@ -91,6 +159,31 @@ class SimpleGA:
 			raise Exception('Invalid Mutation given as input')
 
 	def evolve(self,noOfIterations=50):
+		"""
+		Performs the evolution as many times as number of iterations specified by user or terminates
+		if optimal solution is found.
+
+		Parameters :
+		-----------
+		noOfIterations : int
+						default value : 50
+
+		Outline of Algorithm :
+		---------------------
+		Selection : fittest members of population are selected by invoking 
+					selection handler in Utils.py module
+		Crossover : A probability score is generated from fitness value of each chromosome
+					Chromosomes for crossover are selected based on this probablity score 
+					of each chromosome
+					Crossover is performed by invoking a crossover handler from Utils.py
+		Mutation : The genes to be mutated are chosen randomly
+					Once indexes of Chromomsome / genes to be mutated are determined, a mutation
+					handler from Utils.py module is invoked 
+
+		Each iteration consists of repeating the above operations until an optimal solution 
+		determined by fitness threshold is reached  or number of iterations specified are complete
+
+		"""
 		for i in range(noOfIterations):
 			new_population = self.handle_selection()
 			print("*** Members left after selection = ",len(new_population))
