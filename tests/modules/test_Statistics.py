@@ -23,15 +23,6 @@ def test_add_statistic(statistic,value):
 	assert statistics.statistic_dict[statistic] == [value]
 
 @pytest.mark.parametrize("statistic, value", [
-( 'junk', 8),
-( 'lol', 3 ),
-])
-def test_errors(statistic,value):
-	statistics = Statistics.Statistics()
-	with pytest.raises(Exception):
-		statistics.add_statistic(statistic,value)
-
-@pytest.mark.parametrize("statistic, value", [
 ( 'best-fitness', 8),
 ])
 def test_plot(statistic,value):
