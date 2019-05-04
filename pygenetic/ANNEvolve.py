@@ -38,8 +38,6 @@ class ANNTopologyEvolve:
 		self.batch_size = batch_size
 		self.population_size = population_size
 		self.factory = ANNTopologyChromosomeFactory(hiddenLayers,neuronsPerLayer,activations,optimizers)
-		print(self.factory.createChromosome())
-		#self.fitness(self.factory.createChromosome(),self.input_dim,self.loss,self.metrics)
 
 	def evolve(self,noOfGenerations=100):
 		ga = GAEngine.GAEngine(self.factory,population_size=self.population_size,fitness_type='min')

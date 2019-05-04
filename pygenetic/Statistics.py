@@ -45,7 +45,6 @@ class Statistics:
 		ax.set_xlabel('Generation')
 		ax.set_ylabel('Statistic')
 		for statistic in self.statistic_dict:
-			# print(statistic,self.statistic_dict[statistic])
 			ax.plot(range(1,len(self.statistic_dict[statistic])+1),self.statistic_dict[statistic],label=statistic)
 		fig.legend(loc='upper left')
 		return fig
@@ -63,7 +62,6 @@ class Statistics:
 		ax.set_xlabel('Generation')
 		ax.set_ylabel('Statistic')
 		for statistic in statistics:
-			# print(statistic,self.statistic_dict[statistic])
 			ax.plot(range(1,len(self.statistic_dict[statistic])+1),self.statistic_dict[statistic],label=statistic)
 		fig.legend(loc='upper left')
 		return fig
