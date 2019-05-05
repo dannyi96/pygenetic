@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setuptools.setup(
     name="pygenetic",
-    version="0.3.0",
+    version="0.9.2",
     author="Bharatraj S Telkar, Daniel Isaac, Shreyas V Patil",
     author_email="telkarraj@gmail.com, danielbcbs2@gmail.com, pshreyasv100@gmail.com",
     description="An Efficient Python Genetic Algorithm API",

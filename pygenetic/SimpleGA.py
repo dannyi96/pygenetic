@@ -222,4 +222,4 @@ class SimpleGA:
 			self.population = new_population
 			new_population = []
 		print("Best fitness in this generation = ", self.best_fitness)
-		print("Top 10 fitnesses in this generation = "self.fitness_mappings[:10])
+		print("Top 10 fitnesses in this generation = ", self.fitness_mappings[:10])
