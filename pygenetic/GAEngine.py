@@ -1,5 +1,5 @@
-from pygenetic import Population, Evolution, Statistics
-# import Population, Evolution, Statistics
+# from pygenetic import Population, Evolution, Statistics
+import Population, Evolution, Statistics
 import random
 import collections
 import bisect
@@ -483,7 +483,8 @@ class GAEngine:
 		if self.population == None:
 			raise Exception('Call evolve before calling continue_evolve')
 		print("gen\tavg\t\tbest\tworst\t")
-		for i in range(noOfIterations):
+		i=0
+		while i<noOfIterations:
 			self.generateFitnessMappings()
 			fitnesses = [ x[1] for x in self.fitness_mappings]
 			self.statistics.add_statistic('best-fitness',self.fitness_mappings[0][1])
@@ -491,7 +492,7 @@ class GAEngine:
 			self.mean_fitness = sum(fitnesses)/len(fitnesses)
 			self.statistics.add_statistic('avg-fitness',self.mean_fitness)
 			self.diversity = math.sqrt(sum((fitness - self.mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
-			print("%i\t%.2f\t\t%s\t%s\t" % (i,self.mean_fitness,self.fitness_mappings[0][1],self.fitness_mappings[-1][1]))
+			print("%i\t%.2f\t\t%s\t%s\t" % (i+1,self.mean_fitness,self.fitness_mappings[0][1],self.fitness_mappings[-1][1]))
 			if self.adaptive_mutation:
 				self.mut_prob = self.initial_mut_prob * ( 1 + ((self.best_fitness[1]-self.diversity) / (self.diversity+self.best_fitness[1]) ) )
 				self.mut_prob = np.clip(self.mut_prob,0.0001,0.8)
@@ -532,14 +533,7 @@ class GAEngine:
 			if result == 1:
 				print('GA Problem Solved')
 				break
+			i += 1
 		# print("Best fitness in this generation = ", self.best_fitness)
 		# print("Best among all generations = ", self.hall_of_fame)
 		# print("Top fittest chromosomes of this generation: ", self.fitness_mappings[:10])
-		self.generateFitnessMappings()
-		fitnesses = [ x[1] for x in self.fitness_mappings]
-		self.statistics.add_statistic('best-fitness',self.fitness_mappings[0][1])
-		self.statistics.add_statistic('worst-fitness',self.fitness_mappings[-1][1])
-		self.mean_fitness = sum(fitnesses)/len(fitnesses)
-		self.statistics.add_statistic('avg-fitness',self.mean_fitness)
-		print("%i\t%.2f\t\t%s\t%s\t" % (noOfIterations,self.mean_fitness,self.fitness_mappings[0][1],self.fitness_mappings[-1][1]))
-

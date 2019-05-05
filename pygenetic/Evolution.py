@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 import random
 import math
-from pygenetic import Utils
-# import Utils
+# from pygenetic import Utils
+import Utils
 import numpy as np
 
 class BaseEvolution(ABC):
