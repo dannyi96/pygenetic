@@ -489,7 +489,7 @@ class GAEngine:
 			self.mean_fitness = sum(fitnesses)/len(fitnesses)
 			self.statistics.add_statistic('avg-fitness',self.mean_fitness)
 			self.diversity = math.sqrt(sum((fitness - self.mean_fitness)**2 for fitness in fitnesses)) / len(fitnesses)
-			print("%i\t%.2f\t\t%s\t%s\t" % (len(self.statistic_dict['best-fitness'])+1,self.mean_fitness,self.fitness_mappings[0][1],self.fitness_mappings[-1][1]))
+			print("%i\t%.2f\t\t%s\t%s\t" % (len(self.statistics.statistic_dict['best-fitness'])+1,self.mean_fitness,self.fitness_mappings[0][1],self.fitness_mappings[-1][1]))
 			if self.adaptive_mutation:
 				self.mut_prob = self.initial_mut_prob * ( 1 + ((self.best_fitness[1]-self.diversity) / (self.diversity+self.best_fitness[1]) ) )
 				self.mut_prob = np.clip(self.mut_prob,0.0001,0.8)
