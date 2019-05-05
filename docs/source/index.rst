@@ -16,10 +16,9 @@ Introduction
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
 
   introduction
-  modules
   pygenetic
   README
   tutorial

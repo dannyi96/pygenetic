@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 import random
 import math
-# from pygenetic import Utils
-import Utils
+from pygenetic import Utils
 import numpy as np
 
 class BaseEvolution(ABC):
@@ -75,9 +74,7 @@ class StandardEvolution(BaseEvolution):
 
 		# get (1-r) * cross_prob new members
 		ga.population.new_members = ga.handle_selection()
-		# print("Members left after selection = ",len(ga.population.members))
-		# print("Best member after selection = ",ga.best_fitness[0])
-		# print("Best fitness after selection = ",ga.best_fitness[1])
+
 		if ga.fitness_type[0] == 'equal':
 			if ga.best_fitness[1] == ga.fitness_type[1]:
 				return 1
@@ -99,7 +96,6 @@ class StandardEvolution(BaseEvolution):
 			ga.population.new_members.append(ga.population.members[random.randint(0,len(p)-1)])
 
 		crossover_indexes = np.random.choice(len(p),n,p=p, replace=False)
-		# print("crossover_indices = ",crossover_indexes)
 
 		crossover_chromosomes = [ ga.population.members[index] for index in crossover_indexes]
 
@@ -109,15 +105,13 @@ class StandardEvolution(BaseEvolution):
 			child1, child2 = ga.doCrossover(crossoverHandler,father,mother)
 			ga.population.new_members.extend([child1,child2])
 
-		# print("adaptive_mutation value passed = ",ga.adaptive_mutation)
 
 		mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
-		# print("mutation_indexes = ",mutation_indexes)
+
 		for index in mutation_indexes:
 			mutationHandler = ga.chooseMutationHandler()
 			ga.population.new_members[index] = ga.doMutation(mutationHandler,ga.population.new_members[index])
-		# print("New generation members = ", ga.population.new_members)
-		# print("Length of new generation ", len(ga.population.new_members))
+
 		return 0
 
 	def __evolve_pyspark(self,ga):
@@ -167,9 +161,7 @@ class StandardEvolution(BaseEvolution):
 					selected_chromosomes = [ x[0] for x in selected_chromosomes]
 		else:
 			selected_chromosomes = ga.handle_selection()
-		# print('Members left after selection =  ', selected_chromosomes)
-		# print('Best member after selection = ', ga.best_fitness[0])
-		# print('Best fitness after selection = ', ga.best_fitness[1])
+
 		ga.population.new_members = selected_chromosomes
 
 		if ga.fitness_type[0] == 'equal':
@@ -200,22 +192,14 @@ class StandardEvolution(BaseEvolution):
 
 		crossover_results = crossover_after.flatMap(lambda x:x[1]).collect()
 		ga.population.new_members.extend(crossover_results)
-
-		# Mutation Handling
-		# print("adaptive_mutation value passed = ",ga.adaptive_mutation)
-		# print("Dynamic Mutation Rate = ", ga.mut_prob)
 		
 		mutation_indexes = np.random.choice(len(ga.population.new_members),int(ga.mut_prob*len(p)), replace=False)
-		# print("mutation_indexes = ",mutation_indexes)
 		mutation_indexes_rdd = sc.parallelize(mutation_indexes)
 		mutation_before = mutation_indexes_rdd.map(lambda x:(x,ga.population.new_members[x]))
 		mutation_results = mutation_before.map(lambda x:(x[0],x[1],ga.chooseMutationHandler()(list(x[1])))).collect()
 
 		for entry in mutation_results:
 			ga.population.new_members[entry[0]] = entry[2]
-
-		# print("New generation members = ", ga.population.new_members)
-		# print("Length of new generation ", len(ga.population.new_members))
 
 	def evolve(self,ga):
 		"""
