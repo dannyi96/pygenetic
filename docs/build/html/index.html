@@ -54,12 +54,34 @@
 <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
 <blockquote>
-<div>Efficient Python Genetic Algorithm Framework provides its users a highly efficient and usable way to explore the problem solving ability of Genetic Algorithms. It seeks to reduce the task of solving a problem using genetic algorithms to just choosing the appropriate operators and values which are provided internally. Further, support is also provided for a user to input his own operators for variation or for solving more specific problems.
-Students, teachers, researchers, company employees / entrepreneurs can all use our genetic algorithm framework while experimenting with different Machine Learning Algorithms and observing performance. They can also play around and simulate different Genetic Algorithms online on our website.</div></blockquote>
+<div>Pygenetic provides users a highly efficient and usable way to explore the problem solving ability of Genetic Algorithms. It seeks to reduce the task of solving a problem using genetic algorithms to just choosing the appropriate operators and values which are provided internally. Further, support is also provided for a user to input his own operators for variation or for solving more specific problems.
+Students, teachers, researchers, company employees / entrepreneurs can all use our genetic algorithm framework while experimenting with different Machine Learning Algorithms and observing performance.</div></blockquote>
+</div>
+<div class="section" id="features">
+<h1>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li>Presence of both High-Level(<cite>SimpleGA</cite>) and Low-Level API(<cite>GAEngine</cite>) which users can use as per need.</li>
+<li>Very generic API - Users can customize different part of the GA be it Evolution, Statistics, Different handlers, Chromosome Representations.</li>
+<li>Supports efficient evolution execution using Apache Spark. This is highly scalable as more workers can be deployed. Parallelization of fitness evaluation, selection, crossovers and mutations are taken care of.</li>
+<li>Supports Adaptive Mutation Rates based on how diverse the population is.</li>
+<li>Supports Hall of Fame(best ever chromosome) Injection so that the best chromosome isn&#8217;t lost in later generations due to the selection method used.</li>
+<li>Supports Efficient Iteration Halt</li>
+<li>Supports Visualization of Statistics like max, min, avg, diversity of fitnesses, mutation rates. Users can also define custom statistics</li>
+<li>Supports usage of multiple crossovers and mutations in one GA execution to enhance diversity</li>
+<li>Supports Population Control which users can make use of in various research purposes</li>
+<li>Provides a bunch of Standard Selection, Crossovers, Mutations and Fitness Functions</li>
+<li>Provides continue evolve feature so users can continue from previous evolutions instead of starting all over again.</li>
+<li>Provides ANN Best Topology finder using GA functionality</li>
+</ul>
+</div></blockquote>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#features">Features</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="pygenetic.html">pygenetic package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pygenetic.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pygenetic.html#module-pygenetic.ANNEvolve">pygenetic.ANNEvolve module</a></li>
@@ -131,6 +153,7 @@ Students, teachers, researchers, company employees / entrepreneurs can all use o
   <ul>
 <li><a class="reference internal" href="#">Welcome to Pygenetic&#8217;s documentation!</a></li>
 <li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
