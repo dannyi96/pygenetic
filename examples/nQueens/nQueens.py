@@ -16,13 +16,8 @@ def fitness(board):
 
 factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes=8,minValue=1,maxValue=8)
 ga = GAEngine.GAEngine(factory,100,fitness_type=('equal',8),mut_prob = 0.3)
-
-#ga.addCrossoverHandler(Utils.CrossoverHandlers.PMX, 9)
-
 ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
-#ga.addCrossoverHandler(Utils.CrossoverHandlers.OX, 3)
 ga.addMutationHandler(Utils.MutationHandlers.swap)
-# SOme issue with roullete
 ga.setSelectionHandler(Utils.SelectionHandlers.best)
 ga.setFitnessHandler(fitness)
 

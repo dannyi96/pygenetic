@@ -6,9 +6,6 @@ factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes=8,minValue=0,maxVal
 ga = GAEngine.GAEngine(factory,10,fitness_type='min',mut_prob = 0.02)
 ga.addCrossoverHandler(Utils.CrossoverHandlers.PMX, 9)
 def range_of_generation(fitness_mappings,ga):
-	print('MAX ',fitness_mappings[0][1]  )
-	print('MIN ',fitness_mappings[-1][1]  )
-	print(ga.cross_prob)
 	return abs(fitness_mappings[0][1] - fitness_mappings[-1][1])
 
 ga.addStatistic('range',range_of_generation)
@@ -20,12 +17,7 @@ ga.addMutationHandler(Utils.MutationHandlers.swap)
 ga.setSelectionHandler(Utils.SelectionHandlers.random)
 ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
 ga.evolve(20)
-# fig = ga.statistics.plot_statistics(['best-fitness','worst-fitness','avg-fitness'])
-# plt.show()
-# fig = ga.statistics.plot_statistics(['diversity','mutation_rate'])
-# plt.show()
-# fig = ga.statistics.plot_statistics(['mutation_rate'])
-# plt.show()
+
 fig = ga.statistics.plot_statistics(['range'])
 plt.show()
 fig = ga.statistics.plot()

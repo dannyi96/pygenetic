@@ -5,18 +5,12 @@ matrix = [[0,172,145,607,329,72,312,120],[172,0,192,494,209,158,216,92],[145,192
 factory = ChromosomeFactory.ChromosomeRangeFactory(noOfGenes=8,minValue=0,maxValue=7)
 ga = GAEngine.GAEngine(factory,10,fitness_type='min',mut_prob = 0.02)
 ga.addCrossoverHandler(Utils.CrossoverHandlers.PMX, 9)
-
-	#ga = GAEngine(fitness,8,factory,20)#,fitness_type='equal')
-	#ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 9)
-
 ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct, 4)
 ga.addCrossoverHandler(Utils.CrossoverHandlers.OX, 3)
 ga.addMutationHandler(Utils.MutationHandlers.swap)
-
-ga.setSelectionHandler(Utils.SelectionHandlers.random)
+ga.setSelectionHandler(Utils.SelectionHandlers.best)
 ga.setFitnessHandler(Utils.Fitness.TSP, matrix)
-	# ga.setSelectionHandler(Utils.SelectionHandlers.basic)
-	# Provide max iteration here ???
+
 ga.evolve(100)
 fig = ga.statistics.plot_statistics(['best-fitness','worst-fitness','avg-fitness'])
 plt.show()
