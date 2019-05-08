@@ -29,6 +29,9 @@ pygenetic is published on pypi(https://pypi.org/project/pygenetic/) and can be e
 $ pip3 install pygenetic
 ```
 
+For using pyspark functionality, install `pyspark` , Apache Spark, Scala and JVM.
+For using the ANN Topology Finder, install `tensorflow` and `keras` 
+
 ## Tests
 
 The various tests are present in the `tests/` directory. The main API tests can tested by:
@@ -38,9 +41,38 @@ $ pytest tests/modules
 ```
 
 ### Usage
- Our python package is extensively documented on [ReadTheDocs](https://pygenetic.readthedocs.io/en/latest)
 
- Also, refer [this](https://github.com/danny311296/pygenetic/blob/master/examples/tutorial.md) for tutorials
+#### High Level API Basic Usage
+
+```
+from pygenetic import SimpleGA
+ga = SimpleGA.SimpleGA(minValue=1,maxValue=120,
+                      noOfGenes=20,fitness_func=lambda x:sum(x),
+                      duplicates=False,population_size=1000,
+                      fitness_type='max')
+ga.evolve(100)
+print(ga.best_fitness)
+``` 
+
+#### Low Level API Basic Usage
+
+```
+from pygenetic import ChromosomeFactory, GAEngine, Utils
+factory = ChromosomeFactory.ChromosomeRangeFactory(
+			noOfGenes=8,minValue=1,maxValue=8)
+ga = GAEngine.GAEngine(factory,100,fitness_type=('equal',8)
+						,mut_prob = 0.3)
+ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct)
+ga.addMutationHandler(Utils.MutationHandlers.swap)
+ga.setSelectionHandler(Utils.SelectionHandlers.best)
+ga.setFitnessHandler(Utils.Fitness.add)
+ga.evolve(10)
+print(ga.best_fitness)
+```
+
+#### For more advanced usages and tutorials
+
+ Our python package is extensively documented on [ReadTheDocs](https://pygenetic.readthedocs.io/en/latest). Also, refer [this](https://github.com/danny311296/pygenetic/blob/master/examples/tutorial.md) for step by step tutorials.
 
  Refer `examples` for examples of solving different GAs using pygenetic
 
