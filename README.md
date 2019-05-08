@@ -40,9 +40,9 @@ The various tests are present in the `tests/` directory. The main API tests can 
 $ pytest tests/modules
 ```
 
-### Usage
+## Usage
 
-#### High Level API Basic Usage
+### High Level API Basic Usage
 
 ```
 from pygenetic import SimpleGA
@@ -54,7 +54,7 @@ ga.evolve(100)
 print(ga.best_fitness)
 ``` 
 
-#### Low Level API Basic Usage
+### Low Level API Basic Usage
 
 ```
 from pygenetic import ChromosomeFactory, GAEngine, Utils
@@ -70,7 +70,7 @@ ga.evolve(10)
 print(ga.best_fitness)
 ```
 
-#### For more advanced usages and tutorials
+### For more advanced usages and tutorials
 
  Our python package is extensively documented on [ReadTheDocs](https://pygenetic.readthedocs.io/en/latest). Also, refer [this](https://github.com/danny311296/pygenetic/blob/master/examples/tutorial.md) for step by step tutorials.
 
