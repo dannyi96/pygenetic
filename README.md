@@ -1,5 +1,5 @@
 # pygenetic: An Efficient Generic, User-friendly Python Genetic Algorithm API
-[![Build Status](https://travis-ci.com/danny311296/pygenetic.svg?token=A3bcYHcDEvK23esetBsC&branch=master)](https://travis-ci.com/danny311296/pygenetic) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)  
+[![Build Status](https://travis-ci.com/danny311296/pygenetic.svg?token=A3bcYHcDEvK23esetBsC&branch=master)](https://travis-ci.com/danny311296/pygenetic) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)  [![docs](https://readthedocs.org/projects/pygenetic/badge/?version=latest)](https://pygenetic.readthedocs.io/en/latest/?badge=latest)
 
 pygenetic is a Python Genetic Algorithm API which is User-Friendly as well as Generic in nature unlike most GA APIs which make a trade off between the two.
 
