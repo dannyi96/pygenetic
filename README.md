@@ -65,7 +65,7 @@ ga = GAEngine.GAEngine(factory,100,fitness_type=('equal',8)
 ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct)
 ga.addMutationHandler(Utils.MutationHandlers.swap)
 ga.setSelectionHandler(Utils.SelectionHandlers.best)
-ga.setFitnessHandler(Utils.Fitness.add)
+ga.setFitnessHandler(Utils.Fitness.addition)
 ga.evolve(10)
 print(ga.best_fitness)
 ```
