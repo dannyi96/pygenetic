@@ -38,8 +38,11 @@ $ pytest tests/modules
 ```
 
 ### Usage
- Refer `examples` and ReadTheDocs(https://pygenetic.readthedocs.io/en/latest)
- More tutorials coming soon...
+ Our python package is extensively documented on [ReadTheDocs](https://pygenetic.readthedocs.io/en/latest)
+
+ Also, refer [this](https://github.com/danny311296/pygenetic/blob/master/examples/tutorial.md) for tutorials
+
+ Refer `examples` for examples of solving different GAs using pygenetic
 
 ## GA Online Execution
  Install python `flask` and run
@@ -49,9 +52,9 @@ $ python3 flask/views.py
 Input all the various fields needed for the GA. You can run the GA online and get the best 5 chromosomes of each generations followed by statistics. You can also download the equivalent pygenetic code based on all user inputs in the form
 
 ## Authors
-* Bharatraj S Telkar (https://github.com/BharatRajT)
-* Daniel Isaac (https://github.com/danny311296) 
-* Shreyas V Patil (https://github.com/pshreyasv100)
+* [Bharatraj S Telkar](https://github.com/BharatRajT) 
+* [Daniel Isaac](https://github.com/danny311296) 
+* [Shreyas V Patil](https://github.com/pshreyasv100)
 
 ## Special Mentions
 * Special thanks to Ganesh K, Rahul Bhardwaj and Hardik Surana who lended their UI made for their Design Patterns project (https://github.com/ganesh-k13/GOF-Templates) as an intial template for us to work on for our Web GUI. 
