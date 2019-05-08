@@ -1,4 +1,4 @@
-import ANNEvolve 
+from pygenetic import ANNEvolve 
 import numpy
 # load pima indians dataset
 dataset = numpy.loadtxt("input.csv", delimiter=",")

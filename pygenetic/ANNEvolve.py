@@ -31,7 +31,7 @@ class ANNTopologyChromosomeFactory(ChromosomeFactory):
 	def createChromosome(self):
 		"""
 		Generates ANN chromosome
-		
+
 		"""
 		chromosome = []
 		for i in range(self.hiddenLayers):
@@ -80,14 +80,6 @@ class ANNTopologyEvolve:
 		self.factory = ANNTopologyChromosomeFactory(hiddenLayers,neuronsPerLayer,activations,optimizers)
 
 	def evolve(self,noOfGenerations=100):
-	"""
-	Function to evolve the ANN Topology finder Genetic Algorithm
-
-	Parameters :
-	---------
-	noOfGenerations : number of generations to evolve the GA
-
-	"""
 		ga = GAEngine.GAEngine(self.factory,population_size=self.population_size,fitness_type='min')
 		ga.setFitnessHandler(ANNTopologyEvolve.fitness,self.X,self.Y,self.hiddenLayers,self.input_dim,self.loss,self.metrics,self.epochs,self.batch_size)
 		ga.setSelectionHandler(Utils.SelectionHandlers.best)
@@ -97,9 +89,6 @@ class ANNTopologyEvolve:
 
 	@staticmethod
 	def fitness(chromosome,X,Y,hidden_layers,input_dim,loss,metrics,epochs,batch_size):
-	"""
-	Function to calculate the ANN fitness(loss value) given chromosome and other ANN inputs
-	"""
 		# create model
 		model = Sequential()
 		model.add(Dense(chromosome[0], input_dim= input_dim, activation=chromosome[1]))
@@ -119,9 +108,6 @@ class ANNTopologyEvolve:
 
 	@staticmethod
 	def mutation(chromosome,neuronsPerLayer,activations,optimizers):
-	"""
-	Function to mutate the ANN chromosome
-	"""
 		r = random.randint(0,len(chromosome)-1)
 		newchrom = copy.copy(chromosome)
 		if r == len(chromosome) - 1:
