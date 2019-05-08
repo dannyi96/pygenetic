@@ -526,6 +526,4 @@ class GAEngine:
 				print('GA Problem Solved')
 				break
 			i += 1
-		# print("Best fitness in this generation = ", self.best_fitness)
-		# print("Best among all generations = ", self.hall_of_fame)
-		# print("Top fittest chromosomes of this generation: ", self.fitness_mappings[:10])
+
