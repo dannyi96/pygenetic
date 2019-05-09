@@ -153,7 +153,7 @@ class GAEngine:
   	"""
 
 
-	def __init__(self,factory,population_size=100,cross_prob=0.7,mut_prob=0.1,fitness_type='max',adaptive_mutation=True, population_control=False,hall_of_fame_injection=True,efficient_iteration_halt=True,use_pyspark=False):
+	def __init__(self,factory,population_size=100,cross_prob=0.7,mut_prob=0.1,fitness_type='max',adaptive_mutation=True, population_control=False,hall_of_fame_injection=True,efficient_iteration_halt=False,use_pyspark=False):
 		self.fitness_func = None
 		self.factory = factory
 		self.cross_prob = cross_prob

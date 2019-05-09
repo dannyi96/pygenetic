@@ -70,7 +70,7 @@ Other parameters of `GAEngine` include
 * `adaptive_mutation`: which is a Boolean which decides if adaptive mutation is to be used(default: True) 
 * `population_control`: which is a Boolean which decides whether or not the GAEngine should ensure that the population size remains the same in every evolution iteration. This ensures that any error/issue in user's custom selection or evolution code doesn't cause population size to change. (default: False)
 * `hall_of_fame_injection`: which is a boolean used to carry out the injection of the best chromosome encountered so far in every 20 generations. (default: True)
-* `efficient_iteration_halt`: which is a boolean used to carry out efficient_iteration_halt optimization. It stops evolving if same best fitness value is encountered for 20 consecutive generations (default: True)
+* `efficient_iteration_halt`: which is a boolean used to carry out efficient_iteration_halt optimization. It stops evolving if same best fitness value is encountered for 20 consecutive generations (default: False)
 * `use_pyspark`: which is a boolean used to decide if sequential execution is to be carried out or parallel execution on Apache Spark is to be carried out (default: False)
 
 ### 1.3 Crossovers, Mutations and Selection Functions
