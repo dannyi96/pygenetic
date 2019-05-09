@@ -134,5 +134,5 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 				chromosome = random.sample(range(self.minValue,self.maxValue+1), self.noOfGenes)
 			return chromosome
 		except:
-			raise Exception('Unable to generated chromosome from given max %s min %s noOfGenes %s'%(self.minValue,self.maxValue,self.noOfGenes))
+			raise Exception('Unable to generate chromosome from given min %s max %s noOfGenes %s'%(self.minValue,self.maxValue,self.noOfGenes))
 
