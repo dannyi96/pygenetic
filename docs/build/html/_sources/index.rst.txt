@@ -9,321 +9,34 @@ Welcome to Pygenetic's documentation!
 Introduction
 ============
 
-	Efficient Python Genetic Algorithm Framework provides its users a highly efficient and usable way to explore the problem solving ability of Genetic Algorithms. It seeks to reduce the task of solving a problem using genetic algorithms to just choosing the appropriate operators and values which are provided internally. Further, support is also provided for a user to input his own operators for variation or for solving more specific problems.
-	Students, teachers, researchers, company employees / entrepreneurs can all use our genetic algorithm framework while experimenting with different Machine Learning Algorithms and observing performance. They can also play around and simulate different Genetic Algorithms online on our website.
-
-
-Modules
-=======
-
-GAEngine Module 
----------------
-
-	"Contains GAEngine Class which is the main driver program which contains and invokes the operators used in Genetic algorithm
-	GAEngine keeps track of specific type of operators the user has specified for running the algorithm"
-
-Instance Members
-^^^^^^^^^^^^^^^^
-	fitness_func : A function argument
-				The fitness function to be used, passed as a function argument
-	
-	fitness_threshold : int
-				Threshold at which a candidate solution is considered optimal solution to the problem
-	
-	factory : Instance of any subclass of ChromosomeFactory class 
-				Generates and returns the initial population of candidate solutions
-	
-	population_size : int
-				The number of candidate solutions that can exist after every iteration
-	
-	cross_prob : float
-				The Crossover probability of crossover operation which determines the extent to which crossover between parents
-	
-	mutation_prob : float
-				The mutation probability of mutation operation which determines extent to which candidates should be mutated
-	
-	fitness_type : string
-				Indicates the nature of fitness value (higher/lower/equal) to be considered during selection of candidates
-				(default is max)
-	
-	adaptive_mutation : boolean
-				If set rate of mutation of candidates dynamically changes during execution depending on diversity in population
-				(default is true)
-	
-	smart_fitness : boolean
-				TO BE DESCRIBED  
-
-Methods
-^^^^^^^
-	
-	addCrossoverHandler(crossover_handler, weight)
-		Sets the function to be used for crossover operation
-
-	addMutationHandler(mutation_handler, weight)
-		Sets the function to be used for mutation operation
-
-	setCrossoverProbability(cross_prob)
-		Sets value for cross_prob instance variable for crossover operation
-	
-	setMutationProbability(mut_prob)
-		Sets value for mut_prob instance variable
-	
-	setSelectionHandler(selection_handler)
-		Sets the function to be used for selection operation
-	
-	calculateFitness(chromosome)
-		Invokes fitness function (fitness_func) to compute the fitness score of a chromosome
-	
-	generateFitnessDict()
-		Generates a  dictionary of (individual, fitness_score) and also stores the dictionary 
-		containing fittest chromosome depending on fitness_type(max/min/equal)
-	
-	handle_selection()
-		Invokes generateFitnessDict() and  selection_handler specified 
-	
-	normalizeWeights()
-		Normalizes crossover and mutation handler weights, result is a CDF
-	
-	chooseCrossoverHandler()
-		Selects crossover handler from available handlers based on weightage given to handlers
-	
-	chooseMutationHandler()
-		Selects mutation handler from available handlers based on weightage given to handlers
-		
-	evolve()
-		Invokes evolve method in Evolution module  which Executes the operations of Genetic algorithm till
-		a fitness score reaches a threshold or the number of iterations reach max iterations specified by user
-
-
-ChromosomeFactory Module
-------------------------
-
-Class ChromosomeFactory
-^^^^^^^^^^^^^^^^^^^^^^^
-
-	Abstract Class to be inherited for implemention of different 
-	ways of generating initial population of chromosomes
-	
-	* Instance variables :
-	
-		data_type : type of data of each gene in chromosome
-
-		noOfGenes : number of genes in each chromosome
-	
-	* Methods :
-	
-		createChromosome () : Abstract method to be implemented by derived classes
-
-
-
-Class ChromosomeRegexFactory(ChromosomeFactory)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-	
-	Class derived from ChromosomeFactory, implements the method createChromosome()
-	which generates initial population of candidates by using regex module in python
-	on genes
-
-	* Instance variables :
-
-		data_type : datatype of each gene
-		
-		noOfGenes : int ,  number of genes in each chromosome
-		
-		pattern : string containing individual genes
-
-	* Methods :
-
-		createChromosome() : Generates a chromosome from given genes using python regex module 
-							
-							Returns : chromosome : List containing individual genes of chromosome 
-
-
-Class ChromosomeRangeFactory(ChromosomeFactory)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-	Class derived from ChromosomeFactory, implements the method createChromosome()
-	which generates initial population of candidates by randomly sampling genes from a 
-	range of genes
-
-
-	* Instance variables :
-
-		data_type : datatype of each gene
-
-		noOfGenes : int , number of genes in each chromosome
-		
-		minValue : int , lower bound of range
-		
-		maxValue : int , upper bound of range
-		
-		duplicates : boolean , indicates if gene can be repeated in chromosome
-
-	* Methods :
-
-		createChromosome(self) : Generates a chromosome by randomly sampling genes from a given range
-							
-								Returns : chromosome : List of genes representing each chromosome 
-
-
-
-
-Evolution Module
-----------------
-
-Class Base Evolution
-^^^^^^^^^^^^^^^^^^^^
-
-	Abstract class to be inherited to implement the specific evolution procedure
-
-	* Instance Members :
-	
-	max_iterations : int
-	
-	* Methods :
-	
-	evolve() : abstract method to be implemeted by derived classes
-
-
-
-Class StandardEvolution(BaseEvolution)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-	Class inherits from BaseEvolution and contain implementations of abstract 
-	evolution method in  BaseEvolution
-	
-	* Instance Members :
-
-	max_iterations : int
-	
-	adaptive_mutation : boolean to indicated if rate of mutation should 
-						change dynamically during each iteration
-	pyspark : boolean to indicated if parallelization should be supported by using pyspark
-
-
-
-	1) __evolve_normal(self,ga):
-
-		"""
-		Private method which performs an iteration
-
-		Outline of Algorithm :
-		
-		Selection : fittest members of population are selected by invoking 
-					selection handler in Utils.py module
-
-		Crossover : A probability score is generated from fitness value of each chromosome
-					Chromosomes for crossover are selected based on this probablity score 
-					of each chromosome
-					Crossover is performed by invoking a crossover handler from Utils.py
-
-		Mutation : If adaptive mutation is set then average square deviation of fitness values
-					is used for determining (the indexes of chromosome)/genes to be mutated 
-					If false then genes to be mutated are chosen randomly
-					Once indexes of Chromomsome / genes to be mutated are determined, a mutation
-					handler from Utils.py module is invoked 
-
-		Each iteration consists of repeating the above operations until an optimal solution 
-		determined by fitness threshold is reached  or number of iterations specified are complete
-
-
-	2) evolve()
-
-		Invokes the private method __evolve_normal to perform an iteration Genetic Algorithm
-		
-		Returns : 1 if optimal solution was found
-
-Population Module
------------------
-
-Class Population 
-^^^^^^^^^^^^^^^^
-
-	Class contians info on population of candidate solutions
-	
-	* Instance Members:
-	
-	population_size : int
-	
-	members : List containing the members of population 
-	
-	new_members : List containing members of population after each iteration
-
-
-	* Methods : 
-
-	def createMembers(self,factory):
-		
-		Generates initial meembers of population by invoking one of the methods from
-		ChromosomeFactory.py module
-		
-		Parameters :
-		
-		factory : Reference to a method from ChromosomeFactory.py module
-		
-
-Utils Module
-------------
-	
-	Contains classes which contain static methods for different genetic operators
-
-Class SelectionHandlers
-^^^^^^^^^^^^^^^^^^^^^^^
-	
-	Class contains staticmethods for selection operation which are
-	invoked by  Evolution.py module during selection operation
-	
-	Methods :
-	
-	* basic() : Performs selection operation based fitness scores of candidates
-	* random()
-	* smallest()
-	* largest()
-	* tournament()
-	* roulette()
-
-Class MutationHandlers
-^^^^^^^^^^^^^^^^^^^^^^
-
-	Class contains different  mutation handlers to be invoked by Evolution.py
-	module during mutation operation
-
-
-	Methods :
-
-	* swap()
-	* bitFlip()
-
-
-
-Class CrossoverHandlers
-^^^^^^^^^^^^^^^^^^^^^^^
-
-	Methods :
-
-	* distinct()
-	* onePoint()
-	* twoPoint()
-	* PMX
-	* OX
-
-Class Fitness
-^^^^^^^^^^^^^
-
-	Class contains staticmethods for calculating fitness score of an individual 
-
-
-
-
-
+  Pygenetic provides users a highly efficient and usable way to explore the problem solving ability of Genetic Algorithms. It seeks to reduce the task of solving a problem using genetic algorithms to just choosing the appropriate operators and values which are provided internally. Further, support is also provided for a user to input his own operators for variation or for solving more specific problems.
+  Students, teachers, researchers, company employees / entrepreneurs can all use our genetic algorithm framework while experimenting with different Machine Learning Algorithms and observing performance.
+
+Features
+========
+  * Presence of both High-Level(`SimpleGA`) and Low-Level API(`GAEngine`) which users can use as per need.
+  * Very generic API - Users can customize different part of the GA be it Evolution, Statistics, Different handlers, Chromosome Representations.
+  * Supports efficient evolution execution using Apache Spark. This is highly scalable as more workers can be deployed. Parallelization of fitness evaluation, selection, crossovers and mutations are taken care of.
+  * Supports Adaptive Mutation Rates based on how diverse the population is.
+  * Supports Hall of Fame(best ever chromosome) Injection so that the best chromosome isn't lost in later generations due to the selection method used.
+  * Supports Efficient Iteration Halt 
+  * Supports Visualization of Statistics like max, min, avg, diversity of fitnesses, mutation rates. Users can also define custom statistics
+  * Supports usage of multiple crossovers and mutations in one GA execution to enhance diversity
+  * Supports Population Control which users can make use of in various research purposes
+  * Provides a bunch of Standard Selection, Crossovers, Mutations and Fitness Functions
+  * Provides continue evolve feature so users can continue from previous evolutions instead of starting all over again.
+  * Provides ANN Best Topology finder using GA functionality
+    
 
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
 
-   Introduction
-
+  introduction
+  pygenetic
+  README
+  tutorial
 
 
 
