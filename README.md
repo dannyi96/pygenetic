@@ -60,7 +60,7 @@ print(ga.best_fitness)
 from pygenetic import ChromosomeFactory, GAEngine, Utils
 factory = ChromosomeFactory.ChromosomeRangeFactory(
 			noOfGenes=8,minValue=1,maxValue=8)
-ga = GAEngine.GAEngine(factory,100,fitness_type=('equal',8)
+ga = GAEngine.GAEngine(factory,population_size=100,fitness_type=('equal',8)
 						,mut_prob = 0.3)
 ga.addCrossoverHandler(Utils.CrossoverHandlers.distinct)
 ga.addMutationHandler(Utils.MutationHandlers.swap)
