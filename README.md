@@ -1,5 +1,5 @@
 # pygenetic: An Efficient Generic, User-friendly Python Genetic Algorithm API
-[![Build Status](https://travis-ci.com/danny311296/pygenetic.svg?token=A3bcYHcDEvK23esetBsC&branch=master)](https://travis-ci.com/danny311296/pygenetic) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)  [![docs](https://readthedocs.org/projects/pygenetic/badge/?version=latest)](https://pygenetic.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.com/dannyi96/pygenetic.svg?token=A3bcYHcDEvK23esetBsC&branch=master)](https://travis-ci.com/dannyi96/pygenetic) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)  [![docs](https://readthedocs.org/projects/pygenetic/badge/?version=latest)](https://pygenetic.readthedocs.io/en/latest/?badge=latest)
 
 pygenetic is a Python Genetic Algorithm API which is User-Friendly as well as Generic in nature unlike most GA APIs which make a trade off between the two.
 
@@ -72,7 +72,7 @@ print(ga.best_fitness)
 
 ### For more advanced usages and tutorials
 
- Our python package is extensively documented on [ReadTheDocs](https://pygenetic.readthedocs.io/en/latest). Also, refer [this](https://github.com/danny311296/pygenetic/blob/master/examples/tutorial.md) for step by step tutorials.
+ Our python package is extensively documented on [ReadTheDocs](https://pygenetic.readthedocs.io/en/latest). Also, refer [this](https://github.com/dannyi96/pygenetic/blob/master/examples/tutorial.md) for step by step tutorials.
 
  Refer `examples` for examples of solving different GAs using pygenetic
 
@@ -85,7 +85,7 @@ Input all the various fields needed for the GA. You can run the GA online and ge
 
 ## Authors
 * [Bharatraj S Telkar](https://github.com/BharatRajT) 
-* [Daniel Isaac](https://github.com/danny311296) 
+* [Daniel Isaac](https://github.com/dannyi96) 
 * [Shreyas V Patil](https://github.com/pshreyasv100)
 
 ## Special Mentions
