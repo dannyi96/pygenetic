@@ -1,6 +1,6 @@
 import setuptools
 
-with open("README.md", "r") as f:
+with open("README.md", "r", encoding="utf-8") as f:
    long_description = f.read()
 
 setuptools.setup(
@@ -15,14 +15,21 @@ setuptools.setup(
     packages=['pygenetic'],
     include_package_data=True,
     license='MIT',
-    classifiers=(
+    classifiers=[
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-    ),
+    ],
+    python_requires=">=3.6",
     install_requires=[
-          'rstr==2.2.6',
-          'numpy==1.22.0',
-          'matplotlib==2.2.2',
+          'rstr>=2.2.6',
+          'numpy>=1.19.0',
+          'matplotlib>=3.0.0',
       ],
 )

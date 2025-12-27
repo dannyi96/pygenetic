@@ -24,7 +24,7 @@ def test_errors_ChromosomeRegexFactory(noOfGenes, pattern, data_type):
     # Test case 3: Test for exception when invalid regex is given
     try:
         re.compile(pattern)
-    except:
+    except re.error:
         with pytest.raises(ValueError):
             factory = ChromosomeFactory.ChromosomeRegexFactory(noOfGenes, pattern, data_type)
         return
@@ -35,7 +35,7 @@ def test_errors_ChromosomeRegexFactory(noOfGenes, pattern, data_type):
         # Test only when conversion is not possible
         try:
             result = data_type(factory.createChromosome())
-        except:
+        except (ValueError, TypeError):
             with pytest.raises(Exception):
                 factory.createChromosome()
 

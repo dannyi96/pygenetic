@@ -51,7 +51,7 @@ class SimpleGA:
 		self.population = []
 		for i in range(self.population_size):
 			if self.duplicates:
-				chromosome = random.choices(range(self.minValue,self.maxValue+1), k = self.noOfGenes)
+				chromosome = [random.choice(range(self.minValue,self.maxValue+1)) for _ in range(self.noOfGenes)]
 			else:
 				chromosome = random.sample(range(self.minValue,self.maxValue+1), self.noOfGenes)
 			self.population.append(chromosome)

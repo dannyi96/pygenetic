@@ -79,8 +79,8 @@ class ChromosomeRegexFactory(ChromosomeFactory):
 			else:
 				chromosome = [rstr.xeger(self.pattern) for i in range(self.noOfGenes)]
 			return chromosome
-		except:
-			raise Exception('Unable to convert all/some strings of given regex to type %s'%(type(self.data_type).__name__))
+		except (ValueError, TypeError) as e:
+			raise Exception('Unable to convert all/some strings of given regex to type %s'%(self.data_type.__name__))
 		
 
 class ChromosomeRangeFactory(ChromosomeFactory):
@@ -129,10 +129,10 @@ class ChromosomeRangeFactory(ChromosomeFactory):
 		"""
 		try:
 			if self.duplicates:
-				chromosome = random.choices(range(self.minValue,self.maxValue+1), k = self.noOfGenes)
+				chromosome = [random.choice(range(self.minValue,self.maxValue+1)) for _ in range(self.noOfGenes)]
 			else:
 				chromosome = random.sample(range(self.minValue,self.maxValue+1), self.noOfGenes)
 			return chromosome
-		except:
+		except (ValueError, TypeError) as e:
 			raise Exception('Unable to generate chromosome from given min %s max %s noOfGenes %s'%(self.minValue,self.maxValue,self.noOfGenes))
 
